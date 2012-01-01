@@ -1,0 +1,234 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5E068CF814B0D97B008C3DF7 /* OSTN02.byte-array in Sources */ = {isa = PBXBuildFile; fileRef = 5E068CF714B0D97B008C3DF7 /* OSTN02.byte-array */; };
+		5E068CFE14B0E8D8008C3DF7 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E068CFD14B0E8D8008C3DF7 /* libcrypto.dylib */; };
+		5EBE804514A5FE4800CA9D70 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 5EBE804414A5FE4800CA9D70 /* main.c */; };
+		5EBE804F14A5FE9000CA9D70 /* OSTN02.c in Sources */ = {isa = PBXBuildFile; fileRef = 5EBE804E14A5FE9000CA9D70 /* OSTN02.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5EBE803E14A5FE4800CA9D70 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		5E068CF714B0D97B008C3DF7 /* OSTN02.byte-array */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "OSTN02.byte-array"; sourceTree = "<group>"; };
+		5E068CFD14B0E8D8008C3DF7 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
+		5E7AD48014B0D26E00AA6C99 /* csv-to-byte-array.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = "csv-to-byte-array.rb"; sourceTree = "<group>"; };
+		5EBE804014A5FE4800CA9D70 /* OSTN02 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OSTN02; sourceTree = BUILT_PRODUCTS_DIR; };
+		5EBE804414A5FE4800CA9D70 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		5EBE804D14A5FE7300CA9D70 /* OSTN02.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSTN02.h; sourceTree = "<group>"; };
+		5EBE804E14A5FE9000CA9D70 /* OSTN02.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = OSTN02.c; sourceTree = "<group>"; };
+		5EBE805014A7B2C400CA9D70 /* OSTN02.data */ = {isa = PBXFileReference; lastKnownFileType = file; path = OSTN02.data; sourceTree = "<group>"; };
+		5EBE805114A7B2C400CA9D70 /* OSTN02.data.md5 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = OSTN02.data.md5; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5EBE803D14A5FE4800CA9D70 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5E068CFE14B0E8D8008C3DF7 /* libcrypto.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5EBE803514A5FE4800CA9D70 = {
+			isa = PBXGroup;
+			children = (
+				5E068CFD14B0E8D8008C3DF7 /* libcrypto.dylib */,
+				5E7AD48014B0D26E00AA6C99 /* csv-to-byte-array.rb */,
+				5EBE804314A5FE4800CA9D70 /* OSTN02 */,
+				5EBE804114A5FE4800CA9D70 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5EBE804114A5FE4800CA9D70 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5EBE804014A5FE4800CA9D70 /* OSTN02 */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5EBE804314A5FE4800CA9D70 /* OSTN02 */ = {
+			isa = PBXGroup;
+			children = (
+				5E068CF714B0D97B008C3DF7 /* OSTN02.byte-array */,
+				5EBE805014A7B2C400CA9D70 /* OSTN02.data */,
+				5EBE805114A7B2C400CA9D70 /* OSTN02.data.md5 */,
+				5EBE804414A5FE4800CA9D70 /* main.c */,
+				5EBE804D14A5FE7300CA9D70 /* OSTN02.h */,
+				5EBE804E14A5FE9000CA9D70 /* OSTN02.c */,
+			);
+			path = OSTN02;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5EBE803F14A5FE4800CA9D70 /* OSTN02 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5EBE804A14A5FE4900CA9D70 /* Build configuration list for PBXNativeTarget "OSTN02" */;
+			buildPhases = (
+				5EBE803C14A5FE4800CA9D70 /* Sources */,
+				5EBE803D14A5FE4800CA9D70 /* Frameworks */,
+				5EBE803E14A5FE4800CA9D70 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OSTN02;
+			productName = OSTN02;
+			productReference = 5EBE804014A5FE4800CA9D70 /* OSTN02 */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5EBE803714A5FE4800CA9D70 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = "George MacKerron";
+			};
+			buildConfigurationList = 5EBE803A14A5FE4800CA9D70 /* Build configuration list for PBXProject "OSTN02" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 5EBE803514A5FE4800CA9D70;
+			productRefGroup = 5EBE804114A5FE4800CA9D70 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5EBE803F14A5FE4800CA9D70 /* OSTN02 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5EBE803C14A5FE4800CA9D70 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5EBE804514A5FE4800CA9D70 /* main.c in Sources */,
+				5EBE804F14A5FE9000CA9D70 /* OSTN02.c in Sources */,
+				5E068CF814B0D97B008C3DF7 /* OSTN02.byte-array in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		5EBE804814A5FE4800CA9D70 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		5EBE804914A5FE4800CA9D70 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		5EBE804B14A5FE4900CA9D70 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SDKROOT)/usr/lib/system\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		5EBE804C14A5FE4900CA9D70 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SDKROOT)/usr/lib/system\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5EBE803A14A5FE4800CA9D70 /* Build configuration list for PBXProject "OSTN02" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5EBE804814A5FE4800CA9D70 /* Debug */,
+				5EBE804914A5FE4800CA9D70 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5EBE804A14A5FE4900CA9D70 /* Build configuration list for PBXNativeTarget "OSTN02" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5EBE804B14A5FE4900CA9D70 /* Debug */,
+				5EBE804C14A5FE4900CA9D70 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5EBE803714A5FE4800CA9D70 /* Project object */;
+}
