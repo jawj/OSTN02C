@@ -43,6 +43,8 @@
 
 #endif
 
+#define originalDataMD5 "29114af06558d8fffa83abf6012f0f17"
+
 char *OSGB36GeoidNames[15];
 char *OSGB36GeoidRegions[15];
 
@@ -85,11 +87,11 @@ typedef struct {
 } MapProjection;
 
 typedef struct {
-	unsigned short eShift;
-	unsigned short nShift;
-  unsigned short gShift;
-  unsigned char  gFlag;
-} OSTN02Record;  // corresponds to our OSTN02 data byte format
+	unsigned int eShift : 15;
+	unsigned int nShift : 15;
+  unsigned int gShift : 14;
+  unsigned int gFlag  :  4;
+} __attribute__((packed)) OSTN02Record;
 
 EastingNorthing latLonToEastingNorthing(LatLonDecimal latLon, Ellipsoid ellipsoid, MapProjection projection);
 EastingNorthing ETRS89LatLonToETRSEastingNorthing(LatLonDecimal latLon);
