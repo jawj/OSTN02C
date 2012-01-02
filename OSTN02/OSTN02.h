@@ -21,6 +21,7 @@
 #ifdef use_long
 #define dbl      long double
 #define cdbl     const long double
+#define sfx      L
 #define SIN      sinl
 #define COS      cosl
 #define TAN      tanl
@@ -33,6 +34,7 @@
 
 #define dbl      double
 #define cdbl     const double
+#define sfx
 #define SIN      sin
 #define COS      cos
 #define TAN      tan
@@ -43,7 +45,8 @@
 
 #endif
 
-#define originalDataMD5 "29114af06558d8fffa83abf6012f0f17"
+#define originalIndicesMD5 "0aa1fdc4e4bb6d3367cdcbead28ea190"
+#define originalDataMD5    "a29cc18ab3b4f1fd1c466ace0372b858"
 
 char *OSGB36GeoidNames[15];
 char *OSGB36GeoidRegions[15];
@@ -59,7 +62,7 @@ typedef struct {
 	dbl e;
 	dbl n;
   dbl elevation;
-  signed char geoid;
+  unsigned char geoid;
 } EastingNorthing;
 
 typedef struct {
@@ -101,9 +104,9 @@ typedef struct {
 
 EastingNorthing latLonToEastingNorthing(LatLonDecimal latLon, Ellipsoid ellipsoid, MapProjection projection);
 EastingNorthing ETRS89LatLonToETRSEastingNorthing(LatLonDecimal latLon);
-EastingNorthing OSTN02Shifts(const short eIndex, const short nIndex);
-EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(EastingNorthing en);
-LatLonDecimal   latLonDecimalFromLatLonDegMinSec(LatLonDegMinSec dms);
+EastingNorthing OSTN02Shifts(const int eIndex, const int nIndex);
+EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthing en);
+LatLonDecimal   latLonDecimalFromLatLonDegMinSec(const LatLonDegMinSec dms);
 void            doTests(void);
 
 #endif

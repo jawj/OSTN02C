@@ -28,9 +28,9 @@ int main (int argc, const char * argv[]) {
     }
     printf(llFmtStr, "ETRS89 in ", latLon.lat, latLon.lon, latLon.elevation, "\n");
     printf(enFmtStr, "OSGB36 out", en.e, en.n, en.elevation, OSGB36GeoidRegions[en.geoid], OSGB36GeoidNames[en.geoid], "\n");
-
+    return EXIT_SUCCESS;
   } else {
-    printf("This tool converts an ETRS89/WGS84 lat/lon/elevation to OSGB36 Easting/Northing/elevation using OSTN02 (%s precision).\n", numdesc);
+    printf("This tool converts an ETRS89/WGS84 lat/lon/elevation to OSGB36 Easting/Northing/elevation using OSTN02 (compiled %s %s, %s precision).\n", __DATE__, __TIME__, numdesc);
     printf("Usage: 'OSTN02 --tests' runs tests with OS data.\n");
     printf("       'OSTN02 [lat] [lon] [elevation]' converts coordinates.\n");
     return EXIT_FAILURE;

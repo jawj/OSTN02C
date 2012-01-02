@@ -86,10 +86,10 @@ EastingNorthing latLonToEastingNorthing(const LatLonDecimal latLon, const Ellips
   cdbl rho  = aF0 * (1.0L - e2) / (oneMinusE2SinPhi2 * sqrtOneMinusE2SinPhi2);
   cdbl eta2 = v / rho - 1.0L;
   cdbl m    = b * f0 * ( (1.0L + n + (5.0L / 4.0L) * n2 + (5.0L / 4.0L) * n3) * deltaPhi
-                           - (3.0L * n + 3.0L * n2 + (21.0L / 8.0L) * n3) * SIN(deltaPhi) * COS(sumPhi)
-                           + ((15.0L / 8.0L) * n2 + (15.0L / 8.0L) * n3) * SIN(2.0L * deltaPhi) * COS(2.0L * sumPhi)
-                           - (35.0L / 24.0L) * n3 * SIN(3.0L * deltaPhi) * COS(3.0L * sumPhi) 
-                           );
+                       - (3.0L * n + 3.0L * n2 + (21.0L / 8.0L) * n3) * SIN(deltaPhi) * COS(sumPhi)
+                       + ((15.0L / 8.0L) * n2 + (15.0L / 8.0L) * n3) * SIN(2.0L * deltaPhi) * COS(2.0L * sumPhi)
+                       - (35.0L / 24.0L) * n3 * SIN(3.0L * deltaPhi) * COS(3.0L * sumPhi) 
+                       );
   
   cdbl one    = m + toN;
   cdbl two    = (v /   2.0L) * sinPhi * cosPhi;
@@ -130,11 +130,10 @@ EastingNorthing ETRS89LatLonToETRSEastingNorthing(const LatLonDecimal latLon) {
   return latLonToEastingNorthing(latLon, ETRS89Ellipsoid, nationalGridProj);
 }
 
-EastingNorthing OSTN02Shifts(const short eIndex, const short nIndex) {
+EastingNorthing OSTN02Shifts(const int eIndex, const int nIndex) {
   EastingNorthing shifts;
   shifts.e = shifts.n = shifts.elevation = shifts.geoid = 0;
-  
-  if (eIndex < 0 || eIndex > 700 || nIndex < 0 || nIndex > 1250) return shifts;
+  if (nIndex < 0 || nIndex > 1250) return shifts;
 
   OSTN02Index dataIndex = OSTN02Indices[nIndex];
   if (eIndex < dataIndex.eMin || eIndex >= dataIndex.eMin + dataIndex.eCount) return shifts;
@@ -147,7 +146,6 @@ EastingNorthing OSTN02Shifts(const short eIndex, const short nIndex) {
   shifts.n         = (((dbl) record.nShift) / 1000.0L) - 82.0L;
   shifts.elevation = (((dbl) record.gShift) / 1000.0L) + 43.0L;
   shifts.geoid     = record.gFlag;
-  
   return shifts;
 }
 
@@ -155,19 +153,24 @@ EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthi
   EastingNorthing shifted;
   shifted.e = shifted.n = shifted.elevation = shifted.geoid = 0;
 
-  short e0 = (short) (en.e / 1000.0L);
-  short n0 = (short) (en.n / 1000.0L);
-  cdbl  dx = en.e - (dbl) (e0 * 1000);
-  cdbl  dy = en.n - (dbl) (n0 * 1000);
-  cdbl  t  = dx / 1000.0L;
-  cdbl  u  = dy / 1000.0L;
+  int  e0 = (int) (en.e / 1000.0L);
+  int  n0 = (int) (en.n / 1000.0L);
+  cdbl dx = en.e - (dbl) (e0 * 1000);
+  cdbl dy = en.n - (dbl) (n0 * 1000);
+  cdbl t  = dx / 1000.0L;
+  cdbl u  = dy / 1000.0L;
   
   EastingNorthing shifts0 = OSTN02Shifts(e0    , n0    );
-  EastingNorthing shifts1 = OSTN02Shifts(e0 + 1, n0    );
-  EastingNorthing shifts2 = OSTN02Shifts(e0 + 1, n0 + 1);
-  EastingNorthing shifts3 = OSTN02Shifts(e0    , n0 + 1);
+  if (shifts0.geoid == 0) return shifted;
   
-  if (shifts0.geoid == 0 || shifts1.geoid == 0 || shifts2.geoid == 0 || shifts3.geoid == 0) return shifted;
+  EastingNorthing shifts1 = OSTN02Shifts(e0 + 1, n0    );
+  if (shifts1.geoid == 0) return shifted;
+  
+  EastingNorthing shifts2 = OSTN02Shifts(e0 + 1, n0 + 1);
+  if (shifts2.geoid == 0) return shifted;
+  
+  EastingNorthing shifts3 = OSTN02Shifts(e0    , n0 + 1);
+  if (shifts3.geoid == 0) return shifted;
   
   cdbl weight0 = (1.0L - t) * (1.0L - u);
   cdbl weight1 =         t  * (1.0L - u);
@@ -197,7 +200,7 @@ EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthi
   return shifted;
 }
 
-LatLonDecimal latLonDecimalFromLatLonDegMinSec(LatLonDegMinSec dms) {
+LatLonDecimal latLonDecimalFromLatLonDegMinSec(const LatLonDegMinSec dms) {
   LatLonDecimal dec;
   dec.lat = (dms.lat.westOrSouth ? -1.0L : 1.0L) * (((dbl) dms.lat.deg) + ((dbl) dms.lat.min) / 60.0L + dms.lat.sec / 3600.0L);
   dec.lon = (dms.lon.westOrSouth ? -1.0L : 1.0L) * (((dbl) dms.lon.deg) + ((dbl) dms.lon.min) / 60.0L + dms.lon.sec / 3600.0L);
@@ -207,11 +210,17 @@ LatLonDecimal latLonDecimalFromLatLonDegMinSec(LatLonDegMinSec dms) {
 }
 
 void doTests(void) {
-  printf("Test MD5: ");
   unsigned char digest[MD5_DIGEST_LENGTH];
+  
+  printf("Test index MD5:  ");
+  MD5((unsigned char *) OSTN02Indices, sizeof(OSTN02Indices), digest);
+  for (char i = 0; i < MD5_DIGEST_LENGTH; i++) printf("%02x", digest[i]);
+  printf("\nValid index MD5: %s\n\n", originalIndicesMD5);
+  
+  printf("Test data MD5:   ");
   MD5((unsigned char *) OSTN02Data, sizeof(OSTN02Data), digest);
   for (char i = 0; i < MD5_DIGEST_LENGTH; i++) printf("%02x", digest[i]);
-  printf("\nReal MD5: %s\n\n", originalDataMD5);
+  printf("\nValid data MD5:  %s\n\n", originalDataMD5);
   
   LatLonDegMinSec testETRSCoords[] = {
     {.lat = {.deg = 53, .min = 46, .sec = 44.796925L, .westOrSouth = false}, 
