@@ -7,7 +7,8 @@
 //
 
 #include "OSTN02.h"
-#include "OSTN02.struct-array"
+#include "OSTN02.index.struct-array"
+#include "OSTN02.data.struct-array"
 
 #define piOver180 0.0174532925199432957692369076848861271344287188854172545609L
 
@@ -130,33 +131,22 @@ EastingNorthing ETRS89LatLonToETRSEastingNorthing(const LatLonDecimal latLon) {
 }
 
 EastingNorthing OSTN02Shifts(const short eIndex, const short nIndex) {
-  /* OSTN02Record record;
-  unsigned int  recordIndex = eIndex + (nIndex * 701);
-  unsigned long offset = recordIndex * 7;
-  */
-  /*
-  // using an external data blob
-  FILE *fp = fopen("OSTN02.data", "rb");
-  fseek(fp, offset, SEEK_SET);
-  fread(&record, 1, 7, fp);
-  fclose(fp);
-  */
+  EastingNorthing shifts;
+  shifts.e = shifts.n = shifts.elevation = shifts.geoid = 0;
   
-  // using embedded data array
-  //memcpy(&record, &OSTN02Data[offset], 7);
+  if (eIndex < 0 || eIndex > 700 || nIndex < 0 || nIndex > 1250) return shifts;
+
+  OSTN02Index dataIndex = OSTN02Indices[nIndex];
+  if (eIndex < dataIndex.eMin || eIndex >= dataIndex.eMin + dataIndex.eCount) return shifts;
   
-  unsigned int recordIndex = eIndex + (nIndex * 701);
-  OSTN02Record record = OSTN02Records[recordIndex];
+  unsigned int dataOffset = dataIndex.offset + (eIndex - dataIndex.eMin);
+  OSTN02Datum record = OSTN02Data[dataOffset];
+  if (record.gFlag == 0) return shifts;
   
-  EastingNorthing shifts; 
-  if (record.gFlag == (unsigned char) 0) {
-    shifts.geoid = 0;
-  } else {
-    shifts.e         = (((numtype) record.eShift) / 1000.0L) + 86.0L;
-    shifts.n         = (((numtype) record.nShift) / 1000.0L) - 82.0L;
-    shifts.elevation = (((numtype) record.gShift) / 1000.0L) + 43.0L;
-    shifts.geoid     = record.gFlag;
-  }
+  shifts.e         = (((numtype) record.eShift) / 1000.0L) + 86.0L;
+  shifts.n         = (((numtype) record.nShift) / 1000.0L) - 82.0L;
+  shifts.elevation = (((numtype) record.gShift) / 1000.0L) + 43.0L;
+  shifts.geoid     = record.gFlag;
   
   return shifts;
 }
@@ -164,9 +154,7 @@ EastingNorthing OSTN02Shifts(const short eIndex, const short nIndex) {
 EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthing en) {
   EastingNorthing shifted;
   shifted.e = shifted.n = shifted.elevation = shifted.geoid = 0;
-  
-  if (en.e < 0.0L || en.e >= 700000.0L || en.n < 0.0L || en.n >= 1250000.0L) return shifted;  
-  
+
   short e0 = (short) (en.e / 1000.0L);
   short n0 = (short) (en.n / 1000.0L);
   cnumtype dx = en.e - (numtype) (e0 * 1000);
@@ -219,16 +207,9 @@ LatLonDecimal latLonDecimalFromLatLonDegMinSec(LatLonDegMinSec dms) {
 }
 
 void doTests(void) {
-  /*
   printf("Test MD5: ");
   unsigned char digest[MD5_DIGEST_LENGTH];
-  MD5(OSTN02Data, sizeof(OSTN02Data), digest);
-  for (char i = 0; i < MD5_DIGEST_LENGTH; i++) printf("%02x", digest[i]);
-  printf("\nReal MD5: a1748516214f10799249563a50d7c26d\n\n");
-   */
-  printf("Test MD5: ");
-  unsigned char digest[MD5_DIGEST_LENGTH];
-  MD5((unsigned char *) OSTN02Records, sizeof(OSTN02Records), digest);
+  MD5((unsigned char *) OSTN02Data, sizeof(OSTN02Data), digest);
   for (char i = 0; i < MD5_DIGEST_LENGTH; i++) printf("%02x", digest[i]);
   printf("\nReal MD5: %s\n\n", originalDataMD5);
   
