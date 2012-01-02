@@ -19,8 +19,8 @@
 #define use_long  // comment this line out for double precision
 
 #ifdef use_long
-#define numtype  long double
-#define cnumtype const long double
+#define dbl      long double
+#define cdbl     const long double
 #define SIN      sinl
 #define COS      cosl
 #define TAN      tanl
@@ -31,8 +31,8 @@
 
 #else
 
-#define numtype  double
-#define cnumtype const double
+#define dbl      double
+#define cdbl     const double
 #define SIN      sin
 #define COS      cos
 #define TAN      tan
@@ -51,37 +51,37 @@ char *OSGB36GeoidRegions[15];
 typedef struct {
 	unsigned char deg;  // range 0 - 180 (S or W)
 	unsigned char min;  // range 0 - 60
-	numtype sec;
+	dbl sec;
   bool westOrSouth;
 } DegMinSec;
 
 typedef struct {
-	numtype e;
-	numtype n;
-  numtype elevation;
+	dbl e;
+	dbl n;
+  dbl elevation;
   signed char geoid;
 } EastingNorthing;
 
 typedef struct {
-	numtype lat;
-	numtype lon;
-  numtype elevation;
+	dbl lat;
+	dbl lon;
+  dbl elevation;
   unsigned char geoid;
 } LatLonDecimal;
 
 typedef struct {
 	DegMinSec lat;
 	DegMinSec lon;
-  numtype elevation;
+  dbl elevation;
 } LatLonDegMinSec;
 
 typedef struct {
-	numtype semiMajorAxis;
-	numtype semiMinorAxis;
+	dbl semiMajorAxis;
+	dbl semiMinorAxis;
 } Ellipsoid;
 
 typedef struct {
-	numtype centralMeridianScale;
+	dbl centralMeridianScale;
   LatLonDecimal trueOriginLatLon;
 	EastingNorthing trueOriginEastingNorthing;
 } MapProjection;

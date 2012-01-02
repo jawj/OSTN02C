@@ -49,62 +49,62 @@ char *OSGB36GeoidRegions[] = {
 };
 
 EastingNorthing latLonToEastingNorthing(const LatLonDecimal latLon, const Ellipsoid ellipsoid, const MapProjection projection) {
-  cnumtype a   = ellipsoid.semiMajorAxis;
-  cnumtype b   = ellipsoid.semiMinorAxis;
-  cnumtype f0  = projection.centralMeridianScale;
-  cnumtype toE = projection.trueOriginEastingNorthing.e;
-  cnumtype toN = projection.trueOriginEastingNorthing.n;
+  cdbl a   = ellipsoid.semiMajorAxis;
+  cdbl b   = ellipsoid.semiMinorAxis;
+  cdbl f0  = projection.centralMeridianScale;
+  cdbl toE = projection.trueOriginEastingNorthing.e;
+  cdbl toN = projection.trueOriginEastingNorthing.n;
   
   // Convert degrees to radians
-  cnumtype phi     = piOver180 * latLon.lat;
-  cnumtype lambda  = piOver180 * latLon.lon;
-  cnumtype phi0    = piOver180 * projection.trueOriginLatLon.lat;
-  cnumtype lambda0 = piOver180 * projection.trueOriginLatLon.lon;
+  cdbl phi     = piOver180 * latLon.lat;
+  cdbl lambda  = piOver180 * latLon.lon;
+  cdbl phi0    = piOver180 * projection.trueOriginLatLon.lat;
+  cdbl lambda0 = piOver180 * projection.trueOriginLatLon.lon;
   
   // Calculations
-  cnumtype deltaPhi = phi - phi0;
-  cnumtype sumPhi   = phi + phi0;
-  cnumtype sinPhi   = SIN(phi);
-  cnumtype sinPhi2  = sinPhi * sinPhi;
-  cnumtype cosPhi   = COS(phi);
-  cnumtype cosPhi2  = cosPhi * cosPhi;
-  cnumtype cosPhi3  = cosPhi2 * cosPhi;
-  cnumtype cosPhi5  = cosPhi3 * cosPhi2;
-  cnumtype tanPhi   = TAN(phi);
-  cnumtype tanPhi2  = tanPhi * tanPhi;
-  cnumtype tanPhi4  = tanPhi2 * tanPhi2;
+  cdbl deltaPhi = phi - phi0;
+  cdbl sumPhi   = phi + phi0;
+  cdbl sinPhi   = SIN(phi);
+  cdbl sinPhi2  = sinPhi * sinPhi;
+  cdbl cosPhi   = COS(phi);
+  cdbl cosPhi2  = cosPhi * cosPhi;
+  cdbl cosPhi3  = cosPhi2 * cosPhi;
+  cdbl cosPhi5  = cosPhi3 * cosPhi2;
+  cdbl tanPhi   = TAN(phi);
+  cdbl tanPhi2  = tanPhi * tanPhi;
+  cdbl tanPhi4  = tanPhi2 * tanPhi2;
   
-  cnumtype a2   = a * a;
-  cnumtype e2   = (a2 - b * b) / a2;
-  cnumtype n    = (a - b) / (a + b);
-  cnumtype n2   = n * n;
-  cnumtype n3   = n2 * n;
-  cnumtype oneMinusE2SinPhi2 = 1.0L - e2 * sinPhi2;
-  cnumtype sqrtOneMinusE2SinPhi2 = SQRT(oneMinusE2SinPhi2);
-  cnumtype aF0  = a * f0;
-  cnumtype v    = aF0 / sqrtOneMinusE2SinPhi2;
-  cnumtype rho  = aF0 * (1.0L - e2) / (oneMinusE2SinPhi2 * sqrtOneMinusE2SinPhi2);
-  cnumtype eta2 = v / rho - 1.0L;
-  cnumtype m    = b * f0 * ( (1.0L + n + (5.0L / 4.0L) * n2 + (5.0L / 4.0L) * n3) * deltaPhi
+  cdbl a2   = a * a;
+  cdbl e2   = (a2 - b * b) / a2;
+  cdbl n    = (a - b) / (a + b);
+  cdbl n2   = n * n;
+  cdbl n3   = n2 * n;
+  cdbl oneMinusE2SinPhi2 = 1.0L - e2 * sinPhi2;
+  cdbl sqrtOneMinusE2SinPhi2 = SQRT(oneMinusE2SinPhi2);
+  cdbl aF0  = a * f0;
+  cdbl v    = aF0 / sqrtOneMinusE2SinPhi2;
+  cdbl rho  = aF0 * (1.0L - e2) / (oneMinusE2SinPhi2 * sqrtOneMinusE2SinPhi2);
+  cdbl eta2 = v / rho - 1.0L;
+  cdbl m    = b * f0 * ( (1.0L + n + (5.0L / 4.0L) * n2 + (5.0L / 4.0L) * n3) * deltaPhi
                            - (3.0L * n + 3.0L * n2 + (21.0L / 8.0L) * n3) * SIN(deltaPhi) * COS(sumPhi)
                            + ((15.0L / 8.0L) * n2 + (15.0L / 8.0L) * n3) * SIN(2.0L * deltaPhi) * COS(2.0L * sumPhi)
                            - (35.0L / 24.0L) * n3 * SIN(3.0L * deltaPhi) * COS(3.0L * sumPhi) 
                            );
   
-  cnumtype one    = m + toN;
-  cnumtype two    = (v /   2.0L) * sinPhi * cosPhi;
-  cnumtype three  = (v /  24.0L) * sinPhi * cosPhi3 * (5.0L - tanPhi2 + 9.0L * eta2);
-  cnumtype threeA = (v / 720.0L) * sinPhi * cosPhi5 * (61.0L - 58.0L * tanPhi2 + tanPhi4);
-  cnumtype four   = v * cosPhi;
-  cnumtype five   = (v /   6.0L) * cosPhi3 * (v / rho - tanPhi2);
-  cnumtype six    = (v / 120.0L) * cosPhi5 * (5.0L - 18.0L * tanPhi2 + tanPhi4 + 14.0L * eta2 - 58.0L * tanPhi2 * eta2);
+  cdbl one    = m + toN;
+  cdbl two    = (v /   2.0L) * sinPhi * cosPhi;
+  cdbl three  = (v /  24.0L) * sinPhi * cosPhi3 * (5.0L - tanPhi2 + 9.0L * eta2);
+  cdbl threeA = (v / 720.0L) * sinPhi * cosPhi5 * (61.0L - 58.0L * tanPhi2 + tanPhi4);
+  cdbl four   = v * cosPhi;
+  cdbl five   = (v /   6.0L) * cosPhi3 * (v / rho - tanPhi2);
+  cdbl six    = (v / 120.0L) * cosPhi5 * (5.0L - 18.0L * tanPhi2 + tanPhi4 + 14.0L * eta2 - 58.0L * tanPhi2 * eta2);
   
-  cnumtype deltaLambda  = lambda - lambda0;
-  cnumtype deltaLambda2 = deltaLambda  * deltaLambda;
-  cnumtype deltaLambda3 = deltaLambda2 * deltaLambda;
-  cnumtype deltaLambda4 = deltaLambda3 * deltaLambda;
-  cnumtype deltaLambda5 = deltaLambda4 * deltaLambda;
-  cnumtype deltaLambda6 = deltaLambda5 * deltaLambda;
+  cdbl deltaLambda  = lambda - lambda0;
+  cdbl deltaLambda2 = deltaLambda  * deltaLambda;
+  cdbl deltaLambda3 = deltaLambda2 * deltaLambda;
+  cdbl deltaLambda4 = deltaLambda3 * deltaLambda;
+  cdbl deltaLambda5 = deltaLambda4 * deltaLambda;
+  cdbl deltaLambda6 = deltaLambda5 * deltaLambda;
   
   EastingNorthing en;
   en.n = one + two * deltaLambda2 + three * deltaLambda4 + threeA * deltaLambda6;
@@ -143,9 +143,9 @@ EastingNorthing OSTN02Shifts(const short eIndex, const short nIndex) {
   OSTN02Datum record = OSTN02Data[dataOffset];
   if (record.gFlag == 0) return shifts;
   
-  shifts.e         = (((numtype) record.eShift) / 1000.0L) + 86.0L;
-  shifts.n         = (((numtype) record.nShift) / 1000.0L) - 82.0L;
-  shifts.elevation = (((numtype) record.gShift) / 1000.0L) + 43.0L;
+  shifts.e         = (((dbl) record.eShift) / 1000.0L) + 86.0L;
+  shifts.n         = (((dbl) record.nShift) / 1000.0L) - 82.0L;
+  shifts.elevation = (((dbl) record.gShift) / 1000.0L) + 43.0L;
   shifts.geoid     = record.gFlag;
   
   return shifts;
@@ -157,10 +157,10 @@ EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthi
 
   short e0 = (short) (en.e / 1000.0L);
   short n0 = (short) (en.n / 1000.0L);
-  cnumtype dx = en.e - (numtype) (e0 * 1000);
-  cnumtype dy = en.n - (numtype) (n0 * 1000);
-  cnumtype t  = dx / 1000.0L;
-  cnumtype u  = dy / 1000.0L;
+  cdbl  dx = en.e - (dbl) (e0 * 1000);
+  cdbl  dy = en.n - (dbl) (n0 * 1000);
+  cdbl  t  = dx / 1000.0L;
+  cdbl  u  = dy / 1000.0L;
   
   EastingNorthing shifts0 = OSTN02Shifts(e0    , n0    );
   EastingNorthing shifts1 = OSTN02Shifts(e0 + 1, n0    );
@@ -169,10 +169,10 @@ EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthi
   
   if (shifts0.geoid == 0 || shifts1.geoid == 0 || shifts2.geoid == 0 || shifts3.geoid == 0) return shifted;
   
-  cnumtype weight0 = (1.0L - t) * (1.0L - u);
-  cnumtype weight1 =         t  * (1.0L - u);
-  cnumtype weight2 =         t  *         u;
-  cnumtype weight3 = (1.0L - t) *         u;
+  cdbl weight0 = (1.0L - t) * (1.0L - u);
+  cdbl weight1 =         t  * (1.0L - u);
+  cdbl weight2 =         t  *         u;
+  cdbl weight3 = (1.0L - t) *         u;
   
   shifted.e = en.e + weight0 * shifts0.e
                    + weight1 * shifts1.e 
@@ -199,8 +199,8 @@ EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthi
 
 LatLonDecimal latLonDecimalFromLatLonDegMinSec(LatLonDegMinSec dms) {
   LatLonDecimal dec;
-  dec.lat = (dms.lat.westOrSouth ? -1.0L : 1.0L) * (((numtype) dms.lat.deg) + ((numtype) dms.lat.min) / 60.0L + dms.lat.sec / 3600.0L);
-  dec.lon = (dms.lon.westOrSouth ? -1.0L : 1.0L) * (((numtype) dms.lon.deg) + ((numtype) dms.lon.min) / 60.0L + dms.lon.sec / 3600.0L);
+  dec.lat = (dms.lat.westOrSouth ? -1.0L : 1.0L) * (((dbl) dms.lat.deg) + ((dbl) dms.lat.min) / 60.0L + dms.lat.sec / 3600.0L);
+  dec.lon = (dms.lon.westOrSouth ? -1.0L : 1.0L) * (((dbl) dms.lon.deg) + ((dbl) dms.lon.min) / 60.0L + dms.lon.sec / 3600.0L);
   dec.elevation = dms.elevation;
   dec.geoid = 0;
   return dec;
