@@ -26,7 +26,7 @@
 #define TAN      tanl
 #define SQRT     sqrtl
 #define numdesc  "long double"
-#define llFmtStr "%s lat: % 11.6Lf,  lon: % 11.6Lf,  elevation: %11.6Lf%s"
+#define llFmtStr "%s lat: % 11.6Lf,  lon: % 11.6Lf,  elevation: %11.3Lf%s"
 #define enFmtStr "%s   E: %11.3Lf,    N: %11.3Lf,  elevation:  %7.3Lf (%s / %s)%s"
 
 #else
@@ -38,7 +38,7 @@
 #define TAN      tan
 #define SQRT     sqrt
 #define numdesc  "double"
-#define llFmtStr "%s lat: % 11.6f,  lon: % 11.6f,  elevation: %11.6f%s"
+#define llFmtStr "%s lat: % 11.6f,  lon: % 11.6f,  elevation: %11.3f%s"
 #define enFmtStr "%s   E: %11.3f,    N: %11.3f,  elevation:  %7.3f (%s / %s)%s"
 
 #endif
