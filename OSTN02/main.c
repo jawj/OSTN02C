@@ -12,7 +12,6 @@
 #include "OSTN02.h"
 
 int main (int argc, const char * argv[]) {
-  printf("%ld", sizeof(OSTN02Index));
   if (argc == 2 && strcmp(argv[1], "--tests") == 0) {
     doTests();
     return EXIT_SUCCESS;
