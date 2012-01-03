@@ -1,4 +1,3 @@
-
 // from http://www.w3.org/TR/PNG/#D-CRCAppendix
 
 #import "crc32.h"

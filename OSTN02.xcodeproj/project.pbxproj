@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5E068CFE14B0E8D8008C3DF7 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E068CFD14B0E8D8008C3DF7 /* libcrypto.dylib */; };
 		5E2FEDCD14B35558007849B4 /* crc32.c in Sources */ = {isa = PBXBuildFile; fileRef = 5E2FEDCC14B35558007849B4 /* crc32.c */; };
 		5EBE804514A5FE4800CA9D70 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 5EBE804414A5FE4800CA9D70 /* main.c */; };
 		5EBE804F14A5FE9000CA9D70 /* OSTN02.c in Sources */ = {isa = PBXBuildFile; fileRef = 5EBE804E14A5FE9000CA9D70 /* OSTN02.c */; };
@@ -26,12 +25,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		5E068CFD14B0E8D8008C3DF7 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
 		5E2FEDCC14B35558007849B4 /* crc32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = crc32.c; sourceTree = "<group>"; };
 		5E2FEDCE14B35570007849B4 /* crc32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crc32.h; sourceTree = "<group>"; };
-		5E2FEDCF14B35DD4007849B4 /* testCoords.struct-arrays */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "testCoords.struct-arrays"; sourceTree = "<group>"; };
-		5E67D47B14B212FE00F5D4BC /* OSTN02.data.struct-array */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "OSTN02.data.struct-array"; sourceTree = "<group>"; };
-		5E67D47C14B212FE00F5D4BC /* OSTN02.index.struct-array */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "OSTN02.index.struct-array"; sourceTree = "<group>"; };
+		5E2FEDCF14B35DD4007849B4 /* testCoords.data */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = testCoords.data; sourceTree = "<group>"; };
+		5E2FEDDA14B3641B007849B4 /* geoids.data */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = geoids.data; sourceTree = "<group>"; };
+		5E67D47B14B212FE00F5D4BC /* shifts.data */ = {isa = PBXFileReference; fileEncoding = 4; path = shifts.data; sourceTree = "<group>"; };
+		5E67D47C14B212FE00F5D4BC /* shifts.index.data */ = {isa = PBXFileReference; fileEncoding = 4; path = shifts.index.data; sourceTree = "<group>"; };
 		5E7AD48014B0D26E00AA6C99 /* csv-to-struct-array.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = "csv-to-struct-array.rb"; sourceTree = "<group>"; };
 		5EBE804014A5FE4800CA9D70 /* OSTN02C */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OSTN02C; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EBE804414A5FE4800CA9D70 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
@@ -44,19 +43,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5E068CFE14B0E8D8008C3DF7 /* libcrypto.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5E2FEDDC14B364D6007849B4 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				5E67D47B14B212FE00F5D4BC /* shifts.data */,
+				5E67D47C14B212FE00F5D4BC /* shifts.index.data */,
+				5E2FEDCF14B35DD4007849B4 /* testCoords.data */,
+				5E2FEDDA14B3641B007849B4 /* geoids.data */,
+			);
+			name = Data;
+			path = OSTN02;
+			sourceTree = "<group>";
+		};
 		5EBE803514A5FE4800CA9D70 = {
 			isa = PBXGroup;
 			children = (
-				5E068CFD14B0E8D8008C3DF7 /* libcrypto.dylib */,
 				5E7AD48014B0D26E00AA6C99 /* csv-to-struct-array.rb */,
-				5EBE804314A5FE4800CA9D70 /* OSTN02 */,
+				5EBE804314A5FE4800CA9D70 /* Source code */,
+				5E2FEDDC14B364D6007849B4 /* Data */,
 				5EBE804114A5FE4800CA9D70 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -69,7 +79,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		5EBE804314A5FE4800CA9D70 /* OSTN02 */ = {
+		5EBE804314A5FE4800CA9D70 /* Source code */ = {
 			isa = PBXGroup;
 			children = (
 				5EBE804D14A5FE7300CA9D70 /* OSTN02.h */,
@@ -77,10 +87,8 @@
 				5E2FEDCC14B35558007849B4 /* crc32.c */,
 				5E2FEDCE14B35570007849B4 /* crc32.h */,
 				5EBE804414A5FE4800CA9D70 /* main.c */,
-				5E67D47B14B212FE00F5D4BC /* OSTN02.data.struct-array */,
-				5E67D47C14B212FE00F5D4BC /* OSTN02.index.struct-array */,
-				5E2FEDCF14B35DD4007849B4 /* testCoords.struct-arrays */,
 			);
+			name = "Source code";
 			path = OSTN02;
 			sourceTree = "<group>";
 		};

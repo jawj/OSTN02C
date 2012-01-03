@@ -1,0 +1,35 @@
+static const char *OSGB36GeoidNames[] = {
+  "N/A",
+  "Newlyn",
+  "St Marys",
+  "Douglas02",
+  "Stornoway",
+  "St Kilda",
+  "Lerwick",
+  "Newlyn",
+  "Fair Isle",
+  "Flannan Isles",
+  "North Rona",
+  "Sule Skerry",
+  "Foula",
+  "Malin Head",
+  "Belfast"
+};
+
+static const char *OSGB36GeoidRegions[] = {
+  "Outside model boundary",
+  "UK mainland",
+  "Scilly Isles",
+  "Isle of Man",
+  "Outer Hebrides",
+  "St Kilda",
+  "Shetland Isles",
+  "Orkney Isles",
+  "Fair Isle",
+  "Flannan Isles",
+  "North Rona",
+  "Sule Skerry",
+  "Foula",
+  "Republic of Ireland",
+  "Northern Ireland"
+};

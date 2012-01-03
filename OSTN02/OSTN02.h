@@ -16,6 +16,7 @@
 #include <string.h>
 #include "crc32.h"
 
+
 #define use_long  // comment this line out for double precision
 
 #ifdef use_long
@@ -52,11 +53,6 @@
 #define ULINE     "\033[4m"
 #define UNULINE   "\033[24m"
 
-#define originalDataCRC    790474494L
-#define originalIndicesCRC 244629328L
-
-char *OSGB36GeoidNames[15];
-char *OSGB36GeoidRegions[15];
 
 typedef struct {
 	unsigned char deg;  // range 0 - 180 (S or W)

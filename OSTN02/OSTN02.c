@@ -7,47 +7,15 @@
 //
 
 #include "OSTN02.h"
-#include "OSTN02.index.struct-array"
-#include "OSTN02.data.struct-array"
-#include "testCoords.struct-arrays"
+#include "testCoords.data"
+#include "shifts.index.data"
+#include "shifts.data"
+#include "geoids.data"
+
+#define originalIndicesCRC 244629328L
+#define originalDataCRC 790474494L
 
 #define piOver180 0.0174532925199432957692369076848861271344287188854172545609L
-
-char *OSGB36GeoidNames[] = {
-  "N/A",
-  "Newlyn",
-  "St Marys",
-  "Douglas02",
-  "Stornoway",
-  "St Kilda",
-  "Lerwick",
-  "Newlyn",
-  "Fair Isle",
-  "Flannan Isles",
-  "North Rona",
-  "Sule Skerry",
-  "Foula",
-  "Malin Head",
-  "Belfast"
-};
-
-char *OSGB36GeoidRegions[] = {
-  "Outside model boundary",
-  "UK mainland",
-  "Scilly Isles",
-  "Isle of Man",
-  "Outer Hebrides",
-  "St Kilda",
-  "Shetland Isles",
-  "Orkney Isles",
-  "Fair Isle",
-  "Flannan Isles",
-  "North Rona",
-  "Sule Skerry",
-  "Foula",
-  "Republic of Ireland",
-  "Northern Ireland"
-};
 
 EastingNorthing latLonToEastingNorthing(const LatLonDecimal latLon, const Ellipsoid ellipsoid, const MapProjection projection) {
   cdbl a   = ellipsoid.semiMajorAxis;

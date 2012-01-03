@@ -10,6 +10,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "OSTN02.h"
+#include "geoids.data"
 
 int main (int argc, const char * argv[]) {  
   if (argc == 2 && strcmp(argv[1], "--tests") == 0) {
