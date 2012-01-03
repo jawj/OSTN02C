@@ -1,0 +1,5 @@
+This is a C implementation of Ordnance Survey's 'definitive transformation model',  "OSTN02":http://www.ordnancesurvey.co.uk/oswebsite/gps/osnetfreeservices/about/surveying_osnet.html#2, with tests.
+
+It's intended to power a future update of my "GridPoint GB":http://mackerron.com/gridpointgb/ iOS app, though it also includes very basic command-line tool.
+
+I'm releasing it under the "MIT licence":http://www.opensource.org/licenses/mit-license.php.
