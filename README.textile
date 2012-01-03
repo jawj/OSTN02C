@@ -2,7 +2,7 @@
 
 It's intended to power a future update of my "GridPoint GB":http://mackerron.com/gridpointgb/ iOS app. It also includes a basic command-line tool.
 
-I'm releasing the code under the "MIT licence":http://www.opensource.org/licenses/mit-license.php (note, however, that OSTN02 and OSGM02 are trademarks of Ordnance Survey, and that the OSTN02 and OSGM02 data are _© Crown copyright 2002. All rights reserved"_).
+I'm releasing the code under the "MIT licence":http://www.opensource.org/licenses/mit-license.php (note, however, that OSTN02 and OSGM02 are trademarks of Ordnance Survey, and that the OSTN02 and OSGM02 data are © Crown copyright 2002. All rights reserved).
 
 The command-line tool works like this:
 
