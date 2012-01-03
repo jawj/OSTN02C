@@ -56,52 +56,52 @@
 
 
 typedef struct {
-	unsigned char deg;  // range 0 - 180 (S or W)
-	unsigned char min;  // range 0 - 60
-	dbl sec;
+  unsigned char deg;  // range 0 - 180 (S or W)
+  unsigned char min;  // range 0 - 60
+  dbl sec;
   bool westOrSouth;
 } DegMinSec;
 
 typedef struct {
-	dbl e;
-	dbl n;
+  dbl e;
+  dbl n;
   dbl elevation;
   unsigned char geoid;
 } EastingNorthing;
 
 typedef struct {
-	dbl lat;
-	dbl lon;
+  dbl lat;
+  dbl lon;
   dbl elevation;
   unsigned char geoid;
 } LatLonDecimal;
 
 typedef struct {
-	DegMinSec lat;
-	DegMinSec lon;
+  DegMinSec lat;
+  DegMinSec lon;
   dbl elevation;
 } LatLonDegMinSec;
 
 typedef struct {
-	dbl semiMajorAxis;
-	dbl semiMinorAxis;
+  dbl semiMajorAxis;
+  dbl semiMinorAxis;
 } Ellipsoid;
 
 typedef struct {
-	dbl centralMeridianScale;
+  dbl centralMeridianScale;
   LatLonDecimal trueOriginLatLon;
-	EastingNorthing trueOriginEastingNorthing;
+  EastingNorthing trueOriginEastingNorthing;
 } MapProjection;
 
 typedef struct {
-	unsigned int eMin   : 10;
-	unsigned int eCount : 10;
+  unsigned int eMin   : 10;
+  unsigned int eCount : 10;
   unsigned int offset : 20;
 } __attribute__((packed)) OSTN02Index;
 
 typedef struct {
-	unsigned int eShift : 15;
-	unsigned int nShift : 15;
+  unsigned int eShift : 15;
+  unsigned int nShift : 15;
   unsigned int gShift : 14;
   unsigned int gFlag  :  4;
 } __attribute__((packed)) OSTN02Datum;
