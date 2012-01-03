@@ -4,13 +4,213 @@ It's intended to power a future update of my "GridPoint GB":http://mackerron.com
 
 It also includes very basic command-line tool, which works like this:
 
-    dyn204:OSTN02 George$ ./OSTN02C
-    <span style="color: #fff; background: #000;">OSTN02C</span> - Copyright (c) George MacKerron 2012, http://mackerron.com; compiled Jan  3 2012 17:16:43; long double precision.
+bc.. dyn204:OSTN02 George$ ./OSTN02C
+<span style="color: #fff; background: #000;">OSTN02C</span> - Copyright (c) George MacKerron 2012, http://mackerron.com; compiled Jan  3 2012 17:16:43; long double precision.
 
-    Usage: <b>OSTN02 --tests</b> verifies data integrity and runs tests.
-           <b>OSTN02 <u>lat</u> <u>lon</u> <u>elevation</u></b> converts ETRS/WGS84 coordinates to OSGB36 using OSTN02.
+Usage: <b>OSTN02 --tests</b> verifies data integrity and runs tests.
+       <b>OSTN02 <u>lat</u> <u>lon</u> <u>elevation</u></b> converts ETRS/WGS84 coordinates to OSGB36 using OSTN02.
 
-    dyn204:OSTN02 George$ ./OSTN02C 51.0 0.0 100.0
-    ETRS89 in  lat:   51.000000,  lon:    0.000000,  elevation:  100.000
-    OSGB36 out   E:  540431.987,    N:  124193.587,  elevation:   54.955 (UK mainland / Newlyn)
-    
+dyn204:OSTN02 George$ ./OSTN02C 51.0 0.0 100.0
+ETRS89 in  lat:   51.000000,  lon:    0.000000,  elevation:  100.000
+OSGB36 out   E:  540431.987,    N:  124193.587,  elevation:   54.955 (UK mainland / Newlyn)
+
+dyn204:OSTN02 George$ ./OSTN02C --tests
+Original CRC32 (data):  790474494
+Computed CRC32 (data):  790474494
+
+Original CRC32 (index): 244629328
+Computed CRC32 (index): 244629328
+
+ETRS89          lat:   53.779110,  lon:   -3.040455,  elevation:   64.940
+OSGB36 actual     E:  331534.552,    N:  431920.792,  elevation:   12.636 (UK mainland / Newlyn)
+OSGB36 computed   E:  331534.552,    N:  431920.792,  elevation:   12.636 (UK mainland / Newlyn)
+
+ETRS89          lat:   51.427547,  lon:   -2.544076,  elevation:  104.018
+OSGB36 actual     E:  362269.979,    N:  169978.688,  elevation:   54.467 (UK mainland / Newlyn)
+OSGB36 computed   E:  362269.979,    N:  169978.688,  elevation:   54.467 (UK mainland / Newlyn)
+
+ETRS89          lat:   58.515604,  lon:   -6.260915,  elevation:  115.026
+OSGB36 actual     E:  151968.641,    N:  966483.777,  elevation:   58.836 (Outer Hebrides / Stornoway)
+OSGB36 computed   E:  151968.641,    N:  966483.777,  elevation:   58.836 (Outer Hebrides / Stornoway)
+
+ETRS89          lat:   54.895423,  lon:   -2.938277,  elevation:   93.541
+OSGB36 actual     E:  339921.133,    N:  556034.759,  elevation:   41.077 (UK mainland / Newlyn)
+OSGB36 computed   E:  339921.133,    N:  556034.759,  elevation:   41.077 (UK mainland / Newlyn)
+
+ETRS89          lat:   51.858909,  lon:   -4.308525,  elevation:   81.351
+OSGB36 actual     E:  241124.573,    N:  220332.638,  elevation:   27.590 (UK mainland / Newlyn)
+OSGB36 computed   E:  241124.573,    N:  220332.638,  elevation:   27.590 (UK mainland / Newlyn)
+
+ETRS89          lat:   51.894366,  lon:    0.897243,  elevation:   75.273
+OSGB36 actual     E:  599445.578,    N:  225722.824,  elevation:   30.192 (UK mainland / Newlyn)
+OSGB36 computed   E:  599445.578,    N:  225722.824,  elevation:   30.192 (UK mainland / Newlyn)
+
+ETRS89          lat:   53.344803,  lon:   -2.640493,  elevation:   88.411
+OSGB36 actual     E:  357455.831,    N:  383290.434,  elevation:   36.750 (UK mainland / Newlyn)
+OSGB36 computed   E:  357455.831,    N:  383290.434,  elevation:   36.750 (UK mainland / Newlyn)
+
+ETRS89          lat:   52.255294,  lon:   -2.154586,  elevation:  101.526
+OSGB36 actual     E:  389544.178,    N:  261912.151,  elevation:   51.977 (UK mainland / Newlyn)
+OSGB36 computed   E:  389544.178,    N:  261912.151,  elevation:   51.977 (UK mainland / Newlyn)
+
+ETRS89          lat:   55.924783,  lon:   -3.294792,  elevation:  119.032
+OSGB36 actual     E:  319188.423,    N:  670947.532,  elevation:   66.361 (UK mainland / Newlyn)
+OSGB36 computed   E:  319188.423,    N:  670947.532,  elevation:   66.361 (UK mainland / Newlyn)
+
+ETRS89          lat:   54.116851,  lon:   -0.077731,  elevation:   86.778
+OSGB36 actual     E:  525745.658,    N:  470703.211,  elevation:   41.217 (UK mainland / Newlyn)
+OSGB36 computed   E:  525745.658,    N:  470703.211,  elevation:   41.217 (UK mainland / Newlyn)
+
+ETRS89          lat:   57.139025,  lon:   -2.048560,  elevation:  108.610
+OSGB36 actual     E:  397160.479,    N:  805349.734,  elevation:   58.902 (UK mainland / Newlyn)
+OSGB36 computed   E:  397160.479,    N:  805349.734,  elevation:   58.902 (UK mainland / Newlyn)
+
+ETRS89          lat:   55.854000,  lon:   -4.296490,  elevation:   71.617
+OSGB36 actual     E:  256340.914,    N:  664697.266,  elevation:   17.414 (UK mainland / Newlyn)
+OSGB36 computed   E:  256340.914,    N:  664697.266,  elevation:   17.414 (UK mainland / Newlyn)
+
+ETRS89          lat:   57.486250,  lon:   -4.219264,  elevation:   66.178
+OSGB36 actual     E:  267056.756,    N:  846176.969,  elevation:   13.230 (UK mainland / Newlyn)
+OSGB36 computed   E:  267056.756,    N:  846176.969,  elevation:   13.230 (UK mainland / Newlyn)
+
+ETRS89          lat:   54.329195,  lon:   -4.388491,  elevation:   94.503
+OSGB36 actual     E:  244780.625,    N:  495254.884,  elevation:   39.891 (Isle of Man / Douglas02)
+OSGB36 computed   E:  244780.625,    N:  495254.884,  elevation:   39.891 (Isle of Man / Douglas02)
+
+ETRS89          lat:   54.086663,  lon:   -4.634522,  elevation:   84.366
+OSGB36 actual     E:  227778.318,    N:  468847.386,  elevation:   29.335 (Isle of Man / Douglas02)
+OSGB36 computed   E:  227778.318,    N:  468847.386,  elevation:   29.335 (Isle of Man / Douglas02)
+
+ETRS89          lat:   52.751367,  lon:    0.401535,  elevation:   66.431
+OSGB36 actual     E:  562180.535,    N:  319784.993,  elevation:   20.889 (UK mainland / Newlyn)
+OSGB36 computed   E:  562180.535,    N:  319784.993,  elevation:   20.889 (UK mainland / Newlyn)
+
+ETRS89          lat:   53.800215,  lon:   -1.663792,  elevation:  215.609
+OSGB36 actual     E:  422242.174,    N:  433818.699,  elevation:  165.891 (UK mainland / Newlyn)
+OSGB36 computed   E:  422242.174,    N:  433818.699,  elevation:  165.891 (UK mainland / Newlyn)
+
+ETRS89          lat:   49.960061,  lon:   -5.203046,  elevation:  124.269
+OSGB36 actual     E:  170370.706,    N:   11572.404,  elevation:   71.223 (UK mainland / Newlyn)
+OSGB36 computed   E:  170370.706,    N:   11572.404,  elevation:   71.223 (UK mainland / Newlyn)
+
+ETRS89          lat:   51.489366,  lon:   -0.119926,  elevation:   66.057
+OSGB36 actual     E:  530624.963,    N:  178388.461,  elevation:   20.518 (UK mainland / Newlyn)
+OSGB36 computed   E:  530624.963,    N:  178388.461,  elevation:   20.518 (UK mainland / Newlyn)
+
+ETRS89          lat:   53.416285,  lon:   -4.289181,  elevation:  100.776
+OSGB36 actual     E:  247958.959,    N:  393492.906,  elevation:   46.315 (UK mainland / Newlyn)
+OSGB36 computed   E:  247958.959,    N:  393492.906,  elevation:   46.315 (UK mainland / Newlyn)
+
+ETRS89          lat:   53.416309,  lon:   -4.289178,  elevation:  100.854
+OSGB36 actual     E:  247959.229,    N:  393495.580,  elevation:   46.393 (UK mainland / Newlyn)
+OSGB36 computed   E:  247959.229,    N:  393495.580,  elevation:   46.393 (UK mainland / Newlyn)
+
+ETRS89          lat:   57.006067,  lon:   -5.828367,  elevation:   68.494
+OSGB36 actual     E:  167634.190,    N:  797067.142,  elevation:   13.190 (UK mainland / Newlyn)
+OSGB36 computed   E:  167634.190,    N:  797067.142,  elevation:   13.190 (UK mainland / Newlyn)
+
+ETRS89          lat:   51.400782,  lon:   -3.551283,  elevation:  112.371
+OSGB36 actual     E:  292184.858,    N:  168003.462,  elevation:   60.615 (UK mainland / Newlyn)
+OSGB36 computed   E:  292184.858,    N:  168003.462,  elevation:   60.615 (UK mainland / Newlyn)
+
+ETRS89          lat:   54.979123,  lon:   -1.616577,  elevation:  125.878
+OSGB36 actual     E:  424639.343,    N:  565012.700,  elevation:   76.551 (UK mainland / Newlyn)
+OSGB36 computed   E:  424639.343,    N:  565012.700,  elevation:   76.551 (UK mainland / Newlyn)
+
+ETRS89          lat:   51.374470,  lon:    1.444547,  elevation:   99.439
+OSGB36 actual     E:  639821.823,    N:  169565.856,  elevation:   55.110 (UK mainland / Newlyn)
+OSGB36 computed   E:  639821.823,    N:  169565.856,  elevation:   55.110 (UK mainland / Newlyn)
+
+ETRS89          lat:   52.251610,  lon:   -0.912490,  elevation:  131.594
+OSGB36 actual     E:  474335.957,    N:  262047.752,  elevation:   83.961 (UK mainland / Newlyn)
+OSGB36 computed   E:  474335.957,    N:  262047.752,  elevation:   83.961 (UK mainland / Newlyn)
+
+ETRS89          lat:   52.962191,  lon:   -1.197477,  elevation:   93.825
+OSGB36 actual     E:  454002.822,    N:  340834.941,  elevation:   45.252 (UK mainland / Newlyn)
+OSGB36 computed   E:  454002.822,    N:  340834.941,  elevation:   45.252 (UK mainland / Newlyn)
+
+ETRS89          lat:   50.931279,  lon:   -1.450514,  elevation:  100.405
+OSGB36 actual     E:  438710.908,    N:  114792.248,  elevation:   54.029 (UK mainland / Newlyn)
+OSGB36 computed   E:  438710.908,    N:  114792.248,  elevation:   54.029 (UK mainland / Newlyn)
+
+ETRS89          lat:   50.438858,  lon:   -4.108646,  elevation:  215.251
+OSGB36 actual     E:  250359.798,    N:   62016.567,  elevation:  163.081 (UK mainland / Newlyn)
+OSGB36 computed   E:  250359.798,    N:   62016.567,  elevation:  163.081 (UK mainland / Newlyn)
+
+ETRS89          lat:   50.575637,  lon:   -1.297823,  elevation:   94.688
+OSGB36 actual     E:  449816.359,    N:   75335.859,  elevation:   48.570 (UK mainland / Newlyn)
+OSGB36 computed   E:  449816.359,    N:   75335.859,  elevation:   48.570 (UK mainland / Newlyn)
+
+ETRS89          lat:   59.854099,  lon:   -1.274869,  elevation:  149.890
+OSGB36 actual     E:  440725.061,    N: 1107878.445,  elevation:  100.992 (Shetland Isles / Lerwick)
+OSGB36 computed   E:  440725.061,    N: 1107878.445,  elevation:  100.992 (Shetland Isles / Lerwick)
+
+ETRS89          lat:   58.581205,  lon:   -3.726310,  elevation:   98.634
+OSGB36 actual     E:  299721.879,    N:  967202.990,  elevation:   46.011 (UK mainland / Newlyn)
+OSGB36 computed   E:  299721.879,    N:  967202.990,  elevation:   46.011 (UK mainland / Newlyn)
+
+ETRS89          lat:   49.922264,  lon:   -6.299778,  elevation:  100.000
+OSGB36 actual     E:   91492.135,    N:   11318.801,  elevation:   46.882 (Scilly Isles / St Marys)
+OSGB36 computed   E:   91492.135,    N:   11318.801,  elevation:   46.882 (Scilly Isles / St Marys)
+
+ETRS89          lat:   53.347031,  lon:   -4.850973,  elevation:  100.000
+OSGB36 actual     E:       0.000,    N:       0.000,  elevation:    0.000 (Outside model boundary / N/A)
+OSGB36 computed   E:       0.000,    N:       0.000,  elevation:    0.000 (Outside model boundary / N/A)
+
+ETRS89          lat:   56.175310,  lon:   -2.375291,  elevation:  100.000
+OSGB36 actual     E:       0.000,    N:       0.000,  elevation:    0.000 (Outside model boundary / N/A)
+OSGB36 computed   E:       0.000,    N:       0.000,  elevation:    0.000 (Outside model boundary / N/A)
+
+ETRS89          lat:   57.813518,  lon:   -8.578545,  elevation:  100.000
+OSGB36 actual     E:    9587.897,    N:  899448.993,  elevation:   43.424 (St Kilda / St Kilda)
+OSGB36 computed   E:    9587.897,    N:  899448.993,  elevation:   43.424 (St Kilda / St Kilda)
+
+ETRS89          lat:   58.212622,  lon:   -7.592556,  elevation:  140.404
+OSGB36 actual     E:   71713.120,    N:  938516.401,  elevation:   83.594 (Flannan Isles / Flannan Isles)
+OSGB36 computed   E:   71713.120,    N:  938516.401,  elevation:   83.594 (Flannan Isles / Flannan Isles)
+
+ETRS89          lat:   59.096716,  lon:   -5.827993,  elevation:  140.716
+OSGB36 actual     E:  180862.449,    N: 1029604.111,  elevation:   85.197 (North Rona / North Rona)
+OSGB36 computed   E:  180862.449,    N: 1029604.111,  elevation:   85.197 (North Rona / North Rona)
+
+ETRS89          lat:   59.093350,  lon:   -4.417577,  elevation:  100.000
+OSGB36 actual     E:  261596.767,    N: 1025447.599,  elevation:   46.348 (Sule Skerry / Sule Skerry)
+OSGB36 computed   E:  261596.767,    N: 1025447.599,  elevation:   46.348 (Sule Skerry / Sule Skerry)
+
+ETRS89          lat:   60.133081,  lon:   -2.073828,  elevation:  140.716
+OSGB36 actual     E:  395999.656,    N: 1138728.948,  elevation:   89.901 (Foula / Foula)
+OSGB36 computed   E:  395999.656,    N: 1138728.948,  elevation:   89.901 (Foula / Foula)
+
+ETRS89          lat:   59.534708,  lon:   -1.625170,  elevation:  100.000
+OSGB36 actual     E:  421300.513,    N: 1072147.236,  elevation:   50.951 (Fair Isle / Fair Isle)
+OSGB36 computed   E:  421300.513,    N: 1072147.236,  elevation:   50.951 (Fair Isle / Fair Isle)
+
+ETRS89          lat:   59.037439,  lon:   -3.214540,  elevation:  100.000
+OSGB36 actual     E:  330398.311,    N: 1017347.013,  elevation:   47.978 (Orkney Isles / Newlyn)
+OSGB36 computed   E:  330398.311,    N: 1017347.013,  elevation:   47.978 (Orkney Isles / Newlyn)
+
+ETRS89          lat:   58.718937,  lon:   -3.073926,  elevation:  100.000
+OSGB36 actual     E:  337898.195,    N:  981746.359,  elevation:   48.631 (Orkney Isles / Newlyn)
+OSGB36 computed   E:  337898.195,    N:  981746.359,  elevation:   48.631 (Orkney Isles / Newlyn)
+
+ETRS89          lat:   58.721083,  lon:   -3.137883,  elevation:  100.000
+OSGB36 actual     E:  334198.101,    N:  982046.419,  elevation:   48.439 (UK mainland / Newlyn)
+OSGB36 computed   E:  334198.101,    N:  982046.419,  elevation:   48.439 (UK mainland / Newlyn)
+
+ETRS89          lat:   90.000000,  lon:    0.000000,  elevation:  100.000
+OSGB36 actual     E:       0.000,    N:       0.000,  elevation:    0.000 (Outside model boundary / N/A)
+OSGB36 computed   E:       0.000,    N:       0.000,  elevation:    0.000 (Outside model boundary / N/A)
+
+ETRS89          lat:  -90.000000,  lon:    0.000000,  elevation:  100.000
+OSGB36 actual     E:       0.000,    N:       0.000,  elevation:    0.000 (Outside model boundary / N/A)
+OSGB36 computed   E:       0.000,    N:       0.000,  elevation:    0.000 (Outside model boundary / N/A)
+
+ETRS89          lat:  -51.000000,  lon:  180.000000,  elevation:  100.000
+OSGB36 actual     E:       0.000,    N:       0.000,  elevation:    0.000 (Outside model boundary / N/A)
+OSGB36 computed   E:       0.000,    N:       0.000,  elevation:    0.000 (Outside model boundary / N/A)
+
+ETRS89          lat:    0.000000,  lon:    0.000000,  elevation:  100.000
+OSGB36 actual     E:       0.000,    N:       0.000,  elevation:    0.000 (Outside model boundary / N/A)
+OSGB36 computed   E:       0.000,    N:       0.000,  elevation:    0.000 (Outside model boundary / N/A)
+
+50 tests; 50 passed; 0 failed
