@@ -29,8 +29,9 @@
 		5E2FEDCE14B35570007849B4 /* crc32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crc32.h; sourceTree = "<group>"; };
 		5E2FEDCF14B35DD4007849B4 /* testCoords.data */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = testCoords.data; sourceTree = "<group>"; };
 		5E2FEDDA14B3641B007849B4 /* geoids.data */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = geoids.data; sourceTree = "<group>"; };
-		5E67D47B14B212FE00F5D4BC /* shifts.data */ = {isa = PBXFileReference; fileEncoding = 4; path = shifts.data; sourceTree = "<group>"; };
-		5E67D47C14B212FE00F5D4BC /* shifts.index.data */ = {isa = PBXFileReference; fileEncoding = 4; path = shifts.index.data; sourceTree = "<group>"; };
+		5E2FEDDD14B374AF007849B4 /* README.textile */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.textile; sourceTree = "<group>"; };
+		5E67D47B14B212FE00F5D4BC /* shifts.data */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = shifts.data; sourceTree = "<group>"; };
+		5E67D47C14B212FE00F5D4BC /* shifts.index.data */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = shifts.index.data; sourceTree = "<group>"; };
 		5E7AD48014B0D26E00AA6C99 /* csv-to-struct-array.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = "csv-to-struct-array.rb"; sourceTree = "<group>"; };
 		5EBE804014A5FE4800CA9D70 /* OSTN02C */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OSTN02C; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EBE804414A5FE4800CA9D70 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
@@ -64,6 +65,7 @@
 		5EBE803514A5FE4800CA9D70 = {
 			isa = PBXGroup;
 			children = (
+				5E2FEDDD14B374AF007849B4 /* README.textile */,
 				5E7AD48014B0D26E00AA6C99 /* csv-to-struct-array.rb */,
 				5EBE804314A5FE4800CA9D70 /* Source code */,
 				5E2FEDDC14B364D6007849B4 /* Data */,

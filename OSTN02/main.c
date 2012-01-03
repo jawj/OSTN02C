@@ -32,10 +32,10 @@ int main (int argc, const char * argv[]) {
     printf("\n");
     printf("OSGB36 out ");
     printf(enFmtStr, en.e, en.n, en.elevation, OSGB36GeoidRegions[en.geoid], OSGB36GeoidNames[en.geoid]);
-    printf("\n");
+    printf("\n\n");
     return EXIT_SUCCESS;
   } else {
-    printf("\n%sOSTN02C%s - Copyright (c) George MacKerron 2012, http://mackerron.com; compiled %s %s; %s precision.\n\n", INVERSE, UNINVERSE, __DATE__, __TIME__, numdesc);
+    printf("%sOSTN02C%s - Copyright (c) George MacKerron 2012, http://mackerron.com; compiled %s %s; %s precision.\n\n", INVERSE, UNINVERSE, __DATE__, __TIME__, numdesc);
     printf("Usage: %sOSTN02 --tests%s verifies data integrity and runs tests.\n", BOLD, UNBOLD);
     printf("       %sOSTN02 %slat%s %slon%s %selevation%s%s converts ETRS/WGS84 coordinates to OSGB36 using OSTN02.\n\n", BOLD, ULINE, UNULINE, ULINE, UNULINE, ULINE, UNULINE, UNBOLD);
     return EXIT_FAILURE;

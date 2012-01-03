@@ -1,5 +1,16 @@
-This is a C implementation of Ordnance Survey's 'definitive transformation model',  "OSTN02":http://www.ordnancesurvey.co.uk/oswebsite/gps/osnetfreeservices/about/surveying_osnet.html#2, with tests.
+This is a C implementation of Ordnance Survey's 'definitive transformation model', "OSTN02":http://www.ordnancesurvey.co.uk/oswebsite/gps/osnetfreeservices/about/surveying_osnet.html#2, with tests. I'm releasing it under the "MIT licence":http://www.opensource.org/licenses/mit-license.php.
 
-It's intended to power a future update of my "GridPoint GB":http://mackerron.com/gridpointgb/ iOS app, though it also includes very basic command-line tool.
+It's intended to power a future update of my "GridPoint GB":http://mackerron.com/gridpointgb/ iOS app.
 
-I'm releasing it under the "MIT licence":http://www.opensource.org/licenses/mit-license.php.
+It also includes very basic command-line tool, which works like this:
+
+    dyn204:OSTN02 George$ ./OSTN02C
+    <span style="color: #fff; background: #000;">OSTN02C</span> - Copyright (c) George MacKerron 2012, http://mackerron.com; compiled Jan  3 2012 17:16:43; long double precision.
+
+    Usage: <b>OSTN02 --tests</b> verifies data integrity and runs tests.
+           <b>OSTN02 <u>lat</u> <u>lon</u> <u>elevation</u></b> converts ETRS/WGS84 coordinates to OSGB36 using OSTN02.
+
+    dyn204:OSTN02 George$ ./OSTN02C 51.0 0.0 100.0
+    ETRS89 in  lat:   51.000000,  lon:    0.000000,  elevation:  100.000
+    OSGB36 out   E:  540431.987,    N:  124193.587,  elevation:   54.955 (UK mainland / Newlyn)
+    
