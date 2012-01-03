@@ -46,6 +46,7 @@
 
 #endif
 
+
 #define BOLD      "\033[1m"
 #define UNBOLD    "\033[22m"
 #define INVERSE   "\033[7m"
@@ -105,11 +106,11 @@ typedef struct {
   unsigned int gFlag  :  4;
 } __attribute__((packed)) OSTN02Datum;
 
-EastingNorthing latLonToEastingNorthing(LatLonDecimal latLon, Ellipsoid ellipsoid, MapProjection projection);
-EastingNorthing ETRS89LatLonToETRSEastingNorthing(LatLonDecimal latLon);
+EastingNorthing latLonToEastingNorthing(const LatLonDecimal latLon, const Ellipsoid ellipsoid, const MapProjection projection);
+EastingNorthing ETRS89LatLonToETRSEastingNorthing(const LatLonDecimal latLon);
 EastingNorthing OSTN02Shifts(const int eIndex, const int nIndex);
 EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthing en);
 LatLonDecimal   latLonDecimalFromLatLonDegMinSec(const LatLonDegMinSec dms);
-bool            test(bool noisily);
+bool            test(const bool noisily);
 
 #endif

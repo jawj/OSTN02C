@@ -1,6 +1,7 @@
 static const LatLonDegMinSec testETRSCoords[] = {
   
-  // OS-provided test coordinates
+  // OSTN02 test coordinates provided by OS
+  
   {.lat = {.deg = 53, .min = 46, .sec = 44.796925L, .westOrSouth = false}, 
    .lon = {.deg =  3, .min =  2, .sec = 25.637665L, .westOrSouth = true }, .elevation =  64.940L},
   {.lat = {.deg = 51, .min = 25, .sec = 39.170761L, .westOrSouth = false}, 
@@ -90,7 +91,8 @@ static const LatLonDegMinSec testETRSCoords[] = {
   {.lat = {.deg = 58, .min = 43, .sec = 15.898312L, .westOrSouth = false}, 
    .lon = {.deg =  3, .min =  8, .sec = 16.378343L, .westOrSouth = true }, .elevation = 100.000L},
   
-  // additional (extreme) coords
+  // extra (extreme) coords
+  
   {.lat = {.deg =  90, .min =  0, .sec =  0.000000L, .westOrSouth = false}, 
    .lon = {.deg =   0, .min =  0, .sec =  0.000000L, .westOrSouth = false}, .elevation = 100.000L},  // N pole
   {.lat = {.deg =  90, .min =  0, .sec =  0.000000L, .westOrSouth = true }, 
@@ -102,6 +104,10 @@ static const LatLonDegMinSec testETRSCoords[] = {
 };
 
 static const EastingNorthing testOSGB36Coords[] = {
+
+  // these coordinates come either from the OSTN02 test files, or from one of the online OS conversion tools (marked '*')
+  // -- sometimes the elevations differ by 1mm, presumably because of rounding policies
+  
   {.e = 331534.552L, .n =  431920.792L, .elevation =  12.636L, .geoid =  1},
   {.e = 362269.979L, .n =  169978.688L, .elevation =  54.467L, .geoid =  1},
   {.e = 151968.641L, .n =  966483.777L, .elevation =  58.836L, .geoid =  4},
@@ -110,29 +116,29 @@ static const EastingNorthing testOSGB36Coords[] = {
   {.e = 599445.578L, .n =  225722.824L, .elevation =  30.192L, .geoid =  1},
   {.e = 357455.831L, .n =  383290.434L, .elevation =  36.750L, .geoid =  1},
   {.e = 389544.178L, .n =  261912.151L, .elevation =  51.977L, .geoid =  1},
-  {.e = 319188.423L, .n =  670947.532L, .elevation =  66.362L, .geoid =  1},
+  {.e = 319188.423L, .n =  670947.532L, .elevation =  66.361L, .geoid =  1}, // *
   {.e = 525745.658L, .n =  470703.211L, .elevation =  41.217L, .geoid =  1},
   {.e = 397160.479L, .n =  805349.734L, .elevation =  58.902L, .geoid =  1},
   {.e = 256340.914L, .n =  664697.266L, .elevation =  17.414L, .geoid =  1},
   {.e = 267056.756L, .n =  846176.969L, .elevation =  13.230L, .geoid =  1},
   {.e = 244780.625L, .n =  495254.884L, .elevation =  39.891L, .geoid =  3},
   {.e = 227778.318L, .n =  468847.386L, .elevation =  29.335L, .geoid =  3},
-  {.e = 562180.535L, .n =  319784.993L, .elevation =  20.890L, .geoid =  1},
+  {.e = 562180.535L, .n =  319784.993L, .elevation =  20.889L, .geoid =  1}, // *
   {.e = 422242.174L, .n =  433818.699L, .elevation = 165.891L, .geoid =  1},
-  {.e = 170370.706L, .n =   11572.404L, .elevation =  71.222L, .geoid =  1},
+  {.e = 170370.706L, .n =   11572.404L, .elevation =  71.223L, .geoid =  1}, // *
   {.e = 530624.963L, .n =  178388.461L, .elevation =  20.518L, .geoid =  1},
-  {.e = 247958.959L, .n =  393492.906L, .elevation =  46.314L, .geoid =  1},
+  {.e = 247958.959L, .n =  393492.906L, .elevation =  46.315L, .geoid =  1}, // *
   {.e = 247959.229L, .n =  393495.580L, .elevation =  46.393L, .geoid =  1},
   {.e = 167634.190L, .n =  797067.142L, .elevation =  13.190L, .geoid =  1},
   {.e = 292184.858L, .n =  168003.462L, .elevation =  60.615L, .geoid =  1},
   {.e = 424639.343L, .n =  565012.700L, .elevation =  76.551L, .geoid =  1},
   {.e = 639821.823L, .n =  169565.856L, .elevation =  55.110L, .geoid =  1},
   {.e = 474335.957L, .n =  262047.752L, .elevation =  83.961L, .geoid =  1},
-  {.e = 454002.822L, .n =  340834.941L, .elevation =  45.253L, .geoid =  1},
+  {.e = 454002.822L, .n =  340834.941L, .elevation =  45.252L, .geoid =  1}, // *
   {.e = 438710.908L, .n =  114792.248L, .elevation =  54.029L, .geoid =  1},
   {.e = 250359.798L, .n =   62016.567L, .elevation = 163.081L, .geoid =  1},
-  {.e = 449816.359L, .n =   75335.859L, .elevation =  48.571L, .geoid =  1},
-  {.e = 440725.061L, .n = 1107878.445L, .elevation = 100.991L, .geoid =  6},
+  {.e = 449816.359L, .n =   75335.859L, .elevation =  48.570L, .geoid =  1}, // *
+  {.e = 440725.061L, .n = 1107878.445L, .elevation = 100.992L, .geoid =  6}, // *
   {.e = 299721.879L, .n =   967202.99L, .elevation =  46.011L, .geoid =  1},
   {.e =  91492.135L, .n =   11318.801L, .elevation =  46.882L, .geoid =  2},
   {.e =      0.000L, .n =       0.000L, .elevation =   0.000L, .geoid =  0},
@@ -140,7 +146,7 @@ static const EastingNorthing testOSGB36Coords[] = {
   {.e =   9587.897L, .n =  899448.993L, .elevation =  43.424L, .geoid =  5},
   {.e =  71713.120L, .n =  938516.401L, .elevation =  83.594L, .geoid =  9},
   {.e = 180862.449L, .n = 1029604.111L, .elevation =  85.197L, .geoid = 10},
-  {.e = 261596.767L, .n = 1025447.599L, .elevation =  46.347L, .geoid = 11},
+  {.e = 261596.767L, .n = 1025447.599L, .elevation =  46.348L, .geoid = 11}, // *
   {.e = 395999.656L, .n = 1138728.948L, .elevation =  89.901L, .geoid = 12},
   {.e = 421300.513L, .n = 1072147.236L, .elevation =  50.951L, .geoid =  8},
   {.e = 330398.311L, .n = 1017347.013L, .elevation =  47.978L, .geoid =  7},

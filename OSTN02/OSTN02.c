@@ -178,7 +178,7 @@ LatLonDecimal latLonDecimalFromLatLonDegMinSec(const LatLonDegMinSec dms) {
   return dec;
 }
 
-bool test(bool noisily) {
+bool test(const bool noisily) {
   short numTested = 0;
   short numPassed = 0;
   bool  testPassed;
@@ -230,6 +230,6 @@ bool test(bool noisily) {
   }
   
   bool allPassed = numTested == numPassed;
-  if (noisily) printf("%s%i tests; %i passed; %i failed%s\n\n", (allPassed ? "" : BOLD), numTested, numPassed, numTested - numPassed, (allPassed ? "" : UNBOLD));
+  if (noisily) printf("%i tests; %i passed; %s%i failed%s\n\n", numTested, numPassed, (allPassed ? "" : BOLD), numTested - numPassed, (allPassed ? "" : UNBOLD));
   return allPassed;
 }
