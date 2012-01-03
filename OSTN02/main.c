@@ -11,10 +11,10 @@
 #include <stdlib.h>
 #include "OSTN02.h"
 
-int main (int argc, const char * argv[]) {
+int main (int argc, const char * argv[]) {  
   if (argc == 2 && strcmp(argv[1], "--tests") == 0) {
-    doTests();
-    return EXIT_SUCCESS;
+    bool passed = test(true);
+    return passed ? EXIT_SUCCESS : EXIT_FAILURE;
   } else if (argc == 4) {
     LatLonDecimal latLon;
     sscanf(argv[1], "%Lf", &latLon.lat);
@@ -26,13 +26,17 @@ int main (int argc, const char * argv[]) {
       printf("Coordinates outside range.\n");
       return EXIT_FAILURE;
     }
-    printf(llFmtStr, "ETRS89 in ", latLon.lat, latLon.lon, latLon.elevation, "\n");
-    printf(enFmtStr, "OSGB36 out", en.e, en.n, en.elevation, OSGB36GeoidRegions[en.geoid], OSGB36GeoidNames[en.geoid], "\n");
+    printf("ETRS89 in  ");
+    printf(llFmtStr, latLon.lat, latLon.lon, latLon.elevation);
+    printf("\n");
+    printf("OSGB36 out ");
+    printf(enFmtStr, en.e, en.n, en.elevation, OSGB36GeoidRegions[en.geoid], OSGB36GeoidNames[en.geoid]);
+    printf("\n");
     return EXIT_SUCCESS;
   } else {
-    printf("This tool converts an ETRS89/WGS84 lat/lon/elevation to OSGB36 Easting/Northing/elevation using OSTN02 (compiled %s %s, %s precision).\n", __DATE__, __TIME__, numdesc);
-    printf("Usage: 'OSTN02 --tests' runs tests with OS data.\n");
-    printf("       'OSTN02 [lat] [lon] [elevation]' converts coordinates.\n");
+    printf("\n%sOSTN02C%s - Copyright (c) George MacKerron 2012, http://mackerron.com; compiled %s %s; %s precision.\n\n", INVERSE, UNINVERSE, __DATE__, __TIME__, numdesc);
+    printf("Usage: %sOSTN02 --tests%s verifies data integrity and runs tests.\n", BOLD, UNBOLD);
+    printf("       %sOSTN02 %slat%s %slon%s %selevation%s%s converts ETRS/WGS84 coordinates to OSGB36 using OSTN02.\n\n", BOLD, ULINE, UNULINE, ULINE, UNULINE, ULINE, UNULINE, UNBOLD);
     return EXIT_FAILURE;
   }
 }

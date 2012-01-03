@@ -10,11 +10,11 @@
 #define OSTN02_OSTN02_h
 
 #include <stdbool.h>
+#include <stdlib.h>
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
-#include <OpenSSL/md5.h>
-
+#include "crc32.h"
 
 #define use_long  // comment this line out for double precision
 
@@ -27,8 +27,8 @@
 #define TAN      tanl
 #define SQRT     sqrtl
 #define numdesc  "long double"
-#define llFmtStr "%s lat: % 11.6Lf,  lon: % 11.6Lf,  elevation: %8.3Lf%s"
-#define enFmtStr "%s   E: %11.3Lf,    N: %11.3Lf,  elevation:  %7.3Lf (%s / %s)%s"
+#define llFmtStr "lat: % 11.6Lf,  lon: % 11.6Lf,  elevation: %8.3Lf"
+#define enFmtStr "  E: %11.3Lf,    N: %11.3Lf,  elevation:  %7.3Lf (%s / %s)"
 
 #else
 
@@ -40,13 +40,20 @@
 #define TAN      tan
 #define SQRT     sqrt
 #define numdesc  "double"
-#define llFmtStr "%s lat: % 11.6f,  lon: % 11.6f,  elevation: %8.3f%s"
-#define enFmtStr "%s   E: %11.3f,    N: %11.3f,  elevation:  %7.3f (%s / %s)%s"
+#define llFmtStr "lat: % 11.6f,  lon: % 11.6f,  elevation: %8.3f"
+#define enFmtStr "  E: %11.3f,    N: %11.3f,  elevation:  %7.3f (%s / %s)"
 
 #endif
 
-#define originalIndicesMD5 "0aa1fdc4e4bb6d3367cdcbead28ea190"
-#define originalDataMD5    "a29cc18ab3b4f1fd1c466ace0372b858"
+#define BOLD      "\033[1m"
+#define UNBOLD    "\033[22m"
+#define INVERSE   "\033[7m"
+#define UNINVERSE "\033[27m"
+#define ULINE     "\033[4m"
+#define UNULINE   "\033[24m"
+
+#define originalDataCRC    790474494L
+#define originalIndicesCRC 244629328L
 
 char *OSGB36GeoidNames[15];
 char *OSGB36GeoidRegions[15];
@@ -107,6 +114,6 @@ EastingNorthing ETRS89LatLonToETRSEastingNorthing(LatLonDecimal latLon);
 EastingNorthing OSTN02Shifts(const int eIndex, const int nIndex);
 EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthing en);
 LatLonDecimal   latLonDecimalFromLatLonDegMinSec(const LatLonDegMinSec dms);
-void            doTests(void);
+bool            test(bool noisily);
 
 #endif
