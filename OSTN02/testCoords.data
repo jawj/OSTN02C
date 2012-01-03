@@ -97,7 +97,7 @@ static const LatLonDegMinSec testETRSCoords[] = {
    .lon = {.deg =   0, .min =  0, .sec =  0.000000L, .westOrSouth = false}, .elevation = 100.000L},  // N pole
   {.lat = {.deg =  90, .min =  0, .sec =  0.000000L, .westOrSouth = true }, 
    .lon = {.deg =   0, .min =  0, .sec =  0.000000L, .westOrSouth = false}, .elevation = 100.000L},  // S pole
-  {.lat = {.deg =  50, .min =  0, .sec =  0.000000L, .westOrSouth = true }, 
+  {.lat = {.deg =  51, .min =  0, .sec =  0.000000L, .westOrSouth = true }, 
    .lon = {.deg = 180, .min =  0, .sec =  0.000000L, .westOrSouth = false}, .elevation = 100.000L},  // other side of world
   {.lat = {.deg =   0, .min =  0, .sec =  0.000000L, .westOrSouth = false}, 
    .lon = {.deg =   0, .min =  0, .sec =  0.000000L, .westOrSouth = false}, .elevation = 100.000L},  // equator/Greenwich Meridian
