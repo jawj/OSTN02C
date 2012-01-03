@@ -35,9 +35,11 @@ int main (int argc, const char * argv[]) {
     printf("\n\n");
     return EXIT_SUCCESS;
   } else {
-    printf("%sOSTN02C%s - Copyright (c) George MacKerron 2012, http://mackerron.com; compiled %s %s; %s precision.\n\n", INVERSE, UNINVERSE, __DATE__, __TIME__, numdesc);
+    printf("%sOSTN02C%s - Built %s %s (%s precision).\n", INVERSE, UNINVERSE, __DATE__, __TIME__, numdesc);
+    printf("Copyright © George MacKerron 2012 (http://mackerron.com). Released under the MIT licence (http://www.opensource.org/licenses/mit-license.php).\n");
+    printf("OSTN02 and OSGM02 are trademarks of Ordnance Survey. Incorporated OSTN02 and OSGM02 data are © Crown copyright 2002. All rights reserved.\n\n");
     printf("Usage: %sOSTN02 --tests%s verifies data integrity and runs tests.\n", BOLD, UNBOLD);
-    printf("       %sOSTN02 %slat%s %slon%s %selevation%s%s converts ETRS/WGS84 coordinates to OSGB36 using OSTN02.\n\n", BOLD, ULINE, UNULINE, ULINE, UNULINE, ULINE, UNULINE, UNBOLD);
+    printf("       %sOSTN02 %slat%s %slon%s %selevation%s%s converts ETRS/WGS84 coordinates to OSGB36 using OSTN02 + OSGM02.\n\n", BOLD, ULINE, UNULINE, ULINE, UNULINE, ULINE, UNULINE, UNBOLD);
     return EXIT_FAILURE;
   }
 }

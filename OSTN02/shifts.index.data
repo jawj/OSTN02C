@@ -1,3 +1,7 @@
+
+// OSTN02/OSGM02 data (derived from OSTN02_OSGM02_GB.txt in http://www.ordnancesurvey.co.uk/oswebsite/gps/docs/OSTN02_OSGM02files.zip)
+// © Crown copyright 2002. All rights reserved
+
 static const OSTN02Index OSTN02Indices[] = {
  {79,21,0}
 ,{78,23,21}
