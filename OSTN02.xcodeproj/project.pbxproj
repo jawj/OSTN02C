@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5E068CF814B0D97B008C3DF7 /* OSTN02.byte-array in Sources */ = {isa = PBXBuildFile; fileRef = 5E068CF714B0D97B008C3DF7 /* OSTN02.byte-array */; };
 		5E068CFE14B0E8D8008C3DF7 /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E068CFD14B0E8D8008C3DF7 /* libcrypto.dylib */; };
+		5E2FEDCD14B35558007849B4 /* crc32.c in Sources */ = {isa = PBXBuildFile; fileRef = 5E2FEDCC14B35558007849B4 /* crc32.c */; };
 		5EBE804514A5FE4800CA9D70 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 5EBE804414A5FE4800CA9D70 /* main.c */; };
 		5EBE804F14A5FE9000CA9D70 /* OSTN02.c in Sources */ = {isa = PBXBuildFile; fileRef = 5EBE804E14A5FE9000CA9D70 /* OSTN02.c */; };
 /* End PBXBuildFile section */
@@ -26,15 +26,17 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		5E068CF714B0D97B008C3DF7 /* OSTN02.byte-array */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "OSTN02.byte-array"; sourceTree = "<group>"; };
 		5E068CFD14B0E8D8008C3DF7 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
-		5E7AD48014B0D26E00AA6C99 /* csv-to-byte-array.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = "csv-to-byte-array.rb"; sourceTree = "<group>"; };
-		5EBE804014A5FE4800CA9D70 /* OSTN02 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OSTN02; sourceTree = BUILT_PRODUCTS_DIR; };
+		5E2FEDCC14B35558007849B4 /* crc32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = crc32.c; sourceTree = "<group>"; };
+		5E2FEDCE14B35570007849B4 /* crc32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crc32.h; sourceTree = "<group>"; };
+		5E2FEDCF14B35DD4007849B4 /* testCoords.struct-arrays */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "testCoords.struct-arrays"; sourceTree = "<group>"; };
+		5E67D47B14B212FE00F5D4BC /* OSTN02.data.struct-array */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "OSTN02.data.struct-array"; sourceTree = "<group>"; };
+		5E67D47C14B212FE00F5D4BC /* OSTN02.index.struct-array */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "OSTN02.index.struct-array"; sourceTree = "<group>"; };
+		5E7AD48014B0D26E00AA6C99 /* csv-to-struct-array.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = "csv-to-struct-array.rb"; sourceTree = "<group>"; };
+		5EBE804014A5FE4800CA9D70 /* OSTN02C */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OSTN02C; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EBE804414A5FE4800CA9D70 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		5EBE804D14A5FE7300CA9D70 /* OSTN02.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSTN02.h; sourceTree = "<group>"; };
 		5EBE804E14A5FE9000CA9D70 /* OSTN02.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = OSTN02.c; sourceTree = "<group>"; };
-		5EBE805014A7B2C400CA9D70 /* OSTN02.data */ = {isa = PBXFileReference; lastKnownFileType = file; path = OSTN02.data; sourceTree = "<group>"; };
-		5EBE805114A7B2C400CA9D70 /* OSTN02.data.md5 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = OSTN02.data.md5; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,7 +55,7 @@
 			isa = PBXGroup;
 			children = (
 				5E068CFD14B0E8D8008C3DF7 /* libcrypto.dylib */,
-				5E7AD48014B0D26E00AA6C99 /* csv-to-byte-array.rb */,
+				5E7AD48014B0D26E00AA6C99 /* csv-to-struct-array.rb */,
 				5EBE804314A5FE4800CA9D70 /* OSTN02 */,
 				5EBE804114A5FE4800CA9D70 /* Products */,
 			);
@@ -62,7 +64,7 @@
 		5EBE804114A5FE4800CA9D70 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5EBE804014A5FE4800CA9D70 /* OSTN02 */,
+				5EBE804014A5FE4800CA9D70 /* OSTN02C */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -70,12 +72,14 @@
 		5EBE804314A5FE4800CA9D70 /* OSTN02 */ = {
 			isa = PBXGroup;
 			children = (
-				5E068CF714B0D97B008C3DF7 /* OSTN02.byte-array */,
-				5EBE805014A7B2C400CA9D70 /* OSTN02.data */,
-				5EBE805114A7B2C400CA9D70 /* OSTN02.data.md5 */,
-				5EBE804414A5FE4800CA9D70 /* main.c */,
 				5EBE804D14A5FE7300CA9D70 /* OSTN02.h */,
 				5EBE804E14A5FE9000CA9D70 /* OSTN02.c */,
+				5E2FEDCC14B35558007849B4 /* crc32.c */,
+				5E2FEDCE14B35570007849B4 /* crc32.h */,
+				5EBE804414A5FE4800CA9D70 /* main.c */,
+				5E67D47B14B212FE00F5D4BC /* OSTN02.data.struct-array */,
+				5E67D47C14B212FE00F5D4BC /* OSTN02.index.struct-array */,
+				5E2FEDCF14B35DD4007849B4 /* testCoords.struct-arrays */,
 			);
 			path = OSTN02;
 			sourceTree = "<group>";
@@ -97,7 +101,7 @@
 			);
 			name = OSTN02;
 			productName = OSTN02;
-			productReference = 5EBE804014A5FE4800CA9D70 /* OSTN02 */;
+			productReference = 5EBE804014A5FE4800CA9D70 /* OSTN02C */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -133,7 +137,7 @@
 			files = (
 				5EBE804514A5FE4800CA9D70 /* main.c in Sources */,
 				5EBE804F14A5FE9000CA9D70 /* OSTN02.c in Sources */,
-				5E068CF814B0D97B008C3DF7 /* OSTN02.byte-array in Sources */,
+				5E2FEDCD14B35558007849B4 /* crc32.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -192,7 +196,7 @@
 					"$(inherited)",
 					"\"$(SDKROOT)/usr/lib/system\"",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = OSTN02C;
 			};
 			name = Debug;
 		};
@@ -203,7 +207,7 @@
 					"$(inherited)",
 					"\"$(SDKROOT)/usr/lib/system\"",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = OSTN02C;
 			};
 			name = Release;
 		};

@@ -10,38 +10,50 @@
 #define OSTN02_OSTN02_h
 
 #include <stdbool.h>
+#include <stdlib.h>
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
-#include <OpenSSL/md5.h>
-
+#include "crc32.h"
 
 #define use_long  // comment this line out for double precision
 
 #ifdef use_long
-#define numtype  long double
-#define cnumtype const long double
+#define dbl      long double
+#define cdbl     const long double
+#define sfx      L
 #define SIN      sinl
 #define COS      cosl
 #define TAN      tanl
 #define SQRT     sqrtl
 #define numdesc  "long double"
-#define llFmtStr "%s lat: % 11.6Lf,  lon: % 11.6Lf,  elevation: %11.3Lf%s"
-#define enFmtStr "%s   E: %11.3Lf,    N: %11.3Lf,  elevation:  %7.3Lf (%s / %s)%s"
+#define llFmtStr "lat: % 11.6Lf,  lon: % 11.6Lf,  elevation: %8.3Lf"
+#define enFmtStr "  E: %11.3Lf,    N: %11.3Lf,  elevation:  %7.3Lf (%s / %s)"
 
 #else
 
-#define numtype  double
-#define cnumtype const double
+#define dbl      double
+#define cdbl     const double
+#define sfx
 #define SIN      sin
 #define COS      cos
 #define TAN      tan
 #define SQRT     sqrt
 #define numdesc  "double"
-#define llFmtStr "%s lat: % 11.6f,  lon: % 11.6f,  elevation: %11.3f%s"
-#define enFmtStr "%s   E: %11.3f,    N: %11.3f,  elevation:  %7.3f (%s / %s)%s"
+#define llFmtStr "lat: % 11.6f,  lon: % 11.6f,  elevation: %8.3f"
+#define enFmtStr "  E: %11.3f,    N: %11.3f,  elevation:  %7.3f (%s / %s)"
 
 #endif
+
+#define BOLD      "\033[1m"
+#define UNBOLD    "\033[22m"
+#define INVERSE   "\033[7m"
+#define UNINVERSE "\033[27m"
+#define ULINE     "\033[4m"
+#define UNULINE   "\033[24m"
+
+#define originalDataCRC    790474494L
+#define originalIndicesCRC 244629328L
 
 char *OSGB36GeoidNames[15];
 char *OSGB36GeoidRegions[15];
@@ -49,53 +61,59 @@ char *OSGB36GeoidRegions[15];
 typedef struct {
 	unsigned char deg;  // range 0 - 180 (S or W)
 	unsigned char min;  // range 0 - 60
-	numtype sec;
+	dbl sec;
   bool westOrSouth;
 } DegMinSec;
 
 typedef struct {
-	numtype e;
-	numtype n;
-  numtype elevation;
-  signed char geoid;
+	dbl e;
+	dbl n;
+  dbl elevation;
+  unsigned char geoid;
 } EastingNorthing;
 
 typedef struct {
-	numtype lat;
-	numtype lon;
-  numtype elevation;
+	dbl lat;
+	dbl lon;
+  dbl elevation;
   unsigned char geoid;
 } LatLonDecimal;
 
 typedef struct {
 	DegMinSec lat;
 	DegMinSec lon;
-  numtype elevation;
+  dbl elevation;
 } LatLonDegMinSec;
 
 typedef struct {
-	numtype semiMajorAxis;
-	numtype semiMinorAxis;
+	dbl semiMajorAxis;
+	dbl semiMinorAxis;
 } Ellipsoid;
 
 typedef struct {
-	numtype centralMeridianScale;
+	dbl centralMeridianScale;
   LatLonDecimal trueOriginLatLon;
 	EastingNorthing trueOriginEastingNorthing;
 } MapProjection;
 
 typedef struct {
-	unsigned short eShift;
-	unsigned short nShift;
-  unsigned short gShift;
-  unsigned char  gFlag;
-} OSTN02Record;  // corresponds to our OSTN02 data byte format
+	unsigned int eMin   : 10;
+	unsigned int eCount : 10;
+  unsigned int offset : 20;
+} __attribute__((packed)) OSTN02Index;
+
+typedef struct {
+	unsigned int eShift : 15;
+	unsigned int nShift : 15;
+  unsigned int gShift : 14;
+  unsigned int gFlag  :  4;
+} __attribute__((packed)) OSTN02Datum;
 
 EastingNorthing latLonToEastingNorthing(LatLonDecimal latLon, Ellipsoid ellipsoid, MapProjection projection);
 EastingNorthing ETRS89LatLonToETRSEastingNorthing(LatLonDecimal latLon);
-EastingNorthing OSTN02Shifts(const short eIndex, const short nIndex);
-EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(EastingNorthing en);
-LatLonDecimal   latLonDecimalFromLatLonDegMinSec(LatLonDegMinSec dms);
-void            doTests(void);
+EastingNorthing OSTN02Shifts(const int eIndex, const int nIndex);
+EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthing en);
+LatLonDecimal   latLonDecimalFromLatLonDegMinSec(const LatLonDegMinSec dms);
+bool            test(bool noisily);
 
 #endif
