@@ -5,10 +5,10 @@ It's intended to power a future update of my "GridPoint GB":http://mackerron.com
 It also includes very basic command-line tool, which works like this:
 
 bc.. dyn204:OSTN02 George$ ./OSTN02C
-<span style="color: #fff; background: #000;">OSTN02C</span> - Copyright (c) George MacKerron 2012, http://mackerron.com; compiled Jan  3 2012 17:16:43; long double precision.
+OSTN02C - Copyright (c) George MacKerron 2012, http://mackerron.com; compiled Jan  3 2012 17:16:43; long double precision.
 
-Usage: <b>OSTN02 --tests</b> verifies data integrity and runs tests.
-       <b>OSTN02 <u>lat</u> <u>lon</u> <u>elevation</u></b> converts ETRS/WGS84 coordinates to OSGB36 using OSTN02.
+Usage: OSTN02 --tests verifies data integrity and runs tests.
+       OSTN02 lat lon elevation converts ETRS/WGS84 coordinates to OSGB36 using OSTN02.
 
 dyn204:OSTN02 George$ ./OSTN02C 51.0 0.0 100.0
 ETRS89 in  lat:   51.000000,  lon:    0.000000,  elevation:  100.000
