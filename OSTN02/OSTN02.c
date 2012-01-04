@@ -181,10 +181,10 @@ char *gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const bool spac
                                     {'A', 'B', 'C', 'D', 'E'}};
   const int  eRound = round(en.e / (dbl) res) * res;
   const int  nRound = round(en.n / (dbl) res) * res;
-	const int  firstEIndex  = eRound / 500000;
-	const int  firstNIndex  = nRound / 500000;
+  const int  firstEIndex  = eRound / 500000;
+  const int  firstNIndex  = nRound / 500000;
   const int  secondEIndex = (eRound % 500000) / 100000;
-	const int  secondNIndex = (nRound % 500000) / 100000;
+  const int  secondNIndex = (nRound % 500000) / 100000;
   const char sq0 = firstLetters[firstNIndex][firstEIndex];
   const char sq1 = secondLetters[secondNIndex][secondEIndex];
   const int  e   = eRound - (500000 * firstEIndex) - (100000 * secondEIndex);
