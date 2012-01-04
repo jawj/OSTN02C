@@ -24,10 +24,10 @@ int main (int argc, const char * argv[]) {
     latLon.geoid = 0;
     EastingNorthing en = ETRS89EastingNorthingToOSGB36EastingNorthing(ETRS89LatLonToETRSEastingNorthing(latLon));
     if (en.geoid == 0) {
-      printf("Coordinates outside range.\n");
+      printf("Coordinates outside OSTN02 range.\n\n");
       return EXIT_FAILURE;
     }
-    char *gridRef = gridRefFromOSGB36EastingNorthing(en);
+    char *gridRef = gridRefFromOSGB36EastingNorthing(en, true, 10);
     printf("ETRS89 in  ");
     printf(llFmtStr, latLon.lat, latLon.lon, latLon.elevation);
     printf("\nOSGB36 out ");

@@ -169,32 +169,32 @@ EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthi
   return shifted;
 }
 
-char *gridRefFromOSGB36EastingNorthing(const EastingNorthing en) {  // currently 1m resolution ("AB 12345 12345") only
-	const char firstLetters[3][2] = {
-		{'S', 'T'}, 
-		{'N', 'O'}, 
-		{'H', 'J'}
-	};
-	const char secondLetters[5][5] = {
-		{'V', 'W', 'X', 'Y', 'Z'},
-		{'Q', 'R', 'S', 'T', 'U'},
-		{'L', 'M', 'N', 'O', 'P'},
-		{'F', 'G', 'H', 'J', 'K'},
-		{'A', 'B', 'C', 'D', 'E'}
-	};
-  int eRound = round(en.e);
-  int nRound = round(en.n);
-	int firstEIndex  = eRound / 500000;
-	int firstNIndex  = nRound / 500000;
-  int secondEIndex = (eRound % 500000) / 100000;
-	int secondNIndex = (nRound % 500000) / 100000;
-  char sq0 = firstLetters[firstNIndex][firstEIndex];
-  char sq1 = secondLetters[secondNIndex][secondEIndex];
-  int  e   = eRound - (500000 * firstEIndex) - (100000 * secondEIndex);
-  int  n   = nRound - (500000 * firstNIndex) - (100000 * secondNIndex);
-  char *ref;
-  asprintf(&ref, "%c%c %05d %05d", sq0, sq1, e, n);  // don't forget to free!
-  return ref;
+char *gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const bool spaces, const int res) { 
+  // res is expressed in metres: 1/10/100 -> 3/4/5-digit easting and northing
+	const char firstLetters[3][2]  = {{'S', 'T'}, 
+                                    {'N', 'O'}, 
+                                    {'H', 'J'}};
+	const char secondLetters[5][5] = {{'V', 'W', 'X', 'Y', 'Z'},
+                                    {'Q', 'R', 'S', 'T', 'U'},
+                                    {'L', 'M', 'N', 'O', 'P'},
+                                    {'F', 'G', 'H', 'J', 'K'},
+                                    {'A', 'B', 'C', 'D', 'E'}};
+  const int  eRound = round(en.e / (dbl) res) * res;
+  const int  nRound = round(en.n / (dbl) res) * res;
+	const int  firstEIndex  = eRound / 500000;
+	const int  firstNIndex  = nRound / 500000;
+  const int  secondEIndex = (eRound % 500000) / 100000;
+	const int  secondNIndex = (nRound % 500000) / 100000;
+  const char sq0 = firstLetters[firstNIndex][firstEIndex];
+  const char sq1 = secondLetters[secondNIndex][secondEIndex];
+  const int  e   = eRound - (500000 * firstEIndex) - (100000 * secondEIndex);
+  const int  n   = nRound - (500000 * firstNIndex) - (100000 * secondNIndex);
+  char *ref, *fmtStr;
+  const int digits = res == 100 ? 3 : (res == 10 ? 4 : 5);
+  asprintf(&fmtStr, "%%c%%c%%s%%0%dd%%s%%0%dd", digits, digits);
+  asprintf(&ref, fmtStr, sq0, sq1, (spaces ? " " : ""), e / res, (spaces ? " " : ""), n / res);
+  free(fmtStr);
+  return ref;  // don't forget to free!
 }
 
 LatLonDecimal latLonDecimalFromLatLonDegMinSec(const LatLonDegMinSec dms) {

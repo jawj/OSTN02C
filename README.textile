@@ -14,9 +14,9 @@ OSTN02 and OSGM02 are trademarks of Ordnance Survey. Incorporated OSTN02 and OSG
 Usage: OSTN02 --tests verifies data integrity and runs tests.
        OSTN02 lat lon elevation converts ETRS/WGS84 coordinates to OSGB36 using OSTN02 + OSGM02.
        
-dyn204:OSTN02 George$ ./OSTN02C 51.0 0.0 100.0
-ETRS89 in  lat:   51.000000, lon:    0.000000, elevation:  100.000
-OSGB36 out   E:  540431.987,   N:  124193.587, elevation:   54.955 (UK mainland / Newlyn), ref: TQ 40432 24194
+dyn204:OSTN02 George$ ./OSTN02C 51.0 -0.5 100.0
+ETRS89 in  lat:   51.000000, lon:   -0.500000, elevation:  100.000
+OSGB36 out   E:  505349.663,   N:  123360.984, elevation:   54.635 (UK mainland / Newlyn), ref: TQ 0535 2336
 
 dyn204:OSTN02 George$ ./OSTN02C --tests
 Original CRC32 (data):  790474494
