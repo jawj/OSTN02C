@@ -171,10 +171,10 @@ EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthi
 
 char *gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const bool spaces, const int res) { 
   // res is expressed in metres: 1/10/100 -> 3/4/5-digit easting and northing
-	const char firstLetters[3][2]  = {{'S', 'T'}, 
+  const char firstLetters[3][2]  = {{'S', 'T'}, 
                                     {'N', 'O'}, 
                                     {'H', 'J'}};
-	const char secondLetters[5][5] = {{'V', 'W', 'X', 'Y', 'Z'},
+  const char secondLetters[5][5] = {{'V', 'W', 'X', 'Y', 'Z'},
                                     {'Q', 'R', 'S', 'T', 'U'},
                                     {'L', 'M', 'N', 'O', 'P'},
                                     {'F', 'G', 'H', 'J', 'K'},
