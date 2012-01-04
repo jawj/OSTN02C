@@ -169,6 +169,34 @@ EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthi
   return shifted;
 }
 
+char *gridRefFromOSGB36EastingNorthing(const EastingNorthing en) {  // currently 1m resolution ("AB 12345 12345") only
+	const char firstLetters[3][2] = {
+		{'S', 'T'}, 
+		{'N', 'O'}, 
+		{'H', 'J'}
+	};
+	const char secondLetters[5][5] = {
+		{'V', 'W', 'X', 'Y', 'Z'},
+		{'Q', 'R', 'S', 'T', 'U'},
+		{'L', 'M', 'N', 'O', 'P'},
+		{'F', 'G', 'H', 'J', 'K'},
+		{'A', 'B', 'C', 'D', 'E'}
+	};
+  int eRound = round(en.e);
+  int nRound = round(en.n);
+	int firstEIndex  = eRound / 500000;
+	int firstNIndex  = nRound / 500000;
+  int secondEIndex = (eRound % 500000) / 100000;
+	int secondNIndex = (nRound % 500000) / 100000;
+  char sq0 = firstLetters[firstNIndex][firstEIndex];
+  char sq1 = secondLetters[secondNIndex][secondEIndex];
+  int  e   = eRound - (500000 * firstEIndex) - (100000 * secondEIndex);
+  int  n   = nRound - (500000 * firstNIndex) - (100000 * secondNIndex);
+  char *ref;
+  asprintf(&ref, "%c%c %05d %05d", sq0, sq1, e, n);  // don't forget to free!
+  return ref;
+}
+
 LatLonDecimal latLonDecimalFromLatLonDegMinSec(const LatLonDegMinSec dms) {
   LatLonDecimal dec;
   dec.lat = (dms.lat.westOrSouth ? -1.0L : 1.0L) * (((dbl) dms.lat.deg) + ((dbl) dms.lat.min) / 60.0L + dms.lat.sec / 3600.0L);

@@ -28,8 +28,8 @@
 #define TAN      tanl
 #define SQRT     sqrtl
 #define numdesc  "long double"
-#define llFmtStr "lat: % 11.6Lf,  lon: % 11.6Lf,  elevation: %8.3Lf"
-#define enFmtStr "  E: %11.3Lf,    N: %11.3Lf,  elevation:  %7.3Lf (%s / %s)"
+#define llFmtStr "lat: % 11.6Lf, lon: % 11.6Lf, elevation: %8.3Lf"
+#define enFmtStr "  E: %11.3Lf,   N: %11.3Lf, elevation:  %7.3Lf (%s / %s)"
 
 #else
 
@@ -41,8 +41,8 @@
 #define TAN      tan
 #define SQRT     sqrt
 #define numdesc  "double"
-#define llFmtStr "lat: % 11.6f,  lon: % 11.6f,  elevation: %8.3f"
-#define enFmtStr "  E: %11.3f,    N: %11.3f,  elevation:  %7.3f (%s / %s)"
+#define llFmtStr "lat: % 11.6f, lon: % 11.6f, elevation: %8.3f"
+#define enFmtStr "  E: %11.3f,   N: %11.3f, elevation:  %7.3f (%s / %s)"
 
 #endif
 
@@ -111,6 +111,7 @@ EastingNorthing ETRS89LatLonToETRSEastingNorthing(const LatLonDecimal latLon);
 EastingNorthing OSTN02Shifts(const int eIndex, const int nIndex);
 EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthing en);
 LatLonDecimal   latLonDecimalFromLatLonDegMinSec(const LatLonDegMinSec dms);
+char            *gridRefFromOSGB36EastingNorthing(const EastingNorthing en);
 bool            test(const bool noisily);
 
 #endif

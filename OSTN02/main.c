@@ -27,12 +27,13 @@ int main (int argc, const char * argv[]) {
       printf("Coordinates outside range.\n");
       return EXIT_FAILURE;
     }
+    char *gridRef = gridRefFromOSGB36EastingNorthing(en);
     printf("ETRS89 in  ");
     printf(llFmtStr, latLon.lat, latLon.lon, latLon.elevation);
-    printf("\n");
-    printf("OSGB36 out ");
+    printf("\nOSGB36 out ");
     printf(enFmtStr, en.e, en.n, en.elevation, OSGB36GeoidRegions[en.geoid], OSGB36GeoidNames[en.geoid]);
-    printf("\n\n");
+    printf(", ref: %s\n\n", gridRef);
+    free(gridRef);
     return EXIT_SUCCESS;
   } else {
     printf("%sOSTN02C%s - Built %s %s (%s precision).\n", INVERSE, UNINVERSE, __DATE__, __TIME__, numdesc);
