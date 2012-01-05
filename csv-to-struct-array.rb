@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# encoding: utf-8
 
 require 'CSV'
 puts 'loading'
@@ -37,12 +38,18 @@ data.each do |row|
   print row.length.to_s + ', '
 end
 
+c_notice = %{
+// OSTN02/OSGM02 data (derived from OSTN02_OSGM02_GB.txt in http://www.ordnancesurvey.co.uk/oswebsite/gps/docs/OSTN02_OSGM02files.zip)
+// © Crown copyright 2002. All rights reserved
+
+}
+
 puts "\n\nwriting"
 indices_written = data_written = 0
 File.open("shifts.index.data", "w") do |index_file|
-  index_file.puts('const OSTN02Index OSTN02Indices[] = {')
+  index_file.puts(c_notice + 'static const OSTN02Index OSTN02Indices[] = {')
   File.open("shifts.data", "w") do |data_file|
-    data_file.puts('const OSTN02Datum OSTN02Data[] = {')
+    data_file.puts(c_notice + 'static const OSTN02Datum OSTN02Data[] = {')
     data.each do |row|
       print row.empty? ? '- ' : row[0][:n].to_s + ' '
       emin = row.empty? ? 0 : row.first[:e]
