@@ -18,9 +18,9 @@ int main (int argc, const char * argv[]) {
     return passed ? EXIT_SUCCESS : EXIT_FAILURE;
   } else if (argc == 4) {
     LatLonDecimal latLon;
-    sscanf(argv[1], "%Lf", &latLon.lat);
-    sscanf(argv[2], "%Lf", &latLon.lon);
-    sscanf(argv[3], "%Lf", &latLon.elevation);
+    sscanf(argv[1], "%" DBLFMT, &latLon.lat);
+    sscanf(argv[2], "%" DBLFMT, &latLon.lon);
+    sscanf(argv[3], "%" DBLFMT, &latLon.elevation);
     latLon.geoid = 0;
     EastingNorthing en = ETRS89EastingNorthingToOSGB36EastingNorthing(ETRS89LatLonToETRSEastingNorthing(latLon));
     if (en.geoid == 0) {
@@ -29,14 +29,14 @@ int main (int argc, const char * argv[]) {
     }
     char *gridRef = gridRefFromOSGB36EastingNorthing(en, true, 10);
     printf("ETRS89 in  ");
-    printf(llFmtStr, latLon.lat, latLon.lon, latLon.elevation);
+    printf(LLFMT, latLon.lat, latLon.lon, latLon.elevation);
     printf("\nOSGB36 out ");
-    printf(enFmtStr, en.e, en.n, en.elevation, OSGB36GeoidRegions[en.geoid], OSGB36GeoidNames[en.geoid]);
+    printf(ENFMT, en.e, en.n, en.elevation, OSGB36GeoidRegions[en.geoid], OSGB36GeoidNames[en.geoid]);
     printf(", ref: %s\n\n", gridRef);
     free(gridRef);
     return EXIT_SUCCESS;
   } else {
-    printf("%sOSTN02C%s - Built %s %s (%s precision).\n", INVERSE, UNINVERSE, __DATE__, __TIME__, numdesc);
+    printf("%sOSTN02C%s - Built %s %s (%s precision).\n", INVERSE, UNINVERSE, __DATE__, __TIME__, NUMDESC);
     printf("Copyright © George MacKerron 2012 (http://mackerron.com). Released under the MIT licence (http://www.opensource.org/licenses/mit-license.php).\n");
     printf("OSTN02 and OSGM02 are trademarks of Ordnance Survey. Incorporated OSTN02 and OSGM02 data are © Crown copyright 2002. All rights reserved.\n\n");
     printf("Usage: %sOSTN02 --tests%s verifies data integrity and runs tests.\n", BOLD, UNBOLD);

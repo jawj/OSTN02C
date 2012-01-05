@@ -16,36 +16,32 @@
 #include <string.h>
 #include "crc32.h"
 
-
-#define use_long  // comment this line out for double precision
+#define use_long  // comment this line out for double precision -- but it makes no difference within a millimetre on any test
 
 #ifdef use_long
-#define dbl      long double
-#define cdbl     const long double
-#define sfx      L
-#define SIN      sinl
-#define COS      cosl
-#define TAN      tanl
-#define SQRT     sqrtl
-#define numdesc  "long double"
-#define llFmtStr "lat: % 11.6Lf, lon: % 11.6Lf, elevation: %8.3Lf"
-#define enFmtStr "  E: %11.3Lf,   N: %11.3Lf, elevation:  %7.3Lf (%s / %s)"
-
+#define DBL       long double
+#define L(x)      x ## L
+#define DBLFMT    "Lf"
+#define SIN       sinl
+#define COS       cosl
+#define TAN       tanl
+#define SQRT      sqrtl
+#define NUMDESC   "long double"
 #else
-
-#define dbl      double
-#define cdbl     const double
-#define sfx
-#define SIN      sin
-#define COS      cos
-#define TAN      tan
-#define SQRT     sqrt
-#define numdesc  "double"
-#define llFmtStr "lat: % 11.6f, lon: % 11.6f, elevation: %8.3f"
-#define enFmtStr "  E: %11.3f,   N: %11.3f, elevation:  %7.3f (%s / %s)"
-
+#define DBL       double
+#define L(x)      x
+#define DBLFMT    "lf"
+#define SIN       sin
+#define COS       cos
+#define TAN       tan
+#define SQRT      sqrt
+#define NUMDESC   "double"
 #endif
 
+#define CDBL      const DBL
+
+#define LLFMT     "lat: % 11.6" DBLFMT ", lon: % 11.6" DBLFMT ", elevation: %8.3" DBLFMT
+#define ENFMT     "  E: %11.3" DBLFMT ",   N: %11.3" DBLFMT ", elevation:  %7.3" DBLFMT " (%s / %s)"
 
 #define BOLD      "\033[1m"
 #define UNBOLD    "\033[22m"
@@ -58,37 +54,37 @@
 typedef struct {
   unsigned char deg;  // range 0 - 180 (S or W)
   unsigned char min;  // range 0 - 60
-  dbl sec;
+  DBL sec;
   bool westOrSouth;
 } DegMinSec;
 
 typedef struct {
-  dbl e;
-  dbl n;
-  dbl elevation;
+  DBL e;
+  DBL n;
+  DBL elevation;
   unsigned char geoid;
 } EastingNorthing;
 
 typedef struct {
-  dbl lat;
-  dbl lon;
-  dbl elevation;
+  DBL lat;
+  DBL lon;
+  DBL elevation;
   unsigned char geoid;
 } LatLonDecimal;
 
 typedef struct {
   DegMinSec lat;
   DegMinSec lon;
-  dbl elevation;
+  DBL elevation;
 } LatLonDegMinSec;
 
 typedef struct {
-  dbl semiMajorAxis;
-  dbl semiMinorAxis;
+  DBL semiMajorAxis;
+  DBL semiMinorAxis;
 } Ellipsoid;
 
 typedef struct {
-  dbl centralMeridianScale;
+  DBL centralMeridianScale;
   LatLonDecimal trueOriginLatLon;
   EastingNorthing trueOriginEastingNorthing;
 } MapProjection;

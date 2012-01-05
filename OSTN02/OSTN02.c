@@ -13,67 +13,67 @@
 #include "geoids.data"
 
 #define originalIndicesCRC 244629328L
-#define originalDataCRC 790474494L
+#define originalDataCRC    790474494L
 
-#define piOver180 0.0174532925199432957692369076848861271344287188854172545609L
+static CDBL piOver180 = L(0.0174532925199432957692369076848861271344287188854172545609);
 
 EastingNorthing latLonToEastingNorthing(const LatLonDecimal latLon, const Ellipsoid ellipsoid, const MapProjection projection) {
-  cdbl a   = ellipsoid.semiMajorAxis;
-  cdbl b   = ellipsoid.semiMinorAxis;
-  cdbl f0  = projection.centralMeridianScale;
-  cdbl toE = projection.trueOriginEastingNorthing.e;
-  cdbl toN = projection.trueOriginEastingNorthing.n;
+  CDBL a   = ellipsoid.semiMajorAxis;
+  CDBL b   = ellipsoid.semiMinorAxis;
+  CDBL f0  = projection.centralMeridianScale;
+  CDBL toE = projection.trueOriginEastingNorthing.e;
+  CDBL toN = projection.trueOriginEastingNorthing.n;
   
   // Convert degrees to radians
-  cdbl phi     = piOver180 * latLon.lat;
-  cdbl lambda  = piOver180 * latLon.lon;
-  cdbl phi0    = piOver180 * projection.trueOriginLatLon.lat;
-  cdbl lambda0 = piOver180 * projection.trueOriginLatLon.lon;
+  CDBL phi     = piOver180 * latLon.lat;
+  CDBL lambda  = piOver180 * latLon.lon;
+  CDBL phi0    = piOver180 * projection.trueOriginLatLon.lat;
+  CDBL lambda0 = piOver180 * projection.trueOriginLatLon.lon;
   
   // Calculations
-  cdbl deltaPhi = phi - phi0;
-  cdbl sumPhi   = phi + phi0;
-  cdbl sinPhi   = SIN(phi);
-  cdbl sinPhi2  = sinPhi * sinPhi;
-  cdbl cosPhi   = COS(phi);
-  cdbl cosPhi2  = cosPhi * cosPhi;
-  cdbl cosPhi3  = cosPhi2 * cosPhi;
-  cdbl cosPhi5  = cosPhi3 * cosPhi2;
-  cdbl tanPhi   = TAN(phi);
-  cdbl tanPhi2  = tanPhi * tanPhi;
-  cdbl tanPhi4  = tanPhi2 * tanPhi2;
+  CDBL deltaPhi = phi - phi0;
+  CDBL sumPhi   = phi + phi0;
+  CDBL sinPhi   = SIN(phi);
+  CDBL sinPhi2  = sinPhi * sinPhi;
+  CDBL cosPhi   = COS(phi);
+  CDBL cosPhi2  = cosPhi * cosPhi;
+  CDBL cosPhi3  = cosPhi2 * cosPhi;
+  CDBL cosPhi5  = cosPhi3 * cosPhi2;
+  CDBL tanPhi   = TAN(phi);
+  CDBL tanPhi2  = tanPhi * tanPhi;
+  CDBL tanPhi4  = tanPhi2 * tanPhi2;
   
-  cdbl a2   = a * a;
-  cdbl e2   = (a2 - b * b) / a2;
-  cdbl n    = (a - b) / (a + b);
-  cdbl n2   = n * n;
-  cdbl n3   = n2 * n;
-  cdbl oneMinusE2SinPhi2 = 1.0L - e2 * sinPhi2;
-  cdbl sqrtOneMinusE2SinPhi2 = SQRT(oneMinusE2SinPhi2);
-  cdbl aF0  = a * f0;
-  cdbl v    = aF0 / sqrtOneMinusE2SinPhi2;
-  cdbl rho  = aF0 * (1.0L - e2) / (oneMinusE2SinPhi2 * sqrtOneMinusE2SinPhi2);
-  cdbl eta2 = v / rho - 1.0L;
-  cdbl m    = b * f0 * ( (1.0L + n + (5.0L / 4.0L) * n2 + (5.0L / 4.0L) * n3) * deltaPhi
-                       - (3.0L * n + 3.0L * n2 + (21.0L / 8.0L) * n3) * SIN(deltaPhi) * COS(sumPhi)
-                       + ((15.0L / 8.0L) * n2 + (15.0L / 8.0L) * n3) * SIN(2.0L * deltaPhi) * COS(2.0L * sumPhi)
-                       - (35.0L / 24.0L) * n3 * SIN(3.0L * deltaPhi) * COS(3.0L * sumPhi) 
+  CDBL a2   = a * a;
+  CDBL e2   = (a2 - b * b) / a2;
+  CDBL n    = (a - b) / (a + b);
+  CDBL n2   = n * n;
+  CDBL n3   = n2 * n;
+  CDBL oneMinusE2SinPhi2 = L(1.0) - e2 * sinPhi2;
+  CDBL sqrtOneMinusE2SinPhi2 = SQRT(oneMinusE2SinPhi2);
+  CDBL aF0  = a * f0;
+  CDBL v    = aF0 / sqrtOneMinusE2SinPhi2;
+  CDBL rho  = aF0 * (L(1.0) - e2) / (oneMinusE2SinPhi2 * sqrtOneMinusE2SinPhi2);
+  CDBL eta2 = v / rho - L(1.0);
+  CDBL m    = b * f0 * ( (L(1.0) + n + (L(5.0) / L(4.0)) * n2 + (L(5.0) / L(4.0)) * n3) * deltaPhi
+                       - (L(3.0) * n + L(3.0) * n2 + (L(21.0) / L(8.0)) * n3) * SIN(deltaPhi) * COS(sumPhi)
+                       + ((L(15.0) / L(8.0)) * n2 + (L(15.0) / L(8.0)) * n3) * SIN(L(2.0) * deltaPhi) * COS(L(2.0) * sumPhi)
+                       - (L(35.0) / L(24.0)) * n3 * SIN(L(3.0) * deltaPhi) * COS(L(3.0) * sumPhi) 
                        );
   
-  cdbl one    = m + toN;
-  cdbl two    = (v /   2.0L) * sinPhi * cosPhi;
-  cdbl three  = (v /  24.0L) * sinPhi * cosPhi3 * (5.0L - tanPhi2 + 9.0L * eta2);
-  cdbl threeA = (v / 720.0L) * sinPhi * cosPhi5 * (61.0L - 58.0L * tanPhi2 + tanPhi4);
-  cdbl four   = v * cosPhi;
-  cdbl five   = (v /   6.0L) * cosPhi3 * (v / rho - tanPhi2);
-  cdbl six    = (v / 120.0L) * cosPhi5 * (5.0L - 18.0L * tanPhi2 + tanPhi4 + 14.0L * eta2 - 58.0L * tanPhi2 * eta2);
+  CDBL one    = m + toN;
+  CDBL two    = (v /   L(2.0)) * sinPhi * cosPhi;
+  CDBL three  = (v /  L(24.0)) * sinPhi * cosPhi3 * (L(5.0) - tanPhi2 + L(9.0) * eta2);
+  CDBL threeA = (v / L(720.0)) * sinPhi * cosPhi5 * (L(61.0) - L(58.0) * tanPhi2 + tanPhi4);
+  CDBL four   = v * cosPhi;
+  CDBL five   = (v /   L(6.0)) * cosPhi3 * (v / rho - tanPhi2);
+  CDBL six    = (v / L(120.0)) * cosPhi5 * (L(5.0) - L(18.0) * tanPhi2 + tanPhi4 + L(14.0) * eta2 - L(58.0) * tanPhi2 * eta2);
   
-  cdbl deltaLambda  = lambda - lambda0;
-  cdbl deltaLambda2 = deltaLambda  * deltaLambda;
-  cdbl deltaLambda3 = deltaLambda2 * deltaLambda;
-  cdbl deltaLambda4 = deltaLambda3 * deltaLambda;
-  cdbl deltaLambda5 = deltaLambda4 * deltaLambda;
-  cdbl deltaLambda6 = deltaLambda5 * deltaLambda;
+  CDBL deltaLambda  = lambda - lambda0;
+  CDBL deltaLambda2 = deltaLambda  * deltaLambda;
+  CDBL deltaLambda3 = deltaLambda2 * deltaLambda;
+  CDBL deltaLambda4 = deltaLambda3 * deltaLambda;
+  CDBL deltaLambda5 = deltaLambda4 * deltaLambda;
+  CDBL deltaLambda6 = deltaLambda5 * deltaLambda;
   
   EastingNorthing en;
   en.n = one + two * deltaLambda2 + three * deltaLambda4 + threeA * deltaLambda6;
@@ -86,15 +86,15 @@ EastingNorthing latLonToEastingNorthing(const LatLonDecimal latLon, const Ellips
 
 EastingNorthing ETRS89LatLonToETRSEastingNorthing(const LatLonDecimal latLon) {
   Ellipsoid ETRS89Ellipsoid;
-  ETRS89Ellipsoid.semiMajorAxis = 6378137.0L;
-  ETRS89Ellipsoid.semiMinorAxis = 6356752.3141L;  
+  ETRS89Ellipsoid.semiMajorAxis = L(6378137.0);
+  ETRS89Ellipsoid.semiMinorAxis = L(6356752.3141);  
   
   MapProjection nationalGridProj;
-  nationalGridProj.centralMeridianScale = 0.9996012717L;
-  nationalGridProj.trueOriginLatLon.lat = 49.0L;
-  nationalGridProj.trueOriginLatLon.lon = -2.0L;
-  nationalGridProj.trueOriginEastingNorthing.e =  400000.0L;
-  nationalGridProj.trueOriginEastingNorthing.n = -100000.0L;
+  nationalGridProj.centralMeridianScale = L(0.9996012717);
+  nationalGridProj.trueOriginLatLon.lat = L(49.0);
+  nationalGridProj.trueOriginLatLon.lon = L(-2.0);
+  nationalGridProj.trueOriginEastingNorthing.e = L(400000.0);
+  nationalGridProj.trueOriginEastingNorthing.n = L(-100000.0);
   
   return latLonToEastingNorthing(latLon, ETRS89Ellipsoid, nationalGridProj);
 }
@@ -111,9 +111,9 @@ EastingNorthing OSTN02Shifts(const int eIndex, const int nIndex) {
   OSTN02Datum record = OSTN02Data[dataOffset];
   if (record.gFlag == 0) return shifts;
   
-  shifts.e         = (((dbl) record.eShift) / 1000.0L) + 86.0L;
-  shifts.n         = (((dbl) record.nShift) / 1000.0L) - 82.0L;
-  shifts.elevation = (((dbl) record.gShift) / 1000.0L) + 43.0L;
+  shifts.e         = (((DBL) record.eShift) / L(1000.0)) + L(86.0);
+  shifts.n         = (((DBL) record.nShift) / L(1000.0)) - L(82.0);
+  shifts.elevation = (((DBL) record.gShift) / L(1000.0)) + L(43.0);
   shifts.geoid     = record.gFlag;
   return shifts;
 }
@@ -122,12 +122,12 @@ EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthi
   EastingNorthing shifted;
   shifted.e = shifted.n = shifted.elevation = shifted.geoid = 0;
 
-  int  e0 = (int) (en.e / 1000.0L);
-  int  n0 = (int) (en.n / 1000.0L);
-  cdbl dx = en.e - (dbl) (e0 * 1000);
-  cdbl dy = en.n - (dbl) (n0 * 1000);
-  cdbl t  = dx / 1000.0L;
-  cdbl u  = dy / 1000.0L;
+  int  e0 = (int) (en.e / L(1000.0));
+  int  n0 = (int) (en.n / L(1000.0));
+  CDBL dx = en.e - (DBL) (e0 * 1000);
+  CDBL dy = en.n - (DBL) (n0 * 1000);
+  CDBL t  = dx / L(1000.0);
+  CDBL u  = dy / L(1000.0);
   
   EastingNorthing shifts0 = OSTN02Shifts(e0    , n0    );
   if (shifts0.geoid == 0) return shifted;
@@ -141,10 +141,10 @@ EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthi
   EastingNorthing shifts3 = OSTN02Shifts(e0    , n0 + 1);
   if (shifts3.geoid == 0) return shifted;
   
-  cdbl weight0 = (1.0L - t) * (1.0L - u);
-  cdbl weight1 =         t  * (1.0L - u);
-  cdbl weight2 =         t  *         u;
-  cdbl weight3 = (1.0L - t) *         u;
+  CDBL weight0 = (L(1.0) - t) * (L(1.0) - u);
+  CDBL weight1 =           t  * (L(1.0) - u);
+  CDBL weight2 =           t  *           u;
+  CDBL weight3 = (L(1.0) - t) *           u;
   
   shifted.e = en.e + weight0 * shifts0.e
                    + weight1 * shifts1.e 
@@ -161,8 +161,8 @@ EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthi
                                     + weight2 * shifts2.elevation
                                     + weight3 * shifts3.elevation);
   
-  bool left   = dx < 500.0L;
-  bool bottom = dy < 500.0L;
+  bool left   = dx < L(500.0);
+  bool bottom = dy < L(500.0);
   EastingNorthing nearestShift = left ? (bottom ? shifts0 : shifts3) : (bottom ? shifts1 : shifts2);
   shifted.geoid = nearestShift.geoid;
   
@@ -179,8 +179,8 @@ char *gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const bool spac
                                     {'L', 'M', 'N', 'O', 'P'},
                                     {'F', 'G', 'H', 'J', 'K'},
                                     {'A', 'B', 'C', 'D', 'E'}};
-  const int  eRound = round(en.e / (dbl) res) * res;
-  const int  nRound = round(en.n / (dbl) res) * res;
+  const int  eRound = round(en.e / (DBL) res) * res;
+  const int  nRound = round(en.n / (DBL) res) * res;
   const int  firstEIndex  = eRound / 500000;
   const int  firstNIndex  = nRound / 500000;
   const int  secondEIndex = (eRound % 500000) / 100000;
@@ -199,8 +199,8 @@ char *gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const bool spac
 
 LatLonDecimal latLonDecimalFromLatLonDegMinSec(const LatLonDegMinSec dms) {
   LatLonDecimal dec;
-  dec.lat = (dms.lat.westOrSouth ? -1.0L : 1.0L) * (((dbl) dms.lat.deg) + ((dbl) dms.lat.min) / 60.0L + dms.lat.sec / 3600.0L);
-  dec.lon = (dms.lon.westOrSouth ? -1.0L : 1.0L) * (((dbl) dms.lon.deg) + ((dbl) dms.lon.min) / 60.0L + dms.lon.sec / 3600.0L);
+  dec.lat = (dms.lat.westOrSouth ? L(-1.0) : L(1.0)) * (((DBL) dms.lat.deg) + ((DBL) dms.lat.min) / L(60.0) + dms.lat.sec / L(3600.0));
+  dec.lon = (dms.lon.westOrSouth ? L(-1.0) : L(1.0)) * (((DBL) dms.lon.deg) + ((DBL) dms.lon.min) / L(60.0) + dms.lon.sec / L(3600.0));
   dec.elevation = dms.elevation;
   dec.geoid = 0;
   return dec;
@@ -240,9 +240,9 @@ bool test(const bool noisily) {
     EastingNorthing testEN = ETRS89EastingNorthingToOSGB36EastingNorthing(ETRS89LatLonToETRSEastingNorthing(testLatLonDec));
     
     char *ETRS89Str, *realENStr, *testENStr;
-    asprintf(&ETRS89Str, llFmtStr, testLatLonDec.lat, testLatLonDec.lon, testLatLonDec.elevation);
-    asprintf(&realENStr, enFmtStr, realEN.e, realEN.n, realEN.elevation, OSGB36GeoidRegions[realEN.geoid], OSGB36GeoidNames[realEN.geoid]);
-    asprintf(&testENStr, enFmtStr, testEN.e, testEN.n, testEN.elevation, OSGB36GeoidRegions[testEN.geoid], OSGB36GeoidNames[testEN.geoid]);
+    asprintf(&ETRS89Str, LLFMT, testLatLonDec.lat, testLatLonDec.lon, testLatLonDec.elevation);
+    asprintf(&realENStr, ENFMT, realEN.e, realEN.n, realEN.elevation, OSGB36GeoidRegions[realEN.geoid], OSGB36GeoidNames[realEN.geoid]);
+    asprintf(&testENStr, ENFMT, testEN.e, testEN.n, testEN.elevation, OSGB36GeoidRegions[testEN.geoid], OSGB36GeoidNames[testEN.geoid]);
     
     testPassed = strcmp(realENStr, testENStr) == 0;
     numTested ++;
