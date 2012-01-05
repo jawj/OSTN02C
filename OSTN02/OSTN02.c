@@ -12,7 +12,7 @@
 #include "shifts.data"
 #include "geoids.data"
 
-#define originalIndicesCRC 244629328L
+#define originalIndicesCRC 244629328L  // these won't be robust against differing endianness or compiler packing of bit-structs
 #define originalDataCRC    790474494L
 
 static CDBL piOver180 = L(0.0174532925199432957692369076848861271344287188854172545609);
@@ -50,9 +50,8 @@ EastingNorthing latLonToEastingNorthing(const LatLonDecimal latLon, const Ellips
   CDBL n3   = n2 * n;
   CDBL oneMinusE2SinPhi2 = L(1.0) - e2 * sinPhi2;
   CDBL sqrtOneMinusE2SinPhi2 = SQRT(oneMinusE2SinPhi2);
-  CDBL aF0  = a * f0;
-  CDBL v    = aF0 / sqrtOneMinusE2SinPhi2;
-  CDBL rho  = aF0 * (L(1.0) - e2) / (oneMinusE2SinPhi2 * sqrtOneMinusE2SinPhi2);
+  CDBL v    = a * f0 / sqrtOneMinusE2SinPhi2;
+  CDBL rho  = a * f0 * (L(1.0) - e2) / (oneMinusE2SinPhi2 * sqrtOneMinusE2SinPhi2);
   CDBL eta2 = v / rho - L(1.0);
   CDBL m    = b * f0 * ( (L(1.0) + n + (L(5.0) / L(4.0)) * n2 + (L(5.0) / L(4.0)) * n3) * deltaPhi
                        - (L(3.0) * n + L(3.0) * n2 + (L(21.0) / L(8.0)) * n3) * SIN(deltaPhi) * COS(sumPhi)
