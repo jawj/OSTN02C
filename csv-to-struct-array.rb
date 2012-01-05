@@ -39,9 +39,9 @@ end
 
 puts "\n\nwriting"
 indices_written = data_written = 0
-File.open("OSTN02.index.struct-array", "w") do |index_file|
+File.open("shifts.index.data", "w") do |index_file|
   index_file.puts('const OSTN02Index OSTN02Indices[] = {')
-  File.open("OSTN02.data.struct-array", "w") do |data_file|
+  File.open("shifts.data", "w") do |data_file|
     data_file.puts('const OSTN02Datum OSTN02Data[] = {')
     data.each do |row|
       print row.empty? ? '- ' : row[0][:n].to_s + ' '
