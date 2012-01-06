@@ -107,7 +107,8 @@ EastingNorthing ETRS89LatLonToETRSEastingNorthing(const LatLonDecimal latLon);
 EastingNorthing OSTN02Shifts(const int eIndex, const int nIndex);
 EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthing en);
 LatLonDecimal   latLonDecimalFromLatLonDegMinSec(const LatLonDegMinSec dms);
-char            *gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const bool spaces, const int res) ;
+char            *gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const bool spaces, const int res);  // be sure to free(result) after use
+char            *tetradFromOSGB36EastingNorthing(const EastingNorthing en);                                     // be sure to free(result) after use
 bool            test(const bool noisily);
 
 #endif

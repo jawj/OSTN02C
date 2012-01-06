@@ -11,6 +11,7 @@
 #include "shifts.index.data"
 #include "shifts.data"
 #include "geoids.data"
+#include "gridRef.data"
 
 #define originalIndicesCRC 244629328L  // these won't be robust against differing endianness or compiler packing of bit-structs
 #define originalDataCRC    790474494L
@@ -170,14 +171,6 @@ EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthi
 
 char *gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const bool spaces, const int res) { 
   // res is expressed in metres: 1/10/100 -> 3/4/5-digit easting and northing
-  const char firstLetters[3][2]  = {{'S', 'T'}, 
-                                    {'N', 'O'}, 
-                                    {'H', 'J'}};
-  const char secondLetters[5][5] = {{'V', 'W', 'X', 'Y', 'Z'},
-                                    {'Q', 'R', 'S', 'T', 'U'},
-                                    {'L', 'M', 'N', 'O', 'P'},
-                                    {'F', 'G', 'H', 'J', 'K'},
-                                    {'A', 'B', 'C', 'D', 'E'}};
   const int  eRound = round(en.e / (DBL) res) * res;
   const int  nRound = round(en.n / (DBL) res) * res;
   const int  firstEIndex  = eRound / 500000;
@@ -193,7 +186,29 @@ char *gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const bool spac
   asprintf(&fmtStr, "%%c%%c%%s%%0%dd%%s%%0%dd", digits, digits);
   asprintf(&ref, fmtStr, sq0, sq1, (spaces ? " " : ""), e / res, (spaces ? " " : ""), n / res);
   free(fmtStr);
-  return ref;  // don't forget to free!
+  return ref;
+}
+
+char *tetradFromOSGB36EastingNorthing(const EastingNorthing en) {
+  // see http://www.bto.org/volunteer-surveys/birdatlas/taking-part/correct-grid-references/know-your-place
+  const int  eTrunc = (int) en.e;  // note: unlike for a grid ref, we never round -- we (implictly) truncate
+  const int  nTrunc = (int) en.n;
+  const int  firstEIndex  = eTrunc / 500000;
+  const int  firstNIndex  = nTrunc / 500000;
+  const int  secondEIndex = (eTrunc % 500000) / 100000;
+  const int  secondNIndex = (nTrunc % 500000) / 100000;
+  const char sq0 = firstLetters[firstNIndex][firstEIndex];
+  const char sq1 = secondLetters[secondNIndex][secondEIndex];
+  const int  eMinusSq = eTrunc - (500000 * firstEIndex) - (100000 * secondEIndex);
+  const int  nMinusSq = nTrunc - (500000 * firstNIndex) - (100000 * secondNIndex);
+  const int  eDigit = eMinusSq / 10000;
+  const int  nDigit = nMinusSq / 10000;
+  const int  tetradEIndex = (eMinusSq % 10000) / 2000;
+  const int  tetradNIndex = (nMinusSq % 10000) / 2000;
+  char tetradLetter = tetradLetters[tetradNIndex][tetradEIndex];
+  char *tetrad;
+  asprintf(&tetrad, "%c%c%d%d%c", sq0, sq1, eDigit, nDigit, tetradLetter);
+  return tetrad;
 }
 
 LatLonDecimal latLonDecimalFromLatLonDegMinSec(const LatLonDegMinSec dms) {

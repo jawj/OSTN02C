@@ -1,0 +1,16 @@
+
+static const char firstLetters[3][2]   = {{'S', 'T'}, 
+                                          {'N', 'O'}, 
+                                          {'H', 'J'}};
+
+static const char secondLetters[5][5]  = {{'V', 'W', 'X', 'Y', 'Z'},
+                                          {'Q', 'R', 'S', 'T', 'U'},
+                                          {'L', 'M', 'N', 'O', 'P'},
+                                          {'F', 'G', 'H', 'J', 'K'},
+                                          {'A', 'B', 'C', 'D', 'E'}};
+
+static const char tetradLetters[5][5]  = {{'A', 'F', 'K', 'Q', 'V'},
+                                          {'B', 'G', 'L', 'R', 'W'},
+                                          {'C', 'H', 'M', 'S', 'X'},
+                                          {'D', 'I', 'N', 'T', 'Y'},
+                                          {'E', 'J', 'P', 'U', 'Z'}};

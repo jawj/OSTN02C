@@ -28,11 +28,13 @@ int main (int argc, const char * argv[]) {
       return EXIT_FAILURE;
     }
     char *gridRef = gridRefFromOSGB36EastingNorthing(en, true, 10);
+    char *tetrad = tetradFromOSGB36EastingNorthing(en);
     printf("ETRS89 in  ");
     printf(LLFMT, latLon.lat, latLon.lon, latLon.elevation);
     printf("\nOSGB36 out ");
     printf(ENFMT, en.e, en.n, en.elevation, OSGB36GeoidRegions[en.geoid], OSGB36GeoidNames[en.geoid]);
-    printf(", ref: %s\n\n", gridRef);
+    printf(", ref: %s, tetrad: %s\n\n", gridRef, tetrad);
+    free(tetrad);
     free(gridRef);
     return EXIT_SUCCESS;
   } else {

@@ -33,6 +33,7 @@
 		5E67D47B14B212FE00F5D4BC /* shifts.data */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = shifts.data; sourceTree = "<group>"; };
 		5E67D47C14B212FE00F5D4BC /* shifts.index.data */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = shifts.index.data; sourceTree = "<group>"; };
 		5E7AD48014B0D26E00AA6C99 /* csv-to-struct-array.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = "csv-to-struct-array.rb"; sourceTree = "<group>"; };
+		5EB2BE9D14B7593100EE7A5D /* gridRef.data */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = gridRef.data; sourceTree = "<group>"; };
 		5EBE804014A5FE4800CA9D70 /* OSTN02C */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OSTN02C; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EBE804414A5FE4800CA9D70 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		5EBE804D14A5FE7300CA9D70 /* OSTN02.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSTN02.h; sourceTree = "<group>"; };
@@ -57,6 +58,7 @@
 				5E67D47C14B212FE00F5D4BC /* shifts.index.data */,
 				5E2FEDCF14B35DD4007849B4 /* testCoords.data */,
 				5E2FEDDA14B3641B007849B4 /* geoids.data */,
+				5EB2BE9D14B7593100EE7A5D /* gridRef.data */,
 			);
 			name = Data;
 			path = OSTN02;
