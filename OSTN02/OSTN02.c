@@ -104,11 +104,11 @@ EastingNorthing OSTN02Shifts(const int eIndex, const int nIndex) {
   shifts.e = shifts.n = shifts.elevation = shifts.geoid = 0;
   if (nIndex < 0 || nIndex > 1250) return shifts;
 
-  OSTN02Index dataIndex = OSTN02Indices[nIndex];
+  const OSTN02Index dataIndex = OSTN02Indices[nIndex];
   if (eIndex < dataIndex.eMin || eIndex >= dataIndex.eMin + dataIndex.eCount) return shifts;
   
-  unsigned int dataOffset = dataIndex.offset + (eIndex - dataIndex.eMin);
-  OSTN02Datum record = OSTN02Data[dataOffset];
+  const unsigned int dataOffset = dataIndex.offset + (eIndex - dataIndex.eMin);
+  const OSTN02Datum record = OSTN02Data[dataOffset];
   if (record.gFlag == 0) return shifts;
   
   shifts.e         = (((DBL) record.eShift) / L(1000.0)) + L(86.0);
@@ -122,23 +122,23 @@ EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthi
   EastingNorthing shifted;
   shifted.e = shifted.n = shifted.elevation = shifted.geoid = 0;
 
-  int  e0 = (int) (en.e / L(1000.0));
-  int  n0 = (int) (en.n / L(1000.0));
-  CDBL dx = en.e - (DBL) (e0 * 1000);
-  CDBL dy = en.n - (DBL) (n0 * 1000);
-  CDBL t  = dx / L(1000.0);
-  CDBL u  = dy / L(1000.0);
+  const int e0 = (int) (en.e / L(1000.0));
+  const int n0 = (int) (en.n / L(1000.0));
+  CDBL      dx = en.e - (DBL) (e0 * 1000);
+  CDBL      dy = en.n - (DBL) (n0 * 1000);
+  CDBL      t  = dx / L(1000.0);
+  CDBL      u  = dy / L(1000.0);
   
-  EastingNorthing shifts0 = OSTN02Shifts(e0    , n0    );
+  const EastingNorthing shifts0 = OSTN02Shifts(e0    , n0    );
   if (shifts0.geoid == 0) return shifted;
   
-  EastingNorthing shifts1 = OSTN02Shifts(e0 + 1, n0    );
+  const EastingNorthing shifts1 = OSTN02Shifts(e0 + 1, n0    );
   if (shifts1.geoid == 0) return shifted;
   
-  EastingNorthing shifts2 = OSTN02Shifts(e0 + 1, n0 + 1);
+  const EastingNorthing shifts2 = OSTN02Shifts(e0 + 1, n0 + 1);
   if (shifts2.geoid == 0) return shifted;
   
-  EastingNorthing shifts3 = OSTN02Shifts(e0    , n0 + 1);
+  const EastingNorthing shifts3 = OSTN02Shifts(e0    , n0 + 1);
   if (shifts3.geoid == 0) return shifted;
   
   CDBL weight0 = (L(1.0) - t) * (L(1.0) - u);
@@ -161,9 +161,9 @@ EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthi
                                     + weight2 * shifts2.elevation
                                     + weight3 * shifts3.elevation);
   
-  bool left   = dx < L(500.0);
-  bool bottom = dy < L(500.0);
-  EastingNorthing nearestShift = left ? (bottom ? shifts0 : shifts3) : (bottom ? shifts1 : shifts2);
+  const bool left   = dx < L(500.0);
+  const bool bottom = dy < L(500.0);
+  const EastingNorthing nearestShift = left ? (bottom ? shifts0 : shifts3) : (bottom ? shifts1 : shifts2);
   shifted.geoid = nearestShift.geoid;
   
   return shifted;
@@ -227,7 +227,7 @@ bool test(const bool noisily) {
   
   // check data integrity
   
-  unsigned long dataCRC = crc32((unsigned char *) OSTN02Data, sizeof(OSTN02Data));
+  const unsigned long dataCRC = crc32((unsigned char *) OSTN02Data, sizeof(OSTN02Data));
   testPassed = dataCRC == originalDataCRC;
   numTested ++;
   if (testPassed) numPassed ++;
@@ -236,7 +236,7 @@ bool test(const bool noisily) {
     printf("%sComputed CRC32 (data):  %li%s\n\n", (testPassed ? "" : BOLD), dataCRC, (testPassed ? "" : UNBOLD));
   }
   
-  unsigned long indicesCRC = crc32((unsigned char *) OSTN02Indices, sizeof(OSTN02Indices));
+  const unsigned long indicesCRC = crc32((unsigned char *) OSTN02Indices, sizeof(OSTN02Indices));
   testPassed = indicesCRC == originalIndicesCRC;
   numTested ++;
   if (testPassed) numPassed ++;
@@ -246,14 +246,18 @@ bool test(const bool noisily) {
   }
   
   // check test conversions against known good results
-
-  char len = sizeof(testETRSCoords) / sizeof(LatLonDegMinSec);
+  
+  LatLonDecimal testLatLonDec;
+  EastingNorthing realEN, testEN;
+  char *ETRS89Str, *realENStr, *testENStr;
+  
+  const char len = sizeof(testETRSCoords) / sizeof(LatLonDegMinSec);
+  
   for (char i = 0; i < len; i ++) {
-    LatLonDecimal testLatLonDec = latLonDecimalFromLatLonDegMinSec(testETRSCoords[i]);
-    EastingNorthing realEN = testOSGB36Coords[i];
-    EastingNorthing testEN = ETRS89EastingNorthingToOSGB36EastingNorthing(ETRS89LatLonToETRSEastingNorthing(testLatLonDec));
+    testLatLonDec = latLonDecimalFromLatLonDegMinSec(testETRSCoords[i]);
+    realEN = testOSGB36Coords[i];
+    testEN = ETRS89EastingNorthingToOSGB36EastingNorthing(ETRS89LatLonToETRSEastingNorthing(testLatLonDec));
     
-    char *ETRS89Str, *realENStr, *testENStr;
     asprintf(&ETRS89Str, LLFMT, testLatLonDec.lat, testLatLonDec.lon, testLatLonDec.elevation);
     asprintf(&realENStr, ENFMT, realEN.e, realEN.n, realEN.elevation, OSGB36GeoidRegions[realEN.geoid], OSGB36GeoidNames[realEN.geoid]);
     asprintf(&testENStr, ENFMT, testEN.e, testEN.n, testEN.elevation, OSGB36GeoidRegions[testEN.geoid], OSGB36GeoidNames[testEN.geoid]);
