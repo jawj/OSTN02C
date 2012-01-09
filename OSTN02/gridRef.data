@@ -1,4 +1,6 @@
 
+// since Northings increase upward and array indices increase downwards, these grids all appear North-South flipped
+
 static const char firstLetters[3][2]   = {{'S', 'T'}, 
                                           {'N', 'O'}, 
                                           {'H', 'J'}};
