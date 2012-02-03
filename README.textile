@@ -6,17 +6,33 @@ I'm releasing the code under the "MIT licence":http://www.opensource.org/license
 
 The command-line tool works like this:
 
-bc.. dyn204:OSTN02 George$ ./OSTN02C
-OSTN02C - Built Jan  3 2012 18:18:55 (long double precision).
+bc.. dyn204:OSTN02 George$ ./OSTN02C --help
+OSTN02C -- https://github.com/jawj/OSTN02C -- Built Feb  3 2012 13:01:35 (double precision).
+
+This tool converts ETRS89/WGS84 coordinates to OSGB36 using OSTN02 and OSGM02.
+
+Usage: OSTN02 lat lon elevation converts one set of coordinates with human-friendly output.
+       OSTN02 (without arguments) does batch conversion, reading from STDIN and writing to STDOUT (see below).
+       OSTN02 --tests verifies data integrity and runs conversion tests with known coordinates.
+       OSTN02 --help displays this message.
+
+For batch conversion:
+* Input rows should have 3 columns -- lat, lon and elevation -- with any reasonable separator.
+* Output rows have 4 comma-separated columns: easting, northing, elevation, and a geoid flag.
+* Out-of-range input coordinates produce all-zero output rows.
+* Malformatted input terminates processing, with a non-zero exit code.
+
 Copyright © George MacKerron 2012 (http://mackerron.com). Released under the MIT licence (http://www.opensource.org/licenses/mit-license.php).
 OSTN02 and OSGM02 are trademarks of Ordnance Survey. Incorporated OSTN02 and OSGM02 data are © Crown copyright 2002. All rights reserved.
 
-Usage: OSTN02 --tests verifies data integrity and runs tests.
-       OSTN02 lat lon elevation converts ETRS/WGS84 coordinates to OSGB36 using OSTN02 + OSGM02.
-       
 dyn204:OSTN02 George$ ./OSTN02C 51.0 -0.5 100.0
 ETRS89 in  lat:   51.000000, lon:   -0.500000, elevation:  100.000
-OSGB36 out   E:  505349.663,   N:  123360.984, elevation:   54.635 (UK mainland / Newlyn), ref: TQ 0535 2336
+OSGB36 out   E:  505349.663,   N:  123360.984, elevation:   54.635 (UK mainland / Newlyn), ref: TQ 0535 2336, tetrad: TQ02L
+
+dyn204:OSTN02 George$ echo "51.0, -0.5, 100.0
+> 51.5, -1.0, 50.0" | ./OSTN02C
+505349.662525,123360.984201,54.635315,1
+469509.184346,178369.364219,3.360257,1
 
 dyn204:OSTN02 George$ ./OSTN02C --tests
 Original CRC32 (data):  790474494
