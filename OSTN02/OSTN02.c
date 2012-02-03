@@ -161,8 +161,8 @@ EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthi
 
 char *gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const bool spaces, const int res) { 
   // res is expressed in metres: 1/10/100 -> 3/4/5-digit easting and northing
-  const int  eRound = round(en.e / (DBL) res) * res;
-  const int  nRound = round(en.n / (DBL) res) * res;
+  const int  eRound = (int) round(en.e / (DBL) res) * res;
+  const int  nRound = (int) round(en.n / (DBL) res) * res;
   const int  firstEIndex  = eRound / 500000;
   const int  firstNIndex  = nRound / 500000;
   const int  secondEIndex = (eRound % 500000) / 100000;
