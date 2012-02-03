@@ -7,11 +7,12 @@
 //
 
 #include "OSTN02.h"
-#include "testCoords.data"
+#include "constants.data"
 #include "shifts.index.data"
 #include "shifts.data"
 #include "geoids.data"
 #include "gridRef.data"
+#include "testCoords.data"
 
 #define originalIndicesCRC 244629328L  // these won't be robust against differing endianness or compiler packing of bit-structs
 #define originalDataCRC    790474494L
@@ -85,18 +86,7 @@ EastingNorthing latLonToEastingNorthing(const LatLonDecimal latLon, const Ellips
 }
 
 EastingNorthing ETRS89LatLonToETRSEastingNorthing(const LatLonDecimal latLon) {
-  Ellipsoid ETRS89Ellipsoid;
-  ETRS89Ellipsoid.semiMajorAxis = L(6378137.0);
-  ETRS89Ellipsoid.semiMinorAxis = L(6356752.3141);  
-  
-  MapProjection nationalGridProj;
-  nationalGridProj.centralMeridianScale = L(0.9996012717);
-  nationalGridProj.trueOriginLatLon.lat = L(49.0);
-  nationalGridProj.trueOriginLatLon.lon = L(-2.0);
-  nationalGridProj.trueOriginEastingNorthing.e = L(400000.0);
-  nationalGridProj.trueOriginEastingNorthing.n = L(-100000.0);
-  
-  return latLonToEastingNorthing(latLon, ETRS89Ellipsoid, nationalGridProj);
+  return latLonToEastingNorthing(latLon, GRS80Ellipsoid, nationalGridProj);
 }
 
 EastingNorthing OSTN02Shifts(const int eIndex, const int nIndex) {
