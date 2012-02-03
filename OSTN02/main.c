@@ -31,13 +31,13 @@ int main (int argc, const char * argv[]) {
       printf("Coordinates outside OSTN02 range.\n\n");
       return EXIT_FAILURE;
     }
-    char *gridRef = gridRefFromOSGB36EastingNorthing(en, true, 10);
+    char *gridRef = gridRefFromOSGB36EastingNorthing(en, false, 10);
     char *tetrad = tetradFromOSGB36EastingNorthing(en);
     printf("ETRS89 in  ");
     printf(LLFMT, latLon.lat, latLon.lon, latLon.elevation);
     printf("\nOSGB36 out ");
     printf(ENFMT, en.e, en.n, en.elevation, OSGB36GeoidRegions[en.geoid], OSGB36GeoidNames[en.geoid]);
-    printf(", ref: %s, tetrad: %s\n\n", gridRef, tetrad);
+    printf("\n        tetrad:       %s, ref:  %s\n\n", tetrad, gridRef);
     free(tetrad);
     free(gridRef);
     return EXIT_SUCCESS;

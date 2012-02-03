@@ -31,7 +31,8 @@ Incorporated OSTN02 and OSGM02 data are © Crown copyright 2002. All rights rese
 
 bc.. dyn204:OSTN02 George$ ./OSTN02C 51.0 -0.5 100.0
 ETRS89 in  lat:   51.000000, lon:   -0.500000, elevation:  100.000
-OSGB36 out   E:  505349.663,   N:  123360.984, elevation:   54.635 (UK mainland / Newlyn), ref: TQ 0535 2336, tetrad: TQ02L
+OSGB36 out   E:  505349.663,   N:  123360.984, elevation:   54.635 (UK mainland / Newlyn)
+        tetrad:       TQ02L, ref:  TQ05352336
 
 
 bc.. dyn204:OSTN02 George$ echo "51.0, -0.5, 100.0
