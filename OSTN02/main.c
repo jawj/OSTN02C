@@ -44,7 +44,7 @@ int main (int argc, const char * argv[]) {
   
   // with any other arguments, show help text
   } else if (argc > 1) {
-    printf("%sOSTN02C%s -- https://github.com/jawj/OSTN02C -- Built %s %s (%s precision).\n\n", INVERSE, UNINVERSE, __DATE__, __TIME__, NUMDESC);
+    printf("%sOSTN02C%s — https://github.com/jawj/OSTN02C – Built %s %s (%s precision).\n\n", INVERSE, UNINVERSE, __DATE__, __TIME__, NUMDESC);
     printf("This tool converts ETRS89/WGS84 coordinates to OSGB36 using OSTN02 and OSGM02.\n\n");
     printf("Usage: %sOSTN02 %slat%s %slon%s %selevation%s%s converts one set of coordinates with human-friendly output.\n", BOLD, ULINE, UNULINE, ULINE, UNULINE, ULINE, UNULINE, UNBOLD);
     printf("       %sOSTN02%s (without arguments) does batch conversion, reading from STDIN and writing to STDOUT (see below).\n", BOLD, UNBOLD);
@@ -52,23 +52,25 @@ int main (int argc, const char * argv[]) {
     printf("       %sOSTN02 --help%s displays this message.\n\n", BOLD, UNBOLD);
     
     printf("For batch conversion:\n");
-    printf("* Input rows should have 3 columns -- lat, lon and elevation -- with any reasonable separator.\n");
-    printf("* Output rows have 4 comma-separated columns: easting, northing, elevation, and a geoid flag.\n");
-    printf("* Out-of-range input coordinates produce all-zero output rows.\n");
-    printf("* Malformatted input terminates processing, with a non-zero exit code.\n\n");
+    printf("* Input rows should have 3 columns — lat, lon and elevation — with any reasonable separator.\n");
+    printf("* Output rows have 4 comma-separated columns: easting, northing, elevation, and the geoid datum flag (1 – 14).\n");
+    printf("* In case of out-of-range input coordinates, all output columns will be zero.\n");
+    printf("* Malformatted input terminates processing, and results in a non-zero exit code.\n\n");
     
-    printf("Copyright © George MacKerron 2012 (http://mackerron.com). Released under the MIT licence (http://www.opensource.org/licenses/mit-license.php).\n");
-    printf("OSTN02 and OSGM02 are trademarks of Ordnance Survey. Incorporated OSTN02 and OSGM02 data are © Crown copyright 2002. All rights reserved.\n\n");
+    printf("Copyright © George MacKerron 2012 (http://mackerron.com).\n");
+    printf("Released under the MIT licence (http://www.opensource.org/licenses/mit-license.php).\n\n");
+    printf("OSTN02 and OSGM02 are trademarks of Ordnance Survey.\n");
+    printf("Incorporated OSTN02 and OSGM02 data are © Crown copyright 2002. All rights reserved.\n\n");
     return EXIT_SUCCESS;
     
   // without arguments, convert 3-column CSV/TSV/similar (lat, lon, elevation) to 4-column CSV (easting, northing, elevation, geoid flag)
   } else {
     LatLonDecimal latLon;
     int scanResult;
-    while((scanResult = scanf("%" DBLFMT "%*[ \t,;:]%" DBLFMT "%*[ \t,;:]%" DBLFMT "%*[ \t,;:\n\r]", &latLon.lat, &latLon.lon, &latLon.elevation)) == 3) {
+    while((scanResult = scanf("%" DBLFMT "%*[ \t,;:]%" DBLFMT "%*[ \t,;:]%" DBLFMT "%*[ \t,;:\r]\n", &latLon.lat, &latLon.lon, &latLon.elevation)) == 3) {
       latLon.geoid = 0;
       EastingNorthing en = ETRS89EastingNorthingToOSGB36EastingNorthing(ETRS89LatLonToETRSEastingNorthing(latLon));
-      printf("%" DBLFMT ",%" DBLFMT ",%" DBLFMT ",%d\n", en.e, en.n, en.elevation, en.geoid);
+      printf("%.3" DBLFMT ",%.3" DBLFMT ",%.3" DBLFMT ",%d\n", en.e, en.n, en.elevation, en.geoid);
     }
     return scanResult == EOF ? EXIT_SUCCESS : EXIT_FAILURE;
   }
