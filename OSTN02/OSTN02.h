@@ -16,9 +16,7 @@
 #include <string.h>
 #include "crc32.h"
 
-// #define use_long  // comment this line out for double precision -- it makes no difference within a millimetre on any test
-
-#ifdef use_long
+#ifdef USE_LONG
 #define DBL       long double
 #define L(x)      x ## L
 #define DBLFMT    "Lf"
