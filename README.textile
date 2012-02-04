@@ -16,7 +16,7 @@ You can "download the tool as a 32/64-bit Intel binary for Mac OS X 10.4 and abo
 
 h3. From source
 
-Otherwise, clone the source to your machine and compile it either in Xcode or (as tested on Ubuntu 10.04) like so:
+Otherwise, clone the source to your machine and compile it either in Xcode 4 or (as tested on Ubuntu 10.04) like so:
 
 bc. gcc -std=gnu99 -lm -D_GNU_SOURCE -Wall -pedantic -o OSTN02C main.c OSTN02.c crc32.c
 
