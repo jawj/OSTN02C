@@ -1,6 +1,8 @@
 *This is a C implementation of Ordnance Survey's definitive transformation model "OSTN02":http://www.ordnancesurvey.co.uk/oswebsite/gps/osnetfreeservices/about/surveying_osnet.html#6 and Geoid model "OSGM02":http://www.ordnancesurvey.co.uk/oswebsite/gps/osnetfreeservices/about/surveying_osnet.html#7, with tests.*
 
-It's intended to power a future update of my "GridPoint GB":http://mackerron.com/gridpointgb/ iOS app. It also includes a basic command-line tool.
+It's intended to power a future update of my "GridPoint GB":http://mackerron.com/gridpointgb/ iOS app. 
+
+It also includes a simple command-line tool, which you can "download as a 32/64-bit Intel binary for Mac OS X 10.4 and above":http://jawj.github.com/OSTN02C/OSTN02C.gz.
 
 I'm releasing the code under the "MIT licence":http://www.opensource.org/licenses/mit-license.php (note, however, that OSTN02 and OSGM02 are trademarks of Ordnance Survey, and that the OSTN02 and OSGM02 data are © Crown copyright 2002. All rights reserved).
 
