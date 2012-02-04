@@ -31,14 +31,14 @@ OSTN02 and OSGM02 are trademarks of Ordnance Survey
 Embedded OSTN02 and OSGM02 data are (c) Crown copyright 2002. All rights reserved.
 
 
-bc.. dyn204:OSTN02 George$ OSTN02C 51.0 -0.5 100.0
+dyn204:OSTN02 George$ OSTN02C 51.0 -0.5 100.0
 
 ETRS89 in  lat:   51.000000, lon:   -0.500000, elevation:  100.000
 OSGB36 out   E:  505349.663,   N:  123360.984, elevation:   54.635 (UK mainland / Newlyn)
            ref:  TQ05352336
 
 
-bc.. dyn204:OSTN02 George$ echo "51.0, -0.5, 100.0
+dyn204:OSTN02 George$ echo "51.0, -0.5, 100.0
 > 51.5, -1.0, 50.0" | OSTN02C
 505349.663,123360.984,54.635,1
 469509.184,178369.364,3.360,1
@@ -47,7 +47,7 @@ dyn204:OSTN02 George$ echo $?
 0
 
 
-bc.. dyn204:OSTN02 George$ echo "51.0, -0.5, 100.0
+dyn204:OSTN02 George$ echo "51.0, -0.5, 100.0
 > 20.0 40.0 0.0
 > an invalid line
 > 51.5, -1.0, 50.0" | OSTN02C
@@ -58,7 +58,7 @@ dyn204:OSTN02 George$ echo $?
 1
 
 
-bc.. dyn204:OSTN02 George$ OSTN02C --list-geoids
+dyn204:OSTN02 George$ OSTN02C --list-geoids
 
 Flag  Datum          Region
    0  N/A            Outside model boundary
@@ -78,7 +78,7 @@ Flag  Datum          Region
   14  Belfast        Northern Ireland
   
   
-bc.. dyn204:OSTN02 George$ OSTN02C --test
+dyn204:OSTN02 George$ OSTN02C --test
 
 Original CRC32 (data):  790474494
 Computed CRC32 (data):  790474494
