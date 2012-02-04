@@ -14,10 +14,18 @@
 
 int main (int argc, const char * argv[]) {
   
-  // with arg --tests, run tests
-  if (argc == 2 && strcmp(argv[1], "--tests") == 0) {
+  // with arg --test, run tests
+  if (argc == 2 && strcmp(argv[1], "--test") == 0) {
     bool passed = test(true);
     return passed ? EXIT_SUCCESS : EXIT_FAILURE;
+    
+  // with arg --list-geoids, show geoid datum names and regions
+  } else if (argc == 2 && strcmp(argv[1], "--list-geoids") == 0) {
+    puts(BOLD "\nFlag  Datum          Region" UNBOLD);
+    const int len = LENGTH_OF(OSGB36GeoidNames);
+    for (int i = 0; i < len; i ++)
+      printf("  %2d  %-13s  %s\n", i, OSGB36GeoidNames[i], OSGB36GeoidRegions[i]);
+    puts("");
     
   // with one set of coords (lat lon elevation) given on the command line, convert with verbose output
   } else if (argc == 4) {
@@ -25,50 +33,50 @@ int main (int argc, const char * argv[]) {
     sscanf(argv[1], "%" DBLFMT, &latLon.lat);
     sscanf(argv[2], "%" DBLFMT, &latLon.lon);
     sscanf(argv[3], "%" DBLFMT, &latLon.elevation);
-    latLon.geoid = 0;
+    printf("\nETRS89 in  ");
+    printf(LLFMT, latLon.lat, latLon.lon, latLon.elevation);
     EastingNorthing en = ETRS89EastingNorthingToOSGB36EastingNorthing(ETRS89LatLonToETRSEastingNorthing(latLon));
     if (en.geoid == 0) {
-      printf("Coordinates outside OSTN02 range.\n\n");
+      puts("\nCoordinates outside OSTN02 range.\n");
       return EXIT_FAILURE;
     }
     char *gridRef = gridRefFromOSGB36EastingNorthing(en, false, 10);
-    char *tetrad = tetradFromOSGB36EastingNorthing(en);
-    printf("ETRS89 in  ");
-    printf(LLFMT, latLon.lat, latLon.lon, latLon.elevation);
     printf("\nOSGB36 out ");
     printf(ENFMT, en.e, en.n, en.elevation, OSGB36GeoidRegions[en.geoid], OSGB36GeoidNames[en.geoid]);
-    printf("\n        tetrad:       %s, ref:  %s\n\n", tetrad, gridRef);
-    free(tetrad);
+    printf("\n           ref:  %s\n\n", gridRef);
     free(gridRef);
     return EXIT_SUCCESS;
   
   // with any other arguments, show help text
   } else if (argc > 1) {
-    printf("%sOSTN02C%s — https://github.com/jawj/OSTN02C – Built %s %s (%s precision).\n\n", INVERSE, UNINVERSE, __DATE__, __TIME__, NUMDESC);
-    printf("This tool converts ETRS89/WGS84 coordinates to OSGB36 using OSTN02 and OSGM02.\n\n");
-    printf("Usage: %sOSTN02 %slat%s %slon%s %selevation%s%s converts one set of coordinates with human-friendly output.\n", BOLD, ULINE, UNULINE, ULINE, UNULINE, ULINE, UNULINE, UNBOLD);
-    printf("       %sOSTN02%s (without arguments) does batch conversion, reading from STDIN and writing to STDOUT (see below).\n", BOLD, UNBOLD);
-    printf("       %sOSTN02 --tests%s verifies data integrity and runs conversion tests with known coordinates.\n", BOLD, UNBOLD);
-    printf("       %sOSTN02 --help%s displays this message.\n\n", BOLD, UNBOLD);
-    
-    printf("For batch conversion:\n");
-    printf("* Input rows should have 3 columns — lat, lon and elevation — with any reasonable separator.\n");
-    printf("* Output rows have 4 comma-separated columns: easting, northing, elevation, and the geoid datum flag (1 – 14).\n");
-    printf("* In case of out-of-range input coordinates, all output columns will be zero.\n");
-    printf("* Malformatted input terminates processing, and results in a non-zero exit code.\n\n");
-    
-    printf("Copyright © George MacKerron 2012 (http://mackerron.com).\n");
-    printf("Released under the MIT licence (http://www.opensource.org/licenses/mit-license.php).\n\n");
-    printf("OSTN02 and OSGM02 are trademarks of Ordnance Survey.\n");
-    printf("Incorporated OSTN02 and OSGM02 data are © Crown copyright 2002. All rights reserved.\n\n");
+    puts("\n" INVERSE "OSTN02C" UNINVERSE " -- https://github.com/jawj/OSTN02C -- Built " __DATE__ " " __TIME__ " (" NUMDESC " precision)\n"
+         "\n"
+         "This tool converts ETRS89/WGS84 coordinates to OSGB36 using OSTN02 and OSGM02\n"
+         "\n"
+         "Usage: " BOLD "OSTN02 " ULINE "lat" UNULINE " " ULINE "lon" UNULINE " " ULINE "elevation" UNULINE UNBOLD " converts one set of coordinates with human-friendly output\n"
+         "       " BOLD "OSTN02" UNBOLD " (without arguments) does batch conversion, reading from STDIN and writing to STDOUT (see below)\n"
+         "       " BOLD "OSTN02 --list-geoids" UNBOLD " lists the datum name and region for each geoid datum flag\n"
+         "       " BOLD "OSTN02 --test" UNBOLD " checks embedded data integrity and runs conversion tests with known coordinates\n"
+         "       " BOLD "OSTN02 --help" UNBOLD " displays this message\n"
+         "\n"
+         "For batch conversion:\n"
+         "* Input rows must have 3 columns -- lat, lon and elevation -- with any reasonable separator (,;:| \\t)\n"
+         "* Output rows have 4 comma-separated columns: easting, northing, elevation, and the geoid datum flag\n"
+         "* In case of out-of-range input coordinates, all output columns will be zero\n"
+         "* Malformatted input terminates processing, and results in a non-zero exit code\n"
+         "\n"
+         "Software copyright (c) George MacKerron 2012 (http://mackerron.com)\n"
+         "Released under the MIT licence (http://www.opensource.org/licenses/mit-license.php)\n"
+         "OSTN02 and OSGM02 are trademarks of Ordnance Survey\n"
+         "Embedded OSTN02 and OSGM02 data are (c) Crown copyright 2002. All rights reserved.\n");
     return EXIT_SUCCESS;
     
   // without arguments, convert 3-column CSV/TSV/similar (lat, lon, elevation) to 4-column CSV (easting, northing, elevation, geoid flag)
   } else {
     LatLonDecimal latLon;
     int scanResult;
-    while((scanResult = scanf("%" DBLFMT "%*[ \t,;:]%" DBLFMT "%*[ \t,;:]%" DBLFMT "%*[ \t,;:\r]\n", &latLon.lat, &latLon.lon, &latLon.elevation)) == 3) {
-      latLon.geoid = 0;
+    while((scanResult = scanf("%" DBLFMT "%*[ \t,;:|]%" DBLFMT "%*[ \t,;:|]%" DBLFMT "%*[ \t,;:|\r]\n", 
+                              &latLon.lat, &latLon.lon, &latLon.elevation)) == 3) {
       EastingNorthing en = ETRS89EastingNorthingToOSGB36EastingNorthing(ETRS89LatLonToETRSEastingNorthing(latLon));
       printf("%.3" DBLFMT ",%.3" DBLFMT ",%.3" DBLFMT ",%d\n", en.e, en.n, en.elevation, en.geoid);
     }

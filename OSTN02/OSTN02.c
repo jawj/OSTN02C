@@ -222,7 +222,7 @@ bool test(const bool noisily) {
   numTested ++;
   if (testPassed) numPassed ++;
   if (noisily) {
-    printf("Original CRC32 (data):  %li\n", originalDataCRC);
+    printf("\nOriginal CRC32 (data):  %li\n", originalDataCRC);
     printf("%sComputed CRC32 (data):  %li%s\n\n", (testPassed ? "" : BOLD), dataCRC, (testPassed ? "" : UNBOLD));
   }
   
@@ -241,9 +241,8 @@ bool test(const bool noisily) {
   EastingNorthing realEN, testEN;
   char *ETRS89Str, *realENStr, *testENStr;
   
-  const char len = sizeof(testETRSCoords) / sizeof(LatLonDegMinSec);
-  
-  for (char i = 0; i < len; i ++) {
+  const int len = LENGTH_OF(testETRSCoords);
+  for (int i = 0; i < len; i ++) {
     testLatLonDec = latLonDecimalFromLatLonDegMinSec(testETRSCoords[i]);
     realEN = testOSGB36Coords[i];
     testEN = ETRS89EastingNorthingToOSGB36EastingNorthing(ETRS89LatLonToETRSEastingNorthing(testLatLonDec));

@@ -50,6 +50,8 @@
 #define ULINE     "\033[4m"
 #define UNULINE   "\033[24m"
 
+#define LENGTH_OF(x) (sizeof (x) / sizeof *(x))
+
 
 typedef struct {
   unsigned char deg;  // range 0 - 180 (S or W)
