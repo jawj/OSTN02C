@@ -30,6 +30,7 @@ int main (int argc, const char * argv[]) {
   // with one set of coords (lat lon elevation) given on the command line, convert with verbose output
   } else if (argc == 4) {
     LatLonDecimal latLon;
+    latLon.lat = latLon.lon = latLon.elevation = 0;
     sscanf(argv[1], "%" DBLFMT, &latLon.lat);
     sscanf(argv[2], "%" DBLFMT, &latLon.lon);
     sscanf(argv[3], "%" DBLFMT, &latLon.elevation);
@@ -37,7 +38,7 @@ int main (int argc, const char * argv[]) {
     printf(LLFMT, latLon.lat, latLon.lon, latLon.elevation);
     EastingNorthing en = ETRS89EastingNorthingToOSGB36EastingNorthing(ETRS89LatLonToETRSEastingNorthing(latLon));
     if (en.geoid == 0) {
-      puts("\nCoordinates outside OSTN02 range.\n");
+      puts("\nCoordinates outside OSTN02 range\n");
       return EXIT_FAILURE;
     }
     char *gridRef = gridRefFromOSGB36EastingNorthing(en, false, 10);
