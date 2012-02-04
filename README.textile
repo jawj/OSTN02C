@@ -6,37 +6,40 @@ I'm releasing the code under the "MIT licence":http://www.opensource.org/license
 
 The command-line tool works like this:
 
-bc.. dyn204:OSTN02 George$ ./OSTN02C --help
-OSTN02C — https://github.com/jawj/OSTN02C – Built Feb  3 2012 20:27:54 (double precision).
 
-This tool converts ETRS89/WGS84 coordinates to OSGB36 using OSTN02 and OSGM02.
+bc.. dyn204:OSTN02 George$ OSTN02C --help
 
-Usage: OSTN02 lat lon elevation converts one set of coordinates with human-friendly output.
-       OSTN02 (without arguments) does batch conversion, reading from STDIN and writing to STDOUT (see below).
-       OSTN02 --tests verifies data integrity and runs conversion tests with known coordinates.
-       OSTN02 --help displays this message.
+OSTN02C -- https://github.com/jawj/OSTN02C -- Built Feb  4 2012 14:46:02 (double precision)
+
+This tool converts ETRS89/WGS84 coordinates to OSGB36 using OSTN02 and OSGM02
+
+Usage: OSTN02 lat lon elevation converts one set of coordinates with human-friendly output
+       OSTN02 (without arguments) does batch conversion, reading from STDIN and writing to STDOUT (see below)
+       OSTN02 --list-geoids lists the datum name and region for each geoid datum flag
+       OSTN02 --test checks embedded data integrity and runs conversion tests with known coordinates
+       OSTN02 --help displays this message
 
 For batch conversion:
-* Input rows should have 3 columns — lat, lon and elevation — with any reasonable separator.
-* Output rows have 4 comma-separated columns: easting, northing, elevation, and the geoid datum flag (1 – 14).
-* In case of out-of-range input coordinates, all output columns will be zero.
-* Malformatted input terminates processing, and results in a non-zero exit code.
+* Input rows must have 3 columns -- lat, lon and elevation -- with any reasonable separator (,;:| \t)
+* Output rows have 4 comma-separated columns: easting, northing, elevation, and the geoid datum flag
+* In case of out-of-range input coordinates, all output columns will be zero
+* Malformatted input terminates processing, and results in a non-zero exit code
 
-Copyright © George MacKerron 2012 (http://mackerron.com).
-Released under the MIT licence (http://www.opensource.org/licenses/mit-license.php).
+Software copyright (c) George MacKerron 2012 (http://mackerron.com)
+Released under the MIT licence (http://www.opensource.org/licenses/mit-license.php)
+OSTN02 and OSGM02 are trademarks of Ordnance Survey
+Embedded OSTN02 and OSGM02 data are (c) Crown copyright 2002. All rights reserved.
 
-OSTN02 and OSGM02 are trademarks of Ordnance Survey.
-Incorporated OSTN02 and OSGM02 data are © Crown copyright 2002. All rights reserved.
 
+bc.. dyn204:OSTN02 George$ OSTN02C 51.0 -0.5 100.0
 
-bc.. dyn204:OSTN02 George$ ./OSTN02C 51.0 -0.5 100.0
 ETRS89 in  lat:   51.000000, lon:   -0.500000, elevation:  100.000
 OSGB36 out   E:  505349.663,   N:  123360.984, elevation:   54.635 (UK mainland / Newlyn)
-        tetrad:       TQ02L, ref:  TQ05352336
+           ref:  TQ05352336
 
 
 bc.. dyn204:OSTN02 George$ echo "51.0, -0.5, 100.0
-51.5, -1.0, 50.0" | ./OSTN02C
+> 51.5, -1.0, 50.0" | OSTN02C
 505349.663,123360.984,54.635,1
 469509.184,178369.364,3.360,1
 
@@ -47,7 +50,7 @@ dyn204:OSTN02 George$ echo $?
 bc.. dyn204:OSTN02 George$ echo "51.0, -0.5, 100.0
 > 20.0 40.0 0.0
 > an invalid line
-> 51.5, -1.0, 50.0" | ./OSTN02C
+> 51.5, -1.0, 50.0" | OSTN02C
 505349.663,123360.984,54.635,1
 0.000,0.000,0.000,0
 
@@ -55,7 +58,28 @@ dyn204:OSTN02 George$ echo $?
 1
 
 
-bc.. dyn204:OSTN02 George$ ./OSTN02C --tests
+bc.. dyn204:OSTN02 George$ OSTN02C --list-geoids
+
+Flag  Datum          Region
+   0  N/A            Outside model boundary
+   1  Newlyn         UK mainland
+   2  St Marys       Scilly Isles
+   3  Douglas02      Isle of Man
+   4  Stornoway      Outer Hebrides
+   5  St Kilda       St Kilda
+   6  Lerwick        Shetland Isles
+   7  Newlyn         Orkney Isles
+   8  Fair Isle      Fair Isle
+   9  Flannan Isles  Flannan Isles
+  10  North Rona     North Rona
+  11  Sule Skerry    Sule Skerry
+  12  Foula          Foula
+  13  Malin Head     Republic of Ireland
+  14  Belfast        Northern Ireland
+  
+  
+bc.. dyn204:OSTN02 George$ OSTN02C --test
+
 Original CRC32 (data):  790474494
 Computed CRC32 (data):  790474494
 
