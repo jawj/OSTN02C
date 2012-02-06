@@ -4,7 +4,7 @@ const Ellipsoid GRS80Ellipsoid = {
   .semiMinorAxis = L(6356752.3141)
 };
 
-const MapProjection nationalGridProj = {
+const MapProjection NationalGridProj = {
   .centralMeridianScale = L( 0.9996012717),
   .trueOriginLatLon.lat = L(49.0),
   .trueOriginLatLon.lon = L(-2.0),

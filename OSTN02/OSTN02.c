@@ -86,7 +86,7 @@ EastingNorthing eastingNorthingFromLatLon(const LatLonDecimal latLon, const Elli
 }
 
 EastingNorthing ETRS89EastingNorthingFromETRS89LatLon(const LatLonDecimal latLon) {
-  return eastingNorthingFromLatLon(latLon, GRS80Ellipsoid, nationalGridProj);
+  return eastingNorthingFromLatLon(latLon, GRS80Ellipsoid, NationalGridProj);
 }
 
 EastingNorthing OSTN02ShiftsForIndices(const int eIndex, const int nIndex) {
