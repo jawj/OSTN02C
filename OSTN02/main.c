@@ -36,7 +36,7 @@ int main (int argc, const char * argv[]) {
     sscanf(argv[3], "%" DBLFMT, &latLon.elevation);
     printf("\nETRS89 in  ");
     printf(LLFMT, latLon.lat, latLon.lon, latLon.elevation);
-    EastingNorthing en = ETRS89EastingNorthingToOSGB36EastingNorthing(ETRS89LatLonToETRSEastingNorthing(latLon));
+    EastingNorthing en = ETRS89EastingNorthingToOSGB36EastingNorthing(ETRS89LatLonToETRS89EastingNorthing(latLon));
     if (en.geoid == 0) {
       puts("\nCoordinates outside OSTN02 range\n");
       return EXIT_FAILURE;
@@ -78,7 +78,7 @@ int main (int argc, const char * argv[]) {
     int scanResult;
     while((scanResult = scanf("%" DBLFMT "%*[ \t,;:|]%" DBLFMT "%*[ \t,;:|]%" DBLFMT "%*[ \t,;:|\r]\n", 
                               &latLon.lat, &latLon.lon, &latLon.elevation)) == 3) {
-      EastingNorthing en = ETRS89EastingNorthingToOSGB36EastingNorthing(ETRS89LatLonToETRSEastingNorthing(latLon));
+      EastingNorthing en = ETRS89EastingNorthingToOSGB36EastingNorthing(ETRS89LatLonToETRS89EastingNorthing(latLon));
       printf("%.3" DBLFMT ",%.3" DBLFMT ",%.3" DBLFMT ",%d\n", en.e, en.n, en.elevation, en.geoid);
     }
     return scanResult == EOF ? EXIT_SUCCESS : EXIT_FAILURE;

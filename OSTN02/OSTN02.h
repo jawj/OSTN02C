@@ -24,6 +24,7 @@
 #define COS       cosl
 #define TAN       tanl
 #define SQRT      sqrtl
+#define ABS       fabs
 #define NUMDESC   "long double"
 #else
 #define DBL       double
@@ -33,6 +34,7 @@
 #define COS       cos
 #define TAN       tan
 #define SQRT      sqrt
+#define ABS       fabsl
 #define NUMDESC   "double"
 #endif
 
@@ -103,9 +105,11 @@ typedef struct {
 } __attribute__((packed)) OSTN02Datum;
 
 EastingNorthing latLonToEastingNorthing(const LatLonDecimal latLon, const Ellipsoid ellipsoid, const MapProjection projection);
-EastingNorthing ETRS89LatLonToETRSEastingNorthing(const LatLonDecimal latLon);
+EastingNorthing ETRS89LatLonToETRS89EastingNorthing(const LatLonDecimal latLon);
 EastingNorthing OSTN02Shifts(const int eIndex, const int nIndex);
+EastingNorthing shiftsForEastingNorthing(const EastingNorthing en);
 EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthing en);
+EastingNorthing OSGB36EastingNorthingToETRS89EastingNorthing(const EastingNorthing en);
 LatLonDecimal   latLonDecimalFromLatLonDegMinSec(const LatLonDegMinSec dms);
 char            *gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const bool spaces, const int res);  // be sure to free(result) after use
 char            *tetradFromOSGB36EastingNorthing(const EastingNorthing en);                                     // be sure to free(result) after use

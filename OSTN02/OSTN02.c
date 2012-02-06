@@ -85,7 +85,7 @@ EastingNorthing latLonToEastingNorthing(const LatLonDecimal latLon, const Ellips
   return en;
 }
 
-EastingNorthing ETRS89LatLonToETRSEastingNorthing(const LatLonDecimal latLon) {
+EastingNorthing ETRS89LatLonToETRS89EastingNorthing(const LatLonDecimal latLon) {
   return latLonToEastingNorthing(latLon, GRS80Ellipsoid, nationalGridProj);
 }
 
@@ -108,10 +108,10 @@ EastingNorthing OSTN02Shifts(const int eIndex, const int nIndex) {
   return shifts;
 }
 
-EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthing en) {
-  EastingNorthing shifted;
-  shifted.e = shifted.n = shifted.elevation = shifted.geoid = 0;
-
+EastingNorthing shiftsForEastingNorthing(const EastingNorthing en) {
+  EastingNorthing shifts;
+  shifts.e = shifts.n = shifts.elevation = shifts.geoid = 0;
+  
   const int e0 = (int) (en.e / L(1000.0));
   const int n0 = (int) (en.n / L(1000.0));
   CDBL      dx = en.e - (DBL) (e0 * 1000);
@@ -120,42 +120,72 @@ EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthi
   CDBL      u  = dy / L(1000.0);
   
   const EastingNorthing shifts0 = OSTN02Shifts(e0    , n0    );
-  if (shifts0.geoid == 0) return shifted;
+  if (shifts0.geoid == 0) return shifts;
   
   const EastingNorthing shifts1 = OSTN02Shifts(e0 + 1, n0    );
-  if (shifts1.geoid == 0) return shifted;
+  if (shifts1.geoid == 0) return shifts;
   
   const EastingNorthing shifts2 = OSTN02Shifts(e0 + 1, n0 + 1);
-  if (shifts2.geoid == 0) return shifted;
+  if (shifts2.geoid == 0) return shifts;
   
   const EastingNorthing shifts3 = OSTN02Shifts(e0    , n0 + 1);
-  if (shifts3.geoid == 0) return shifted;
+  if (shifts3.geoid == 0) return shifts;
   
   CDBL weight0 = (L(1.0) - t) * (L(1.0) - u);
   CDBL weight1 =           t  * (L(1.0) - u);
   CDBL weight2 =           t  *           u;
   CDBL weight3 = (L(1.0) - t) *           u;
   
-  shifted.e = en.e + weight0 * shifts0.e
+  shifts.e         = weight0 * shifts0.e
                    + weight1 * shifts1.e 
                    + weight2 * shifts2.e 
                    + weight3 * shifts3.e;
   
-  shifted.n = en.n + weight0 * shifts0.n 
+  shifts.n         = weight0 * shifts0.n 
                    + weight1 * shifts1.n
                    + weight2 * shifts2.n 
                    + weight3 * shifts3.n;
   
-  shifted.elevation = en.elevation - (weight0 * shifts0.elevation 
-                                    + weight1 * shifts1.elevation
-                                    + weight2 * shifts2.elevation
-                                    + weight3 * shifts3.elevation);
+  shifts.elevation = weight0 * shifts0.elevation 
+                   + weight1 * shifts1.elevation
+                   + weight2 * shifts2.elevation
+                   + weight3 * shifts3.elevation;
   
   const bool left   = dx < L(500.0);
   const bool bottom = dy < L(500.0);
   const EastingNorthing nearestShift = left ? (bottom ? shifts0 : shifts3) : (bottom ? shifts1 : shifts2);
-  shifted.geoid = nearestShift.geoid;
+  shifts.geoid = nearestShift.geoid;
   
+  return shifts;
+}
+
+EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthing en) {
+  EastingNorthing shifts = shiftsForEastingNorthing(en);
+  if (shifts.geoid == 0) return shifts;
+  
+  EastingNorthing shifted;
+  shifted.e = en.e + shifts.e;
+  shifted.n = en.n + shifts.n;
+  shifted.elevation = en.elevation - shifts.elevation;
+  shifted.geoid = shifts.geoid;
+  
+  return shifted;
+}
+
+EastingNorthing OSGB36EastingNorthingToETRS89EastingNorthing(const EastingNorthing en) {
+  EastingNorthing shifts, prevShifts, shifted;
+  shifts.e = shifts.n = 0;
+  do {
+    prevShifts.e = shifts.e;
+    prevShifts.n = shifts.n;
+    shifted.e = en.e - shifts.e;
+    shifted.n = en.n - shifts.n;
+    shifts = shiftsForEastingNorthing(shifted);
+    if (shifts.geoid == 0) return shifts;
+  } while (ABS(shifts.e - prevShifts.e) > 0.0001 || ABS(shifts.n - prevShifts.n) > 0.0001);
+  
+  shifted.elevation = en.elevation + shifts.elevation;
+  shifted.geoid = shifts.geoid;  // tells us which geoid datum was used in conversion
   return shifted;
 }
 
@@ -245,7 +275,7 @@ bool test(const bool noisily) {
   for (int i = 0; i < len; i ++) {
     testLatLonDec = latLonDecimalFromLatLonDegMinSec(testETRSCoords[i]);
     realEN = testOSGB36Coords[i];
-    testEN = ETRS89EastingNorthingToOSGB36EastingNorthing(ETRS89LatLonToETRSEastingNorthing(testLatLonDec));
+    testEN = ETRS89EastingNorthingToOSGB36EastingNorthing(ETRS89LatLonToETRS89EastingNorthing(testLatLonDec));
     
     asprintf(&ETRS89Str, LLFMT, testLatLonDec.lat, testLatLonDec.lon, testLatLonDec.elevation);
     asprintf(&realENStr, ENFMT, realEN.e, realEN.n, realEN.elevation, OSGB36GeoidRegions[realEN.geoid], OSGB36GeoidNames[realEN.geoid]);
