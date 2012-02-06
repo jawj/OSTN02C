@@ -104,12 +104,12 @@ typedef struct {
   unsigned int gFlag  :  4;
 } __attribute__((packed)) OSTN02Datum;
 
-EastingNorthing latLonToEastingNorthing(const LatLonDecimal latLon, const Ellipsoid ellipsoid, const MapProjection projection);
-EastingNorthing ETRS89LatLonToETRS89EastingNorthing(const LatLonDecimal latLon);
-EastingNorthing OSTN02Shifts(const int eIndex, const int nIndex);
+EastingNorthing eastingNorthingFromLatLon(const LatLonDecimal latLon, const Ellipsoid ellipsoid, const MapProjection projection);
+EastingNorthing ETRS89EastingNorthingFromETRS89LatLon(const LatLonDecimal latLon);
+EastingNorthing OSTN02ShiftsForIndices(const int eIndex, const int nIndex);
 EastingNorthing shiftsForEastingNorthing(const EastingNorthing en);
-EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthing en);
-EastingNorthing OSGB36EastingNorthingToETRS89EastingNorthing(const EastingNorthing en);
+EastingNorthing OSGB36EastingNorthingFromETRS89EastingNorthing(const EastingNorthing en);
+EastingNorthing ETRS89EastingNorthingFromOSGB36EastingNorthing(const EastingNorthing en);
 LatLonDecimal   latLonDecimalFromLatLonDegMinSec(const LatLonDegMinSec dms);
 char            *gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const bool spaces, const int res);  // be sure to free(result) after use
 char            *tetradFromOSGB36EastingNorthing(const EastingNorthing en);                                     // be sure to free(result) after use

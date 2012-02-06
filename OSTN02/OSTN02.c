@@ -19,7 +19,7 @@
 
 static CDBL piOver180 = L(0.0174532925199432957692369076848861271344287188854172545609);
 
-EastingNorthing latLonToEastingNorthing(const LatLonDecimal latLon, const Ellipsoid ellipsoid, const MapProjection projection) {
+EastingNorthing eastingNorthingFromLatLon(const LatLonDecimal latLon, const Ellipsoid ellipsoid, const MapProjection projection) {
   CDBL a   = ellipsoid.semiMajorAxis;
   CDBL b   = ellipsoid.semiMinorAxis;
   CDBL f0  = projection.centralMeridianScale;
@@ -85,11 +85,11 @@ EastingNorthing latLonToEastingNorthing(const LatLonDecimal latLon, const Ellips
   return en;
 }
 
-EastingNorthing ETRS89LatLonToETRS89EastingNorthing(const LatLonDecimal latLon) {
-  return latLonToEastingNorthing(latLon, GRS80Ellipsoid, nationalGridProj);
+EastingNorthing ETRS89EastingNorthingFromETRS89LatLon(const LatLonDecimal latLon) {
+  return eastingNorthingFromLatLon(latLon, GRS80Ellipsoid, nationalGridProj);
 }
 
-EastingNorthing OSTN02Shifts(const int eIndex, const int nIndex) {
+EastingNorthing OSTN02ShiftsForIndices(const int eIndex, const int nIndex) {
   EastingNorthing shifts;
   shifts.e = shifts.n = shifts.elevation = shifts.geoid = 0;
   if (nIndex < 0 || nIndex > 1250) return shifts;
@@ -119,16 +119,16 @@ EastingNorthing shiftsForEastingNorthing(const EastingNorthing en) {
   CDBL      t  = dx / L(1000.0);
   CDBL      u  = dy / L(1000.0);
   
-  const EastingNorthing shifts0 = OSTN02Shifts(e0    , n0    );
+  const EastingNorthing shifts0 = OSTN02ShiftsForIndices(e0    , n0    );
   if (shifts0.geoid == 0) return shifts;
   
-  const EastingNorthing shifts1 = OSTN02Shifts(e0 + 1, n0    );
+  const EastingNorthing shifts1 = OSTN02ShiftsForIndices(e0 + 1, n0    );
   if (shifts1.geoid == 0) return shifts;
   
-  const EastingNorthing shifts2 = OSTN02Shifts(e0 + 1, n0 + 1);
+  const EastingNorthing shifts2 = OSTN02ShiftsForIndices(e0 + 1, n0 + 1);
   if (shifts2.geoid == 0) return shifts;
   
-  const EastingNorthing shifts3 = OSTN02Shifts(e0    , n0 + 1);
+  const EastingNorthing shifts3 = OSTN02ShiftsForIndices(e0    , n0 + 1);
   if (shifts3.geoid == 0) return shifts;
   
   CDBL weight0 = (L(1.0) - t) * (L(1.0) - u);
@@ -159,7 +159,7 @@ EastingNorthing shiftsForEastingNorthing(const EastingNorthing en) {
   return shifts;
 }
 
-EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthing en) {
+EastingNorthing OSGB36EastingNorthingFromETRS89EastingNorthing(const EastingNorthing en) {
   EastingNorthing shifts = shiftsForEastingNorthing(en);
   if (shifts.geoid == 0) return shifts;
   
@@ -172,7 +172,7 @@ EastingNorthing ETRS89EastingNorthingToOSGB36EastingNorthing(const EastingNorthi
   return shifted;
 }
 
-EastingNorthing OSGB36EastingNorthingToETRS89EastingNorthing(const EastingNorthing en) {
+EastingNorthing ETRS89EastingNorthingFromOSGB36EastingNorthing(const EastingNorthing en) {
   EastingNorthing shifts, prevShifts, shifted;
   shifts.e = shifts.n = 0;
   do {
@@ -275,7 +275,7 @@ bool test(const bool noisily) {
   for (int i = 0; i < len; i ++) {
     testLatLonDec = latLonDecimalFromLatLonDegMinSec(testETRSCoords[i]);
     realEN = testOSGB36Coords[i];
-    testEN = ETRS89EastingNorthingToOSGB36EastingNorthing(ETRS89LatLonToETRS89EastingNorthing(testLatLonDec));
+    testEN = OSGB36EastingNorthingFromETRS89EastingNorthing(ETRS89EastingNorthingFromETRS89LatLon(testLatLonDec));
     
     asprintf(&ETRS89Str, LLFMT, testLatLonDec.lat, testLatLonDec.lon, testLatLonDec.elevation);
     asprintf(&realENStr, ENFMT, realEN.e, realEN.n, realEN.elevation, OSGB36GeoidRegions[realEN.geoid], OSGB36GeoidNames[realEN.geoid]);
