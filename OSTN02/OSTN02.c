@@ -89,6 +89,42 @@ EastingNorthing ETRS89EastingNorthingFromETRS89LatLon(const LatLonDecimal latLon
   return eastingNorthingFromLatLon(latLon, GRS80Ellipsoid, NationalGridProj);
 }
 
+EastingNorthing latLonFromEastingNorthing(const EastingNorthing en, const Ellipsoid ellipsoid, const MapProjection projection) {
+  CDBL a   = ellipsoid.semiMajorAxis;
+  CDBL b   = ellipsoid.semiMinorAxis;
+  CDBL f0  = projection.centralMeridianScale;
+  //CDBL toE = projection.trueOriginEastingNorthing.e;
+  CDBL toN = projection.trueOriginEastingNorthing.n;
+  
+  // Convert degrees to radians
+  CDBL phi0    = piOver180 * projection.trueOriginLatLon.lat;
+  //CDBL lambda0 = piOver180 * projection.trueOriginLatLon.lon;
+  
+  CDBL n    = (a - b) / (a + b);
+  CDBL n2   = n * n;
+  CDBL n3   = n2 * n;
+  
+  DBL phiPrime = phi0;
+  DBL m = L(0.0);
+  DBL deltaPhi, sumPhi;
+  do {
+    phiPrime = (en.n - toN - m) / (a * f0) + phiPrime;
+    deltaPhi = phiPrime - phi0;
+    sumPhi   = phiPrime + phi0;
+    m    = b * f0 * ( (L(1.0) + n + (L(5.0) / L(4.0)) * n2 + (L(5.0) / L(4.0)) * n3) * deltaPhi
+                    - (L(3.0) * n + L(3.0) * n2 + (L(21.0) / L(8.0)) * n3) * SIN(deltaPhi) * COS(sumPhi)
+                    + ((L(15.0) / L(8.0)) * n2 + (L(15.0) / L(8.0)) * n3) * SIN(L(2.0) * deltaPhi) * COS(L(2.0) * sumPhi)
+                    - (L(35.0) / L(24.0)) * n3 * SIN(L(3.0) * deltaPhi) * COS(L(3.0) * sumPhi)
+                    );
+  } while (en.n - toN - m >= L(0.00001));
+  
+  
+}
+
+EastingNorthing ETRS89LatLonFromETRS89EastingNorthing(const EastingNorthing en) {
+  return latLonFromEastingNorthing(en, GRS80Ellipsoid, NationalGridProj);
+}
+
 EastingNorthing OSTN02ShiftsForIndices(const int eIndex, const int nIndex) {
   EastingNorthing shifts;
   shifts.e = shifts.n = shifts.elevation = shifts.geoid = 0;
