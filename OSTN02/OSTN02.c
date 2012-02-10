@@ -17,7 +17,8 @@
 #define originalIndicesCRC 244629328L  // these won't be robust against differing endianness or compiler packing of bit-structs
 #define originalDataCRC    790474494L
 
-static CDBL piOver180 = L(0.0174532925199432957692369076848861271344287188854172545609);
+static CDBL piOver180       = L(0.017453292519943295769236907684886127134428718885417254560971914401710091146034494436822415696345094822);
+static CDBL oneEightyOverPi = L(57.29577951308232087679815481410517033240547246656432154916024386120284714832155263244096899585111094418);
 
 EastingNorthing eastingNorthingFromLatLon(const LatLonDecimal latLon, const Ellipsoid ellipsoid, const MapProjection projection) {
   CDBL a   = ellipsoid.semiMajorAxis;
@@ -26,13 +27,11 @@ EastingNorthing eastingNorthingFromLatLon(const LatLonDecimal latLon, const Elli
   CDBL toE = projection.trueOriginEastingNorthing.e;
   CDBL toN = projection.trueOriginEastingNorthing.n;
   
-  // Convert degrees to radians
   CDBL phi     = piOver180 * latLon.lat;
   CDBL lambda  = piOver180 * latLon.lon;
   CDBL phi0    = piOver180 * projection.trueOriginLatLon.lat;
   CDBL lambda0 = piOver180 * projection.trueOriginLatLon.lon;
   
-  // Calculations
   CDBL deltaPhi = phi - phi0;
   CDBL sumPhi   = phi + phi0;
   CDBL sinPhi   = SIN(phi);
@@ -89,28 +88,27 @@ EastingNorthing ETRS89EastingNorthingFromETRS89LatLon(const LatLonDecimal latLon
   return eastingNorthingFromLatLon(latLon, GRS80Ellipsoid, NationalGridProj);
 }
 
-EastingNorthing latLonFromEastingNorthing(const EastingNorthing en, const Ellipsoid ellipsoid, const MapProjection projection) {
+LatLonDecimal latLonFromEastingNorthing(const EastingNorthing en, const Ellipsoid ellipsoid, const MapProjection projection) {
   CDBL a   = ellipsoid.semiMajorAxis;
   CDBL b   = ellipsoid.semiMinorAxis;
   CDBL f0  = projection.centralMeridianScale;
-  //CDBL toE = projection.trueOriginEastingNorthing.e;
+  CDBL toE = projection.trueOriginEastingNorthing.e;
   CDBL toN = projection.trueOriginEastingNorthing.n;
   
-  // Convert degrees to radians
   CDBL phi0    = piOver180 * projection.trueOriginLatLon.lat;
-  //CDBL lambda0 = piOver180 * projection.trueOriginLatLon.lon;
+  CDBL lambda0 = piOver180 * projection.trueOriginLatLon.lon;
   
   CDBL n    = (a - b) / (a + b);
   CDBL n2   = n * n;
   CDBL n3   = n2 * n;
   
-  DBL phiPrime = phi0;
+  DBL phi = phi0;  // this is phi' in the OS docs
   DBL m = L(0.0);
   DBL deltaPhi, sumPhi;
   do {
-    phiPrime = (en.n - toN - m) / (a * f0) + phiPrime;
-    deltaPhi = phiPrime - phi0;
-    sumPhi   = phiPrime + phi0;
+    phi = (en.n - toN - m) / (a * f0) + phi;
+    deltaPhi = phi - phi0;
+    sumPhi   = phi + phi0;
     m    = b * f0 * ( (L(1.0) + n + (L(5.0) / L(4.0)) * n2 + (L(5.0) / L(4.0)) * n3) * deltaPhi
                     - (L(3.0) * n + L(3.0) * n2 + (L(21.0) / L(8.0)) * n3) * SIN(deltaPhi) * COS(sumPhi)
                     + ((L(15.0) / L(8.0)) * n2 + (L(15.0) / L(8.0)) * n3) * SIN(L(2.0) * deltaPhi) * COS(L(2.0) * sumPhi)
@@ -118,10 +116,54 @@ EastingNorthing latLonFromEastingNorthing(const EastingNorthing en, const Ellips
                     );
   } while (en.n - toN - m >= L(0.00001));
   
+  CDBL sinPhi   = SIN(phi);
+  CDBL sinPhi2  = sinPhi * sinPhi;
+  CDBL cosPhi   = COS(phi);
+  CDBL secPhi   = L(1.0) / cosPhi;
+  CDBL tanPhi   = TAN(phi);
+  CDBL tanPhi2  = tanPhi * tanPhi;
+  CDBL tanPhi4  = tanPhi2 * tanPhi2;
+  CDBL tanPhi6  = tanPhi4 * tanPhi2;
   
+  CDBL a2   = a * a;
+  CDBL e2   = (a2 - b * b) / a2;
+  CDBL oneMinusE2SinPhi2 = L(1.0) - e2 * sinPhi2;
+  CDBL sqrtOneMinusE2SinPhi2 = SQRT(oneMinusE2SinPhi2);
+  CDBL v    = a * f0 / sqrtOneMinusE2SinPhi2;
+  CDBL rho  = a * f0 * (L(1.0) - e2) / (oneMinusE2SinPhi2 * sqrtOneMinusE2SinPhi2);
+  CDBL eta2 = v / rho - L(1.0);
+  
+  CDBL v2 = v * v;
+  CDBL v3 = v2 * v;
+  CDBL v5 = v3 * v2;
+  CDBL v7 = v5 * v2;
+  
+  CDBL seven   = tanPhi / (L(2.0) * rho * v);
+  CDBL eight   = (tanPhi * (L(5.0) + L(3.0) * tanPhi2 + eta2 - L(9.0) * tanPhi2 * eta2)) / (L(24.0) * rho * v3);
+  CDBL nine    = (tanPhi * (L(61.0) + L(90.0) * tanPhi2 + L(45.0) * tanPhi4)) / (L(720.0) * rho * v5);
+  CDBL ten     = secPhi / v;
+  CDBL eleven  = (secPhi * ((v / rho) + L(2.0) * tanPhi2)) / (L(6.0) * v3);
+  CDBL twelve  = (secPhi * (L(5.0) + L(28.0) * tanPhi2 + L(24.0) * tanPhi4)) / (L(120.0) * v5);
+  CDBL twelveA = (secPhi * (L(61.0) + L(662.0) * tanPhi2 + L(1320.0) * tanPhi4 + L(720.0) * tanPhi6)) / (L(5040.0) * v7);
+  
+  CDBL deltaE  = en.e - toE;
+  CDBL deltaE2 = deltaE  * deltaE;
+  CDBL deltaE3 = deltaE2 * deltaE;
+  CDBL deltaE4 = deltaE2 * deltaE2;
+  CDBL deltaE5 = deltaE3 * deltaE2;
+  CDBL deltaE6 = deltaE3 * deltaE3;
+  CDBL deltaE7 = deltaE4 * deltaE3;
+  
+  LatLonDecimal latLon;
+  latLon.lat = oneEightyOverPi * (phi - seven * deltaE2 + eight * deltaE4 - nine * deltaE6);
+  latLon.lon = oneEightyOverPi * (lambda0 + ten * deltaE - eleven * deltaE3 + twelve * deltaE5 - twelveA * deltaE7);
+  latLon.elevation = en.elevation;
+  latLon.geoid = en.geoid;
+  
+  return latLon;
 }
 
-EastingNorthing ETRS89LatLonFromETRS89EastingNorthing(const EastingNorthing en) {
+LatLonDecimal ETRS89LatLonFromETRS89EastingNorthing(const EastingNorthing en) {
   return latLonFromEastingNorthing(en, GRS80Ellipsoid, NationalGridProj);
 }
 
@@ -303,31 +345,50 @@ bool test(const bool noisily) {
   
   // check test conversions against known good results
   
-  LatLonDecimal testLatLonDec;
-  EastingNorthing realEN, testEN;
-  char *ETRS89Str, *realENStr, *testENStr;
+  LatLonDecimal actualLatLon, computedLatLon;
+  EastingNorthing actualEN, computedEN;
+  char *actualLatLonStr, *computedLatLonStr, *actualENStr, *computedENStr;
   
   const int len = LENGTH_OF(testETRSCoords);
   for (int i = 0; i < len; i ++) {
-    testLatLonDec = latLonDecimalFromLatLonDegMinSec(testETRSCoords[i]);
-    realEN = testOSGB36Coords[i];
-    testEN = OSGB36EastingNorthingFromETRS89EastingNorthing(ETRS89EastingNorthingFromETRS89LatLon(testLatLonDec));
     
-    asprintf(&ETRS89Str, LLFMT, testLatLonDec.lat, testLatLonDec.lon, testLatLonDec.elevation);
-    asprintf(&realENStr, ENFMT, realEN.e, realEN.n, realEN.elevation, OSGB36GeoidRegions[realEN.geoid], OSGB36GeoidNames[realEN.geoid]);
-    asprintf(&testENStr, ENFMT, testEN.e, testEN.n, testEN.elevation, OSGB36GeoidRegions[testEN.geoid], OSGB36GeoidNames[testEN.geoid]);
+    // actual coords
     
-    testPassed = strcmp(realENStr, testENStr) == 0;
-    numTested ++;
-    if (testPassed) numPassed ++;
+    actualLatLon = latLonDecimalFromLatLonDegMinSec(testETRSCoords[i]);
+    actualEN     = testOSGB36Coords[i];
+    
+    asprintf(&actualLatLonStr, LLFMT, actualLatLon.lat, actualLatLon.lon, actualLatLon.elevation);
+    asprintf(&actualENStr,     ENFMT, actualEN.e,       actualEN.n,       actualEN.elevation, OSGB36GeoidRegions[actualEN.geoid], OSGB36GeoidNames[actualEN.geoid]);
     
     if (noisily) {
-      printf("ETRS89          %s\n",   ETRS89Str);
-      printf("OSGB36 actual   %s\n",   realENStr);
-      printf("%sOSGB36 computed %s\n\n%s", (testPassed ? "" : BOLD), testENStr, (testPassed ? "" : UNBOLD));
+      printf("ETRS89 actual   %s\n",   actualLatLonStr);
+      printf("OSGB36 actual   %s\n",   actualENStr);
     }
     
-    free(ETRS89Str); free(realENStr); free(testENStr);
+    // computed coords
+    
+    computedLatLon = ETRS89LatLonFromETRS89EastingNorthing(ETRS89EastingNorthingFromOSGB36EastingNorthing(actualEN));
+    computedEN     = OSGB36EastingNorthingFromETRS89EastingNorthing(ETRS89EastingNorthingFromETRS89LatLon(actualLatLon));
+    
+    asprintf(&computedLatLonStr, LLFMT, computedLatLon.lat, computedLatLon.lon, computedLatLon.elevation);
+    asprintf(&computedENStr,     ENFMT, computedEN.e,       computedEN.n,       computedEN.elevation, OSGB36GeoidRegions[computedEN.geoid], OSGB36GeoidNames[computedEN.geoid]);
+    
+    if (actualEN.geoid != 0) {  // i.e. these coordinates are not zeroes, and can be converted sensibly
+      testPassed = strcmp(actualLatLonStr, computedLatLonStr) == 0;
+      numTested ++;
+      if (testPassed) numPassed ++;
+      if (noisily) printf("%sETRS89 computed %s\n%s", (testPassed ? "" : BOLD), computedLatLonStr, (testPassed ? "" : UNBOLD));
+    }
+    
+    testPassed = strcmp(actualENStr, computedENStr) == 0;
+    numTested ++;
+    if (testPassed) numPassed ++;
+    if (noisily) printf("%sOSGB36 computed %s\n\n%s", (testPassed ? "" : BOLD), computedENStr, (testPassed ? "" : UNBOLD));
+    
+    free(actualLatLonStr);
+    free(computedLatLonStr);
+    free(actualENStr);
+    free(computedENStr);
   }
   
   bool allPassed = numTested == numPassed;

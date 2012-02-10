@@ -106,8 +106,8 @@ typedef struct {
 
 EastingNorthing eastingNorthingFromLatLon(const LatLonDecimal latLon, const Ellipsoid ellipsoid, const MapProjection projection);
 EastingNorthing ETRS89EastingNorthingFromETRS89LatLon(const LatLonDecimal latLon);
-EastingNorthing latLonFromEastingNorthing(const EastingNorthing en, const Ellipsoid ellipsoid, const MapProjection projection);
-EastingNorthing ETRS89LatLonFromETRS89EastingNorthing(const EastingNorthing en);
+LatLonDecimal   latLonFromEastingNorthing(const EastingNorthing en, const Ellipsoid ellipsoid, const MapProjection projection);
+LatLonDecimal   ETRS89LatLonFromETRS89EastingNorthing(const EastingNorthing en);
 EastingNorthing OSTN02ShiftsForIndices(const int eIndex, const int nIndex);
 EastingNorthing shiftsForEastingNorthing(const EastingNorthing en);
 EastingNorthing OSGB36EastingNorthingFromETRS89EastingNorthing(const EastingNorthing en);
