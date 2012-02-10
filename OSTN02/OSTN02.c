@@ -114,7 +114,7 @@ LatLonDecimal latLonFromEastingNorthing(const EastingNorthing en, const Ellipsoi
                      + ((L(15.0) / L(8.0)) * n2 + (L(15.0) / L(8.0)) * n3) * SIN(L(2.0) * deltaPhi) * COS(L(2.0) * sumPhi)
                      - (L(35.0) / L(24.0)) * n3 * SIN(L(3.0) * deltaPhi) * COS(L(3.0) * sumPhi)
                      );
-  } while (en.n - n0 - m >= L(0.00001));
+  } while (ABS(en.n - n0 - m) >= L(0.00001));
   
   CDBL sinPhi   = SIN(phi);
   CDBL sinPhi2  = sinPhi * sinPhi;
