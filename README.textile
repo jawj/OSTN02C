@@ -31,18 +31,18 @@ The command-line tool works like this:
 
 bc.. dyn204:OSTN02 George$ OSTN02C help
 
- OSTN02C -- https://github.com/jawj/OSTN02C -- Built Feb 13 2012 16:06:35 (double precision) 
+ OSTN02C -- https://github.com/jawj/OSTN02C -- Built Feb 13 2012 16:29:15 (double precision) 
 
 This tool converts coordinates between ETRS89 (WGS84, GPS) lat/lon/elevation and OSGB36 easting/northing/elevation.
 Conversions make use of Ordnance Survey's OSTN02 and OSGM02 transformations, and should thus be accurate to within 1m.
 
-Usage: OSTN02C to-grid [lat lon elevation] converts ETRS89 to OSGB36
-       OSTN02C to-gps [easting northing elevation] converts OSGB36 to ETRS89
+Usage: OSTN02C gps-to-grid [lat lon elevation] converts ETRS89 to OSGB36
+       OSTN02C grid-to-gps [easting northing elevation] converts OSGB36 to ETRS89
        OSTN02C list-geoids lists the geoid datum flags, names and regions
        OSTN02C test checks embedded data integrity and runs conversion tests with known coordinates
        OSTN02C help displays this message
 
-The conversion commands to-grid and to-gps can be used in two ways:
+The conversion commands gps-to-grid and grid-to-gps can be used in two ways:
 * Given a set of coordinates as command-line arguments, they will convert this set with user-friendly output
 * Given no command-line arguments, they will convert batches of coordinates, reading from STDIN and writing to STDOUT
 
