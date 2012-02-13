@@ -29,8 +29,8 @@ int main (int argc, const char * argv[]) {
       printf("  %2d  %-13s  %s\n", i, OSGB36GeoidNames[i], OSGB36GeoidRegions[i]);
     printf("\n");
     
-  // with arg 'to-grid' and (possibly) 3 additional args, convert ETRS89 lat/lon/elevation to OSGB36 e/n/elevation...
-  } else if ((argc == 2 || argc == 5) && strcmp(argv[1], "to-grid") == 0) {
+  // with arg 'gps-to-grid' and (possibly) 3 additional args, convert ETRS89 lat/lon/elevation to OSGB36 e/n/elevation...
+  } else if ((argc == 2 || argc == 5) && strcmp(argv[1], "gps-to-grid") == 0) {
     
     // with no additional args, convert CSV (or similar) on STDIN to CSV on STDOUT
     if (argc == 2) {
@@ -62,8 +62,8 @@ int main (int argc, const char * argv[]) {
       return EXIT_SUCCESS;
     }
   
-  // with arg 'to-gps' and (possibly) 3 additional args, convert OSGB36 e/n/elevation to ETRS89 lat/lon/elevation...
-  } else if ((argc == 2 || argc == 5) && strcmp(argv[1], "to-gps") == 0) {
+  // with arg 'grid-to-gps' and (possibly) 3 additional args, convert OSGB36 e/n/elevation to ETRS89 lat/lon/elevation...
+  } else if ((argc == 2 || argc == 5) && strcmp(argv[1], "grid-to-gps") == 0) {
     
     // with no additional args, convert CSV (or similar) on STDIN to CSV on STDOUT
     if (argc == 2) {
@@ -103,13 +103,13 @@ int main (int argc, const char * argv[]) {
          "This tool converts coordinates between ETRS89 (WGS84, GPS) lat/lon/elevation and OSGB36 easting/northing/elevation.\n"
          "Conversions make use of Ordnance Survey's OSTN02 and OSGM02 transformations, and should thus be accurate to within 1m.\n"
          "\n"
-         "Usage: " BOLD "OSTN02C to-grid " UNBOLD "[" BOLD ULINE "lat" UNULINE " " ULINE "lon" UNULINE " " ULINE "elevation" UNULINE UNBOLD "] converts ETRS89 to OSGB36\n"
-         "       " BOLD "OSTN02C to-gps " UNBOLD "[" BOLD ULINE "easting" UNULINE " " ULINE "northing" UNULINE " " ULINE "elevation" UNULINE UNBOLD "] converts OSGB36 to ETRS89\n"
+         "Usage: " BOLD "OSTN02C gps-to-grid " UNBOLD "[" BOLD ULINE "lat" UNULINE " " ULINE "lon" UNULINE " " ULINE "elevation" UNULINE UNBOLD "] converts ETRS89 to OSGB36\n"
+         "       " BOLD "OSTN02C grid-to-gps " UNBOLD "[" BOLD ULINE "easting" UNULINE " " ULINE "northing" UNULINE " " ULINE "elevation" UNULINE UNBOLD "] converts OSGB36 to ETRS89\n"
          "       " BOLD "OSTN02C list-geoids" UNBOLD " lists the geoid datum flags, names and regions\n"
          "       " BOLD "OSTN02C test" UNBOLD " checks embedded data integrity and runs conversion tests with known coordinates\n"
          "       " BOLD "OSTN02C help" UNBOLD " displays this message\n"
          "\n"
-         "The conversion commands " BOLD "to-grid" UNBOLD " and " BOLD "to-gps" UNBOLD " can be used in two ways:\n"
+         "The conversion commands " BOLD "gps-to-grid" UNBOLD " and " BOLD "grid-to-gps" UNBOLD " can be used in two ways:\n"
          "* Given a set of coordinates as command-line arguments, they will convert this set with user-friendly output\n"
          "* Given no command-line arguments, they will convert batches of coordinates, reading from STDIN and writing to STDOUT\n"
          "\n"
