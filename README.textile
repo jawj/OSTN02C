@@ -20,9 +20,7 @@ Otherwise, clone the source to your machine and compile it either in Xcode 4 or 
 
 bc. gcc -std=gnu99 -lm -D_GNU_SOURCE -Wall -pedantic -O3 -o ostn02c main.c OSTN02.c crc32.c
 
-Or with long double precision arithmetic:
-
-bc. gcc -std=gnu99 -lm -D_GNU_SOURCE -DUSE_LONG -Wall -pedantic -O3 -o ostn02c main.c OSTN02.c crc32.c
+To compile with long double precision arithmetic, add option @-DUSE_LONG@. To prevent any bold/inverse/underlined output from the tool, add option @-DUNFANCY_OUTPUT@.
 
 
 h2. Using the command-line tool
