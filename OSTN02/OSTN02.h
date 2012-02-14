@@ -16,6 +16,8 @@
 #include <string.h>
 #include "crc32.h"
 
+#define LENGTH_OF(x) (sizeof (x) / sizeof *(x))
+
 #ifdef USE_LONG
 #define DBL       long double
 #define L(x)      x ## L
@@ -40,17 +42,24 @@
 
 #define CDBL      const DBL
 
-#define LLFMT     "lat: % 11.6" DBLFMT ", lon: % 11.6" DBLFMT ", elevation: %8.3" DBLFMT
-#define ENFMT     "  E: %11.3" DBLFMT ",   N: %11.3" DBLFMT ", elevation:  %7.3" DBLFMT " (%s / %s)"
-
+#ifdef UNFANCY_OUTPUT
+#define BOLD      ""
+#define UNBOLD    ""
+#define INVERSE   ""
+#define UNINVERSE ""
+#define ULINE     ""
+#define UNULINE   ""
+#else
 #define BOLD      "\033[1m"
 #define UNBOLD    "\033[22m"
 #define INVERSE   "\033[7m"
 #define UNINVERSE "\033[27m"
 #define ULINE     "\033[4m"
 #define UNULINE   "\033[24m"
+#endif
 
-#define LENGTH_OF(x) (sizeof (x) / sizeof *(x))
+#define LLFMT     "lat: % 11.6" DBLFMT ", lon: % 11.6" DBLFMT ", elevation: %8.3" DBLFMT
+#define ENFMT     "  E: %11.3" DBLFMT ",   N: %11.3" DBLFMT ", elevation:  %7.3" DBLFMT " (%s / %s)"
 
 
 typedef struct {
