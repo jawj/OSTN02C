@@ -111,7 +111,7 @@ Flag  Datum          Region
   14  Belfast        Northern Ireland
   
   
-dyn204:OSTN02 George$ ostn02c --test
+dyn204:OSTN02 George$ ostn02c test
 
 Original CRC32 (data):  790474494
 Computed CRC32 (data):  790474494
