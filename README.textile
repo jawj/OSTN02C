@@ -31,7 +31,7 @@ The command-line tool works like this:
 
 bc.. dyn204:OSTN02 George$ ostn02c help
 
-OSTN02C -- https://github.com/jawj/OSTN02C -- Built Feb 13 2012 16:29:15 (double precision)
+OSTN02C -- https://github.com/jawj/OSTN02C -- Built Feb 14 2012 11:53:48 (double precision)
 
 This tool converts coordinates between ETRS89 (WGS84, GPS) lat/lon/elevation and OSGB36 easting/northing/elevation.
 Conversions make use of Ordnance Survey's OSTN02 and OSGM02 transformations, and should thus be accurate to within 1m.
@@ -56,7 +56,7 @@ Software copyright (c) George MacKerron 2012 (http://mackerron.com)
 Released under the MIT licence (http://www.opensource.org/licenses/mit-license.php)
 
 OSTN02 and OSGM02 are trademarks of Ordnance Survey
-Embedded OSTN02 and OSGM02 data are (c) Crown copyright 2002. All rights reserved.
+Embedded OSTN02 and OSGM02 data (c) Crown copyright 2002. All rights reserved.
 
 
 dyn204:OSTN02 George$ ostn02c gps-to-grid 51.0 -0.5 100.0
