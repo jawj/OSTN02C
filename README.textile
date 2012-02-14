@@ -29,18 +29,18 @@ h2. Using the command-line tool
 
 The command-line tool works like this:
 
-bc.. dyn204:OSTN02 George$ OSTN02C help
+bc.. dyn204:OSTN02 George$ ostn02c help
 
- OSTN02C -- https://github.com/jawj/OSTN02C -- Built Feb 13 2012 16:29:15 (double precision) 
+OSTN02C -- https://github.com/jawj/OSTN02C -- Built Feb 13 2012 16:29:15 (double precision)
 
 This tool converts coordinates between ETRS89 (WGS84, GPS) lat/lon/elevation and OSGB36 easting/northing/elevation.
 Conversions make use of Ordnance Survey's OSTN02 and OSGM02 transformations, and should thus be accurate to within 1m.
 
-Usage: OSTN02C gps-to-grid [lat lon elevation] converts ETRS89 to OSGB36
-       OSTN02C grid-to-gps [easting northing elevation] converts OSGB36 to ETRS89
-       OSTN02C list-geoids lists the geoid datum flags, names and regions
-       OSTN02C test checks embedded data integrity and runs conversion tests with known coordinates
-       OSTN02C help displays this message
+Usage: ostn02c gps-to-grid [lat lon elevation] converts ETRS89 to OSGB36
+       ostn02c grid-to-gps [easting northing elevation] converts OSGB36 to ETRS89
+       ostn02c list-geoids lists the geoid datum flags, names and regions
+       ostn02c test checks embedded data integrity and runs conversion tests with known coordinates
+       ostn02c help displays this message
 
 The conversion commands gps-to-grid and grid-to-gps can be used in two ways:
 * Given a set of coordinates as command-line arguments, they will convert this set with user-friendly output
@@ -59,20 +59,20 @@ OSTN02 and OSGM02 are trademarks of Ordnance Survey
 Embedded OSTN02 and OSGM02 data are (c) Crown copyright 2002. All rights reserved.
 
 
-dyn204:OSTN02 George$ OSTN02C gps-to-grid 51.0 -0.5 100.0
+dyn204:OSTN02 George$ ostn02c gps-to-grid 51.0 -0.5 100.0
 
 ETRS89 in  lat:   51.000000, lon:   -0.500000, elevation:  100.000
 OSGB36 out   E:  505349.663,   N:  123360.984, elevation:   54.635 (UK mainland / Newlyn)
 
 
-dyn204:OSTN02 George$ OSTN02C grid-to-gps 505349.663 123360.984 54.635
+dyn204:OSTN02 George$ ostn02c grid-to-gps 505349.663 123360.984 54.635
 
 OSGB36 in    E:  505349.663,   N:  123360.984, elevation:   54.635 (UK mainland / Newlyn)
 ETRS89 out lat:   51.000000, lon:   -0.500000, elevation:  100.000
 
 
 dyn204:OSTN02 George$ echo "51.0, -0.5, 100.0
-> 51.5, -1.0, 50.0" | OSTN02C gps-to-grid
+> 51.5, -1.0, 50.0" | ostn02c gps-to-grid
 505349.663,123360.984,54.635,1
 469509.184,178369.364,3.360,1
 
@@ -83,7 +83,7 @@ dyn204:OSTN02 George$ echo $?
 dyn204:OSTN02 George$ echo "51.0, -0.5, 100.0
 > 20.0 40.0 0.0
 > an invalid line
-> 51.5, -1.0, 50.0" | OSTN02C gps-to-grid
+> 51.5, -1.0, 50.0" | ostn02c gps-to-grid
 505349.663,123360.984,54.635,1
 0.000,0.000,0.000,0
 
@@ -91,7 +91,7 @@ dyn204:OSTN02 George$ echo $?
 1
 
 
-dyn204:OSTN02 George$ OSTN02C list-geoids
+dyn204:OSTN02 George$ ostn02c list-geoids
 
 Flag  Datum          Region
    0  N/A            Outside model boundary
@@ -111,7 +111,7 @@ Flag  Datum          Region
   14  Belfast        Northern Ireland
   
   
-dyn204:OSTN02 George$ OSTN02C --test
+dyn204:OSTN02 George$ ostn02c --test
 
 Original CRC32 (data):  790474494
 Computed CRC32 (data):  790474494
