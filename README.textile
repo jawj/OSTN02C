@@ -12,7 +12,7 @@ h2. Installing the command-line tool
 
 h3. Intel Mac binary
 
-You can "download a binary for Mac OS X 10.4+ (Intel 32/64-bit)":http://jawj.github.com/OSTN02C/ostn02c.bz2.
+You can "download a binary for Mac OS X 10.4+, Intel 32/64-bit":http://jawj.github.com/OSTN02C/ostn02c.bz2.
 
 h3. From source
 
