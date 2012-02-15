@@ -12,15 +12,15 @@ h2. Installing the command-line tool
 
 h3. Intel Mac binary
 
-You can "download the tool as a 32/64-bit Intel binary for Mac OS X 10.4 and above":http://jawj.github.com/OSTN02C/OSTN02C.gz.
+You can "download a binary for Mac OS X 10.4+ (Intel 32/64-bit)":http://jawj.github.com/OSTN02C/ostn02c.bz2.
 
 h3. From source
 
-Otherwise, clone the source to your machine and compile it either in Xcode 4 or (as tested on Ubuntu 10.04) like so:
+Otherwise, clone the source to your machine and compile it either in Xcode 4 or (as tested on Ubuntu 10.04 after @sudo aptitude install build-essential@) like so:
 
-bc. gcc -std=gnu99 -lm -D_GNU_SOURCE -Wall -pedantic -O3 -o ostn02c main.c OSTN02.c crc32.c
+bc. gcc -std=gnu99 -lm -D_GNU_SOURCE -Wall -pedantic -O2 -o ostn02c main.c OSTN02.c crc32.c
 
-To compile with long double precision arithmetic, add option @-DUSE_LONG@. To prevent any bold/inverse/underlined output from the tool, add option @-DUNFANCY_OUTPUT@.
+To compile with long double precision arithmetic (not recommended, since the outputs are the same within 1mm), add option @-DUSE_LONG@. To prevent fancy formatting (bold/inverse/underlined) in the tool's output, add option @-DUNFANCY_OUTPUT@.
 
 
 h2. Using the command-line tool
