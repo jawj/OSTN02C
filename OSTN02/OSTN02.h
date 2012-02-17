@@ -17,6 +17,7 @@
 #include "crc32.h"
 
 #define LENGTH_OF(x) (sizeof (x) / sizeof *(x))
+#define ASPRINTF_OR_EXIT(...) if (asprintf(__VA_ARGS__) == -1) exit(EXIT_FAILURE)
 
 #ifdef USE_LONG
 #define DBL       long double

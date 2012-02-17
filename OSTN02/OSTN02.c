@@ -281,8 +281,8 @@ char *gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const bool spac
   const int  n   = nRound - (500000 * firstNIndex) - (100000 * secondNIndex);
   char *ref, *fmtStr;
   const int digits = res == 100 ? 3 : (res == 10 ? 4 : 5);
-  asprintf(&fmtStr, "%%c%%c%%s%%0%dd%%s%%0%dd", digits, digits);
-  asprintf(&ref, fmtStr, sq0, sq1, (spaces ? " " : ""), e / res, (spaces ? " " : ""), n / res);
+  ASPRINTF_OR_EXIT(&fmtStr, "%%c%%c%%s%%0%dd%%s%%0%dd", digits, digits);
+  ASPRINTF_OR_EXIT(&ref, fmtStr, sq0, sq1, (spaces ? " " : ""), e / res, (spaces ? " " : ""), n / res);
   free(fmtStr);
   return ref;
 }
@@ -305,7 +305,7 @@ char *tetradFromOSGB36EastingNorthing(const EastingNorthing en) {
   const int  tetradNIndex = (nMinusSq % 10000) / 2000;
   char tetradLetter = tetradLetters[tetradNIndex][tetradEIndex];
   char *tetrad;
-  asprintf(&tetrad, "%c%c%d%d%c", sq0, sq1, eDigit, nDigit, tetradLetter);
+  ASPRINTF_OR_EXIT(&tetrad, "%c%c%d%d%c", sq0, sq1, eDigit, nDigit, tetradLetter);
   return tetrad;
 }
 
@@ -357,8 +357,8 @@ bool test(const bool noisily) {
     actualLatLon = latLonDecimalFromLatLonDegMinSec(testETRSCoords[i]);
     actualEN     = testOSGB36Coords[i];
     
-    asprintf(&actualLatLonStr, LLFMT, actualLatLon.lat, actualLatLon.lon, actualLatLon.elevation);
-    asprintf(&actualENStr,     ENFMT, actualEN.e,       actualEN.n,       actualEN.elevation, OSGB36GeoidRegions[actualEN.geoid], OSGB36GeoidNames[actualEN.geoid]);
+    ASPRINTF_OR_EXIT(&actualLatLonStr, LLFMT, actualLatLon.lat, actualLatLon.lon, actualLatLon.elevation);
+    ASPRINTF_OR_EXIT(&actualENStr,     ENFMT, actualEN.e,       actualEN.n,       actualEN.elevation, OSGB36GeoidRegions[actualEN.geoid], OSGB36GeoidNames[actualEN.geoid]);
     
     if (noisily) {
       printf("ETRS89 actual   %s\n",   actualLatLonStr);
@@ -370,8 +370,8 @@ bool test(const bool noisily) {
     computedLatLon = ETRS89LatLonFromETRS89EastingNorthing(ETRS89EastingNorthingFromOSGB36EastingNorthing(actualEN));
     computedEN     = OSGB36EastingNorthingFromETRS89EastingNorthing(ETRS89EastingNorthingFromETRS89LatLon(actualLatLon));
     
-    asprintf(&computedLatLonStr, LLFMT, computedLatLon.lat, computedLatLon.lon, computedLatLon.elevation);
-    asprintf(&computedENStr,     ENFMT, computedEN.e,       computedEN.n,       computedEN.elevation, OSGB36GeoidRegions[computedEN.geoid], OSGB36GeoidNames[computedEN.geoid]);
+    ASPRINTF_OR_EXIT(&computedLatLonStr, LLFMT, computedLatLon.lat, computedLatLon.lon, computedLatLon.elevation);
+    ASPRINTF_OR_EXIT(&computedENStr,     ENFMT, computedEN.e,       computedEN.n,       computedEN.elevation, OSGB36GeoidRegions[computedEN.geoid], OSGB36GeoidNames[computedEN.geoid]);
     
     if (actualEN.geoid != 0) {  // i.e. these coordinates are not zeroes, and can be converted sensibly
       testPassed = strcmp(actualLatLonStr, computedLatLonStr) == 0;
