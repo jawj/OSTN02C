@@ -16,12 +16,11 @@ You can "download a binary for Mac OS X 10.4+, Intel 32/64-bit":http://jawj.gith
 
 h3. From source
 
-Otherwise: (1) ensure you have build tools installed -- Xcode 4 on the Mac, @sudo aptitude install build-essential@ on Debian/Ubuntu, etc.; (2) download or clone the source to your machine; and (3) compile, in the OSTN02 subdirectory:
+Otherwise, with the relevant build tools installed -- Xcode 4 on the Mac, @sudo aptitude install build-essential@ on Debian/Ubuntu, etc. -- download or clone the source to your machine, and compile like so:
 
-bc. gcc main.c OSTN02.c crc32.c -std=gnu99 -D_GNU_SOURCE -lm -Wall -O2 -o ostn02c
+bc. gcc OSTN02/*.c -std=gnu99 -D_GNU_SOURCE -lm -Wall -O2 -o ostn02c
 
 To compile with long double precision arithmetic (not recommended, since the outputs are the same to within 1mm), add the option @-DUSE_LONG@. To prevent fancy formatting (bold/inverse/underlined) in the tool's output, add the option @-DUNFANCY_OUTPUT@.
-
 
 h2. Using the command-line tool
 

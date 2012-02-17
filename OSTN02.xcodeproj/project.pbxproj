@@ -124,7 +124,7 @@
 		5EBE803714A5FE4800CA9D70 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 				ORGANIZATIONNAME = "George MacKerron";
 			};
 			buildConfigurationList = 5EBE803A14A5FE4800CA9D70 /* Build configuration list for PBXProject "OSTN02" */;
