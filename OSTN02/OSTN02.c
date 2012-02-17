@@ -252,7 +252,7 @@ EastingNorthing OSGB36EastingNorthingFromETRS89EastingNorthing(const EastingNort
 
 EastingNorthing ETRS89EastingNorthingFromOSGB36EastingNorthing(const EastingNorthing en) {
   EastingNorthing shifts, prevShifts, shifted;
-  shifts.e = shifts.n = 0;
+  shifts.e = shifts.n = shifted.elevation = shifted.geoid = 0;  // initialising .elevation and .geoid just avoids warnings
   do {
     prevShifts.e = shifts.e;
     prevShifts.n = shifts.n;
