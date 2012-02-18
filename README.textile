@@ -12,19 +12,19 @@ h2. Installing the command-line tool
 
 h3. For Mac
 
-You can "download a binary for Mac OS X 10.4+, Intel 32/64-bit":http://jawj.github.com/OSTN02C/ostn02c.bz2.
+You can "download a binary for Mac OS X 10.4+, Intel 32/64-bit":http://jawj.github.com/OSTN02C/ostn02c.bz2. You'll need to uncompress, @chmod +x@ and @mv@ this somewhere appropriate.
 
-Or use "Homebrew":http://mxcl.github.com/homebrew/. In Terminal.app, just type:
+Alternatively, use "Homebrew":http://mxcl.github.com/homebrew/. In Terminal.app, type:
 
 @brew install https://raw.github.com/jawj/OSTN02C/master/ostn02c.rb@
 
 h3. From source
 
-Otherwise, with the relevant build tools installed -- Xcode 4 on the Mac, @sudo aptitude install build-essential@ on Debian/Ubuntu, etc. -- download or clone the source to your machine, and compile like so:
+Otherwise, with the relevant build tools installed -- Xcode on the Mac, @sudo aptitude install build-essential@ on Debian/Ubuntu, etc. -- download or clone the source to your machine, and compile like so:
 
-bc. gcc OSTN02/*.c -std=gnu99 -D_GNU_SOURCE -lm -Wall -O2 -o ostn02c
+@gcc OSTN02/*.c -std=gnu99 -D_GNU_SOURCE -lm -Wall -O2 -o ostn02c@
 
-To compile with long double precision arithmetic (not recommended, since the outputs are the same to within 1mm), add the option @-DUSE_LONG@. To prevent fancy formatting (bold/inverse/underlined) in the tool's output, add the option @-DUNFANCY_OUTPUT@.
+To compile with long double precision arithmetic (not recommended, since the outputs are the same to within 1mm), add the option @-DUSE_LONG@. To suppress fancy formatting (bold/inverse/underlined) in the tool's output, add the option @-DUNFANCY_OUTPUT@.
 
 h2. Using the command-line tool
 
