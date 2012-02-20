@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
+# this script processes the OSTN02/OSGM02 data in OS-supplied CSV format
+# into a packed array of structs, and an index thereto
+
 require 'CSV'
 puts 'loading'
 data = []
@@ -12,7 +15,8 @@ CSV.foreach("OSTN02_OSGM02_GB.txt") do |csv_row|
   if dflag == 0
     eshift = nshift = gshift = 0
   else
-    eshift = csv_row[3].sub('.', '').to_i - 86000
+    # these offsets (-86000, 82000, -43000) minimise the number of bits required to store
+    eshift = csv_row[3].sub('.', '').to_i - 86000  
     nshift = csv_row[4].sub('.', '').to_i + 82000
     gshift = csv_row[5].sub('.', '').to_i - 43000
   end

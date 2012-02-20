@@ -14,54 +14,12 @@
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
-#include "crc32.h"
-
-#define LENGTH_OF(x) (sizeof (x) / sizeof *(x))
-#define ASPRINTF_OR_EXIT(...) if (asprintf(__VA_ARGS__) == -1) exit(EXIT_FAILURE)
 
 #ifdef USE_LONG
 #define DBL       long double
-#define L(x)      x ## L
-#define DBLFMT    "Lf"
-#define SIN       sinl
-#define COS       cosl
-#define TAN       tanl
-#define SQRT      sqrtl
-#define ABS       fabs
-#define NUMDESC   "long double"
 #else
 #define DBL       double
-#define L(x)      x
-#define DBLFMT    "lf"
-#define SIN       sin
-#define COS       cos
-#define TAN       tan
-#define SQRT      sqrt
-#define ABS       fabsl
-#define NUMDESC   "double"
 #endif
-
-#define CDBL      const DBL
-
-#ifdef UNFANCY_OUTPUT
-#define BOLD      ""
-#define UNBOLD    ""
-#define INVERSE   ""
-#define UNINVERSE ""
-#define ULINE     ""
-#define UNULINE   ""
-#else
-#define BOLD      "\033[1m"
-#define UNBOLD    "\033[22m"
-#define INVERSE   "\033[7m"
-#define UNINVERSE "\033[27m"
-#define ULINE     "\033[4m"
-#define UNULINE   "\033[24m"
-#endif
-
-#define LLFMT     "lat: % 11.6" DBLFMT ", lon: % 11.6" DBLFMT ", elevation: %8.3" DBLFMT
-#define ENFMT     "  E: %11.3" DBLFMT ",   N: %11.3" DBLFMT ", elevation:  %7.3" DBLFMT " (%s / %s)"
-
 
 typedef struct {
   unsigned char deg;  // range 0 - 180 (S or W)

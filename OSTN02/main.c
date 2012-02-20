@@ -9,9 +9,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
 #include "OSTN02.h"
+#include "dblRelated.h"
+#include "fancyOut.h"
 #include "geoids.data"
 
+#define LENGTH_OF(x) (sizeof (x) / sizeof *(x))
 #define CSVSCANFMT "%" DBLFMT "%*[ \t,;:|]%" DBLFMT "%*[ \t,;:|]%" DBLFMT "%*[ \t,;:|\r]\n"
 
 int main (int argc, const char * argv[]) {
