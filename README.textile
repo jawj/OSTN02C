@@ -16,7 +16,7 @@ You can "download a binary for Mac OS X 10.4+, Intel 32/64-bit":http://jawj.gith
 
 Alternatively, use "Homebrew":http://mxcl.github.com/homebrew/. In Terminal.app, type:
 
-@brew install https://raw.github.com/jawj/OSTN02C/master/ostn02c.rb@
+@brew install http://jawj.github.com/OSTN02C/ostn02c.rb@
 
 h3. From source
 
