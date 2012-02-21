@@ -43,7 +43,7 @@ int main (int argc, const char * argv[]) {
       int scanResult;
       while((scanResult = scanf(CSVSCANFMT, &latLon.lat, &latLon.lon, &latLon.elevation)) == 3) {
         en = OSGB36EastingNorthingFromETRS89EastingNorthing(ETRS89EastingNorthingFromETRS89LatLon(latLon));
-        printf("%.3" DBLFMT ",%.3" DBLFMT ",%.3" DBLFMT ",%d\n", en.e, en.n, en.elevation, en.geoid);
+        printf("%.3" DBLFMT "\t%.3" DBLFMT "\t%.3" DBLFMT "\t%d\n", en.e, en.n, en.elevation, en.geoid);
       }
       return scanResult == EOF ? EXIT_SUCCESS : EXIT_FAILURE;
     
@@ -78,7 +78,7 @@ int main (int argc, const char * argv[]) {
         enETRS89 = ETRS89EastingNorthingFromOSGB36EastingNorthing(en);
         if (enETRS89.geoid == 0) latLon.lat = latLon.lon = latLon.elevation = latLon.geoid = 0;
         else latLon = ETRS89LatLonFromETRS89EastingNorthing(enETRS89);
-        printf("%.6" DBLFMT ",%.6" DBLFMT ",%.3" DBLFMT ",%d\n", latLon.lat, latLon.lon, latLon.elevation, latLon.geoid);
+        printf("%.6" DBLFMT "\t%.6" DBLFMT "\t%.3" DBLFMT "\t%d\n", latLon.lat, latLon.lon, latLon.elevation, latLon.geoid);
       }
       return scanResult == EOF ? EXIT_SUCCESS : EXIT_FAILURE;
       
@@ -122,7 +122,7 @@ int main (int argc, const char * argv[]) {
          "\n"
          "In the batch conversion case:\n"
          "* Input rows must have 3 columns -- lat or easting, lon or northing, elevation -- with any reasonable separator (,;:| \\t)\n"
-         "* Output rows have 4 columns -- easting or lat, northing or lon, elevation, geoid datum flag -- separated with commas (,)\n"
+         "* Output rows have 4 columns -- easting or lat, northing or lon, elevation, geoid datum flag -- separated with tabs\n"
          "* In case of out-of-range input coordinates, all output columns will be zero\n"
          "* Malformatted input terminates processing and results in a non-zero exit code\n"
          "\n"
