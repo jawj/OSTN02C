@@ -49,7 +49,7 @@ The conversion commands gps-to-grid and grid-to-gps can be used in two ways:
 
 In the batch conversion case:
 * Input rows must have 3 columns -- lat or easting, lon or northing, elevation -- with any reasonable separator (,;:| \t)
-* Output rows have 4 columns -- easting or lat, northing or lon, elevation, geoid datum flag -- separated with commas (,)
+* Output rows have 4 columns -- easting or lat, northing or lon, elevation, geoid datum flag -- separated with tabs
 * In case of out-of-range input coordinates, all output columns will be zero
 * Malformatted input terminates processing and results in a non-zero exit code
 
@@ -74,8 +74,8 @@ ETRS89 out lat:   51.000000, lon:   -0.500000, elevation:  100.000
 
 dyn204:OSTN02 George$ echo "51.0, -0.5, 100.0
 > 51.5, -1.0, 50.0" | ostn02c gps-to-grid
-505349.663,123360.984,54.635,1
-469509.184,178369.364,3.360,1
+505349.663	123360.984	54.635	1
+469509.184	178369.364	3.360	1
 
 dyn204:OSTN02 George$ echo $?
 0
@@ -85,8 +85,8 @@ dyn204:OSTN02 George$ echo "51.0, -0.5, 100.0
 > 20.0 40.0 0.0
 > an invalid line
 > 51.5, -1.0, 50.0" | ostn02c gps-to-grid
-505349.663,123360.984,54.635,1
-0.000,0.000,0.000,0
+505349.663	123360.984	54.635	1
+0.000	0.000	0.000	0
 
 dyn204:OSTN02 George$ echo $?
 1
