@@ -20,6 +20,8 @@
 
 int main (int argc, const char * argv[]) {
   
+  if (getenv("OSTN02C_LINE_BUFFERED")) if (setlinebuf(stdout) != 0) exit(EXIT_FAILURE);
+  
   // with arg 'test', run tests
   if (argc == 2 && strcmp(argv[1], "test") == 0) {
     bool passed = test(true);
