@@ -26,6 +26,7 @@ Otherwise, with the relevant build tools installed -- Xcode on the Mac, @sudo ap
 
 To compile with long double precision arithmetic (not recommended, since the outputs are the same to within 1mm), add the option @-DUSE_LONG@. To suppress fancy formatting (bold/inverse/underlined) in the tool's output, add the option @-DUNFANCY_OUTPUT@.
 
+
 h2. Using the command-line tool
 
 The command-line tool works like this:
@@ -355,3 +356,23 @@ OSGB36 actual     E:       0.000,   N:       0.000, elevation:    0.000 (Outside
 OSGB36 computed   E:       0.000,   N:       0.000, elevation:    0.000 (Outside model boundary / N/A)
 
 92 tests; 92 passed; 0 failed
+
+
+h3. Output buffering
+
+If you're using the command line tool from another script (e.g. from Ruby or Python), alternately writing coordinates to its STDIN and reading the converted results from its STDOUT, you'll need to ensure that your I/O isn't being buffered. 
+
+To help with this, the tool checks for an environment variable named OSTN02C_LINE_BUFFERED, and does buffering at line level only (i.e. output is flushed after every newline character) if it's set.
+
+As an example, you can use this snippet to convert WGS84 to OSGB36 in Ruby:
+
+bc. @ostn02 = IO.popen([{'OSTN02C_LINE_BUFFERED' => 'Y'}, 'ostn02c', 'gps-to-grid'], 'r+')
+@ostn02.sync = true  # this is actually the default on my system
+def ll_to_en(lat, lon, elev)
+  @ostn02.puts "#{lat} #{lon} #{elev}"
+  osgb = @ostn02.gets.split("\t")
+  datum = osgb[3].to_i
+  return nil unless datum > 0
+  osgb[0..2].map(&:to_f)
+end
+
