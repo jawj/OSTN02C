@@ -358,6 +358,7 @@ OSGB36 computed   E:       0.000,   N:       0.000, elevation:    0.000 (Outside
 92 tests; 92 passed; 0 failed
 
 
+
 h3. Output buffering
 
 If you're using the command line tool from another script (e.g. from Ruby or Python), alternately writing coordinates to its STDIN and reading the converted results from its STDOUT, you'll need to ensure that your I/O isn't being buffered. 
