@@ -1,7 +1,17 @@
 
-const Ellipsoid GRS80Ellipsoid = {
+const Ellipsoid GRS80Ellipsoid = {  // WGS84, ITRS, ETRS89
   .semiMajorAxis = L(6378137.0),
   .semiMinorAxis = L(6356752.3141)
+};
+
+const Ellipsoid Airy1830Ellipsoid = {  // OSGB36, National Grid
+  .semiMajorAxis = L(6377563.396),
+  .semiMinorAxis = L(6356256.909)
+};
+
+const Ellipsoid Airy1830ModifiedEllipsoid = {  // Ireland 65, Irish National Grid
+  .semiMajorAxis = L(6377340.189),
+  .semiMinorAxis = L(6356034.447)
 };
 
 const MapProjection NationalGridProj = {
@@ -11,5 +21,15 @@ const MapProjection NationalGridProj = {
   .trueOriginEastingNorthing = {
     .e = L( 400000.0),
     .n = L(-100000.0) 
+  }
+};
+
+const MapProjection IrishNationalGridProj = {
+  .centralMeridianScale = L(1.000035),
+  .trueOriginLatLon.lat = L(53.5),
+  .trueOriginLatLon.lon = L(-8.0),
+  .trueOriginEastingNorthing = {
+    .e = L(200000.0),
+    .n = L(250000.0) 
   }
 };
