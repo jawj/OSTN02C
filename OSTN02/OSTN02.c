@@ -26,6 +26,48 @@
 static CDBL piOver180       = L(0.017453292519943295769236907684886127134428718885417254560971914401710091146034494436822415696345094822);
 static CDBL oneEightyOverPi = L(57.29577951308232087679815481410517033240547246656432154916024386120284714832155263244096899585111094418);
 
+
+DBL gridConvergenceDegreesFromEastingNorthing(const EastingNorthing en, const Ellipsoid ellipsoid, const MapProjection projection) {
+  
+  LatLonDecimal latLon = latLonFromEastingNorthing(en, ellipsoid, projection);
+  CDBL phi     = piOver180 * latLon.lat;
+  CDBL lambda  = piOver180 * latLon.lon;
+  CDBL lambda0 = piOver180 * projection.trueOriginLatLon.lon;
+  
+  CDBL a   = ellipsoid.semiMajorAxis;
+  CDBL b   = ellipsoid.semiMinorAxis;
+  CDBL f0  = projection.centralMeridianScale;
+  
+  CDBL deltaLambda  = lambda - lambda0;
+  CDBL deltaLambda2 = deltaLambda  * deltaLambda;
+  CDBL deltaLambda3 = deltaLambda2 * deltaLambda;
+  CDBL deltaLambda5 = deltaLambda3 * deltaLambda2;
+  
+  CDBL sinPhi   = SIN(phi);
+  CDBL sinPhi2  = sinPhi * sinPhi;
+  CDBL cosPhi   = COS(phi);
+  CDBL cosPhi2  = cosPhi * cosPhi;
+  CDBL cosPhi4  = cosPhi2 * cosPhi2;
+  CDBL tanPhi   = TAN(phi);
+  CDBL tanPhi2  = tanPhi * tanPhi;
+  
+  CDBL af0  = a * f0;
+  CDBL af02 = af0 * af0;
+  CDBL bf0  = b * f0;
+  CDBL bf02 = bf0 * bf0;
+  
+  CDBL e2    = (af02 - bf02) / af02;
+  CDBL nu    = af0 / SQRT(L(1.0) - (e2 * sinPhi2));
+  CDBL rho   = (nu * (L(1.0) - e2)) / (L(1.0) - (e2 * sinPhi2));
+  CDBL eta2  = (nu / rho) - L(1.0);
+  CDBL xiv   = ((sinPhi * cosPhi2) / L(3.0))  * (L(1.0) + L(3.0) * eta2 + L(2.0) * eta2 * eta2);
+  CDBL xv    = ((sinPhi * cosPhi4) / L(15.0)) * (L(2.0) - tanPhi2);
+  
+  CDBL cRads = (deltaLambda * sinPhi) + (deltaLambda3 * xiv) + (deltaLambda5 * xv);
+  return oneEightyOverPi * cRads;
+}
+
+
 EastingNorthing eastingNorthingFromLatLon(const LatLonDecimal latLon, const Ellipsoid ellipsoid, const MapProjection projection) {
   CDBL a   = ellipsoid.semiMajorAxis;
   CDBL b   = ellipsoid.semiMinorAxis;
@@ -396,6 +438,13 @@ bool test(const bool noisily) {
     free(actualENStr);
     free(computedENStr);
   }
+  
+  /*
+  EastingNorthing testEN;
+  testEN.e = 651409.903;
+  testEN.n = 313177.270;
+  printf("Convergence: %13.11Lf \n\n", gridConvergenceDegreesFromEastingNorthing(testEN, Airy1830Ellipsoid, NationalGridProj));
+  */
   
   bool allPassed = numTested == numPassed;
   if (noisily) printf("%i tests; %i passed; %s%i failed%s\n\n", numTested, numPassed, (allPassed ? "" : BOLD), numTested - numPassed, (allPassed ? "" : UNBOLD));
