@@ -72,6 +72,7 @@ typedef struct {
   unsigned int gFlag  :  4;
 } __attribute__((packed)) OSTN02Datum;
 
+DBL gridConvergenceDegreesFromLatLon(const LatLonDecimal latLon, const Ellipsoid ellipsoid, const MapProjection projection);
 DBL gridConvergenceDegreesFromEastingNorthing(const EastingNorthing en, const Ellipsoid ellipsoid, const MapProjection projection);
 EastingNorthing eastingNorthingFromLatLon(const LatLonDecimal latLon, const Ellipsoid ellipsoid, const MapProjection projection);
 EastingNorthing ETRS89EastingNorthingFromETRS89LatLon(const LatLonDecimal latLon);

@@ -27,6 +27,46 @@ static CDBL piOver180       = L(0.0174532925199432957692369076848861271344287188
 static CDBL oneEightyOverPi = L(57.29577951308232087679815481410517033240547246656432154916024386120284714832155263244096899585111094418);
 
 
+DBL gridConvergenceDegreesFromLatLon(const LatLonDecimal latLon, const Ellipsoid ellipsoid, const MapProjection projection) {
+  
+  CDBL phi     = piOver180 * latLon.lat;
+  CDBL lambda  = piOver180 * latLon.lon;
+  CDBL lambda0 = piOver180 * projection.trueOriginLatLon.lon;
+  
+  CDBL a   = ellipsoid.semiMajorAxis;
+  CDBL b   = ellipsoid.semiMinorAxis;
+  CDBL f0  = projection.centralMeridianScale;
+  
+  CDBL deltaLambda  = lambda - lambda0;
+  CDBL deltaLambda2 = deltaLambda  * deltaLambda;
+  CDBL deltaLambda3 = deltaLambda2 * deltaLambda;
+  CDBL deltaLambda5 = deltaLambda3 * deltaLambda2;
+  
+  CDBL sinPhi   = SIN(phi);
+  CDBL sinPhi2  = sinPhi * sinPhi;
+  CDBL cosPhi   = COS(phi);
+  CDBL cosPhi2  = cosPhi * cosPhi;
+  CDBL cosPhi4  = cosPhi2 * cosPhi2;
+  CDBL tanPhi   = TAN(phi);
+  CDBL tanPhi2  = tanPhi * tanPhi;
+  
+  CDBL af0  = a * f0;
+  CDBL af02 = af0 * af0;
+  CDBL bf0  = b * f0;
+  CDBL bf02 = bf0 * bf0;
+  
+  CDBL e2    = (af02 - bf02) / af02;
+  CDBL nu    = af0 / SQRT(L(1.0) - (e2 * sinPhi2));
+  CDBL rho   = (nu * (L(1.0) - e2)) / (L(1.0) - (e2 * sinPhi2));
+  CDBL eta2  = (nu / rho) - L(1.0);
+  CDBL xiv   = ((sinPhi * cosPhi2) / L(3.0))  * (L(1.0) + L(3.0) * eta2 + L(2.0) * eta2 * eta2);
+  CDBL xv    = ((sinPhi * cosPhi4) / L(15.0)) * (L(2.0) - tanPhi2);
+  
+  CDBL cRads = (deltaLambda * sinPhi) + (deltaLambda3 * xiv) + (deltaLambda5 * xv);
+  return oneEightyOverPi * cRads;
+}
+
+
 DBL gridConvergenceDegreesFromEastingNorthing(const EastingNorthing en, const Ellipsoid ellipsoid, const MapProjection projection) {
   
   LatLonDecimal latLon = latLonFromEastingNorthing(en, ellipsoid, projection);
@@ -443,7 +483,14 @@ bool test(const bool noisily) {
   EastingNorthing testEN;
   testEN.e = 651409.903;
   testEN.n = 313177.270;
-  printf("Convergence: %13.11Lf \n\n", gridConvergenceDegreesFromEastingNorthing(testEN, Airy1830Ellipsoid, NationalGridProj));
+  printf("Convergence: %13.11lf \n\n", gridConvergenceDegreesFromEastingNorthing(testEN, Airy1830Ellipsoid, NationalGridProj));
+  */
+  
+  /*
+  LatLonDecimal testLL;
+  testLL.lat = 51.0;
+  testLL.lon = -2.0;
+  printf("Convergence: %13.11lf \n\n", gridConvergenceDegreesFromLatLon(testLL, Airy1830Ellipsoid, NationalGridProj));
   */
   
   bool allPassed = numTested == numPassed;
