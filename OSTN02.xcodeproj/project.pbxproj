@@ -33,6 +33,7 @@
 		5E67D47B14B212FE00F5D4BC /* shifts.data */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = shifts.data; sourceTree = "<group>"; };
 		5E67D47C14B212FE00F5D4BC /* shifts.index.data */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = shifts.index.data; sourceTree = "<group>"; };
 		5E7AD48014B0D26E00AA6C99 /* csv-to-struct-array.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = "csv-to-struct-array.rb"; sourceTree = "<group>"; };
+		5E7BD21415B99A5F0003C1E5 /* explorerMaps.data */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = explorerMaps.data; sourceTree = "<group>"; };
 		5E9AFE1214F2525900F82BD7 /* fancyOut.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fancyOut.h; sourceTree = "<group>"; };
 		5E9AFE1414F2560D00F82BD7 /* dblRelated.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = dblRelated.h; sourceTree = "<group>"; };
 		5EB2BE9D14B7593100EE7A5D /* gridRef.data */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = gridRef.data; sourceTree = "<group>"; };
@@ -63,6 +64,7 @@
 				5E2FEDDA14B3641B007849B4 /* geoids.data */,
 				5EB2BE9D14B7593100EE7A5D /* gridRef.data */,
 				5ECB2EE414B863F00015B28A /* constants.data */,
+				5E7BD21415B99A5F0003C1E5 /* explorerMaps.data */,
 			);
 			name = Data;
 			path = OSTN02;

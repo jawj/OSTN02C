@@ -16,6 +16,7 @@
 #include "geoids.data"
 #include "gridRef.data"
 #include "testCoords.data"
+#include "explorerMaps.data"
 
 #define LENGTH_OF(x) (sizeof (x) / sizeof *(x))
 #define ASPRINTF_OR_DIE(...) if (asprintf(__VA_ARGS__) < 0) exit(EXIT_FAILURE)

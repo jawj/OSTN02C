@@ -22,6 +22,16 @@
 #endif
 
 typedef struct {
+  int num;
+  int emin;
+  int nmin;
+  int emax;
+  int nmax;
+  char nameUTF8[77];
+  char sheetUTF8[46];
+} OSMap;
+
+typedef struct {
   unsigned char deg;  // range 0 - 180 (S or W)
   unsigned char min;  // range 0 - 60
   DBL sec;
