@@ -14,6 +14,7 @@
 #include "dblRelated.h"
 #include "fancyOut.h"
 #include "geoids.data"
+#include "explorerMaps.data"
 
 #define LENGTH_OF(x) (sizeof (x) / sizeof *(x))
 #define CSVSCANFMT "%" DBLFMT "%*[ \t,;:|]%" DBLFMT "%*[ \t,;:|]%" DBLFMT "%*[ \t,;:|\r]\n"
@@ -65,6 +66,17 @@ int main (int argc, const char * argv[]) {
       printf("\nOSGB36 out ");
       printf(ENFMT, en.e, en.n, en.elevation, OSGB36GeoidRegions[en.geoid], OSGB36GeoidNames[en.geoid]);
       printf("\n\n");
+      
+      int mapIndex = nextOSExplorerMap(en, -1);
+      while (mapIndex >= 0) {
+        OSMap map = OSExplorerMaps[mapIndex];
+        printf("OS Explorer Map %03i  %s", map.num, map.nameUTF8);
+        if (strlen(map.sheetUTF8) > 0) printf("  Sheet: %s", map.sheetUTF8);
+        printf("\n");
+        mapIndex = nextOSExplorerMap(en, mapIndex);
+      };
+      printf("\n");
+      
       return EXIT_SUCCESS;
     }
   

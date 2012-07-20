@@ -108,6 +108,16 @@ DBL gridConvergenceDegreesFromEastingNorthing(const EastingNorthing en, const El
   return oneEightyOverPi * cRads;
 }
 
+int nextOSExplorerMap(EastingNorthing en, int prevMap) {
+  for (int i = prevMap + 1, len = LENGTH_OF(OSExplorerMaps); i < len; i ++) {
+    OSMap map = OSExplorerMaps[i];
+    if (   en.e >= (DBL) map.emin 
+        && en.e <= (DBL) map.emax 
+        && en.n >= (DBL) map.nmin 
+        && en.n <= (DBL) map.nmax) return i;
+  }
+  return -1;
+}
 
 EastingNorthing eastingNorthingFromLatLon(const LatLonDecimal latLon, const Ellipsoid ellipsoid, const MapProjection projection) {
   CDBL a   = ellipsoid.semiMajorAxis;

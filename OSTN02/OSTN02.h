@@ -84,6 +84,7 @@ typedef struct {
 
 DBL gridConvergenceDegreesFromLatLon(const LatLonDecimal latLon, const Ellipsoid ellipsoid, const MapProjection projection);
 DBL gridConvergenceDegreesFromEastingNorthing(const EastingNorthing en, const Ellipsoid ellipsoid, const MapProjection projection);
+int nextOSExplorerMap(EastingNorthing en, int prevMap);
 EastingNorthing eastingNorthingFromLatLon(const LatLonDecimal latLon, const Ellipsoid ellipsoid, const MapProjection projection);
 EastingNorthing ETRS89EastingNorthingFromETRS89LatLon(const LatLonDecimal latLon);
 LatLonDecimal   latLonFromEastingNorthing(const EastingNorthing en, const Ellipsoid ellipsoid, const MapProjection projection);

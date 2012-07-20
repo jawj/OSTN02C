@@ -1,4 +1,4 @@
-const OSMap OSExplorerMaps[] = {
+static const OSMap OSExplorerMaps[] = {
 	{.num = 1, .emin = 393000, .nmin = 380000, .emax = 415000, .nmax = 410000, .nameUTF8 = "Peak District", .sheetUTF8 = "West"},
 	{.num = 1, .emin = 410000, .nmin = 380000, .emax = 432425, .nmax = 410000, .nameUTF8 = "Peak District", .sheetUTF8 = "East"},
 	{.num = 2, .emin = 380000, .nmin = 450000, .emax = 410000, .nmax = 472000, .nameUTF8 = "Yorkshire Dales - Southern & Western areas", .sheetUTF8 = "East"},
