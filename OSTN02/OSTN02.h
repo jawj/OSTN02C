@@ -21,6 +21,12 @@
 #define DBL       double
 #endif
 
+#ifdef DONT_PACK
+#define PACKED
+#else
+#define PACKED    __attribute__((packed))
+#endif
+
 typedef struct {
   int num;
   int emin;
@@ -73,14 +79,14 @@ typedef struct {
   unsigned int eMin   : 10;
   unsigned int eCount : 10;
   unsigned int offset : 20;
-} __attribute__((packed)) OSTN02Index;
+} PACKED OSTN02Index;
 
 typedef struct {
   unsigned int eShift : 15;
   unsigned int nShift : 15;
   unsigned int gShift : 14;
   unsigned int gFlag  :  4;
-} __attribute__((packed)) OSTN02Datum;
+} PACKED OSTN02Datum;
 
 DBL gridConvergenceDegreesFromLatLon(const LatLonDecimal latLon, const Ellipsoid ellipsoid, const MapProjection projection);
 DBL gridConvergenceDegreesFromEastingNorthing(const EastingNorthing en, const Ellipsoid ellipsoid, const MapProjection projection);
