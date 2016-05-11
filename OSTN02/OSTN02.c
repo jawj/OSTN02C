@@ -508,3 +508,69 @@ bool test(const bool noisily) {
   if (noisily) printf("%i tests; %i passed; %s%i failed%s\n\n", numTested, numPassed, (allPassed ? "" : BOLD), numTested - numPassed, (allPassed ? "" : UNBOLD));
   return allPassed;
 }
+
+
+#ifdef USE_EMBIND
+#include <emscripten/bind.h>
+
+OSMap OSExplorerMapForIndex(int i) {
+  return OSExplorerMaps[i];
+}
+
+std::string OSExplorerMapNameForIndex(int i) {
+  return OSExplorerMaps[i].nameUTF8;
+}
+
+std::string OSExplorerMapSheetForIndex(int i) {
+  return OSExplorerMaps[i].sheetUTF8;
+}
+
+EMSCRIPTEN_BINDINGS(ostn02c) {
+  emscripten::value_object<EastingNorthing>("EastingNorthing")
+    .field("e", &EastingNorthing::e)
+    .field("n", &EastingNorthing::n)
+    .field("elevation", &EastingNorthing::elevation)
+  ;
+  emscripten::value_object<LatLonDecimal>("LatLonDecimal")
+    .field("lat", &LatLonDecimal::lat)
+    .field("lon", &LatLonDecimal::lon)
+    .field("elevation", &LatLonDecimal::elevation)
+  ;
+  emscripten::value_object<OSMap>("OSMap")
+    .field("num", &OSMap::num)
+    .field("emin", &OSMap::emin)
+    .field("nmin", &OSMap::nmin)
+    .field("emax", &OSMap::emax)
+    .field("nmax", &OSMap::nmax)
+  ;
+
+  emscripten::function("ETRS89EastingNorthingFromETRS89LatLon",          &ETRS89EastingNorthingFromETRS89LatLon);
+  emscripten::function("OSGB36EastingNorthingFromETRS89EastingNorthing", &OSGB36EastingNorthingFromETRS89EastingNorthing);
+  emscripten::function("ETRS89EastingNorthingFromOSGB36EastingNorthing", &ETRS89EastingNorthingFromOSGB36EastingNorthing);
+  emscripten::function("ETRS89LatLonFromETRS89EastingNorthing",          &ETRS89LatLonFromETRS89EastingNorthing);
+  emscripten::function("nextOSExplorerMap",                              &nextOSExplorerMap);
+  emscripten::function("OSExplorerMapForIndex",                          &OSExplorerMapForIndex);
+  emscripten::function("OSExplorerMapNameForIndex",                      &OSExplorerMapNameForIndex);
+  emscripten::function("OSExplorerMapSheetForIndex",                     &OSExplorerMapSheetForIndex);
+  emscripten::function("test",                                           &test);
+}
+
+
+// emscripten build commands
+
+// development: emcc -x c++ OSTN02/*.c --bind --std=c++11 -DUSE_EMBIND -lm -Wall -g1 -o emscripten-build/ostn02c.js
+// production:  emcc -x c++ OSTN02/*.c --bind --std=c++11 -DUSE_EMBIND -lm -Wall -O2 -o emscripten-build/ostn02c.js
+
+
+// JavaScript example usage
+
+// var en = Module.OSGB36EastingNorthingFromETRS89EastingNorthing(
+//   Module.ETRS89EastingNorthingFromETRS89LatLon(
+//     {lat: 53 + 46 / 60 + 44.796925 / 3600, lon: -(3 + 2 / 60 + 25.637665 / 3600), elevation: 64.940}));
+
+// var map = Module.nextOSExplorerMap(en, 0);
+
+// UTF8 = { dec: function(s) { return decodeURIComponent(escape(s)); } };
+// var mapName = UTF8.dec(Module.OSExplorerMapNameForIndex(map));
+
+#endif
