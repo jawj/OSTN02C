@@ -513,16 +513,28 @@ bool test(const bool noisily) {
 #ifdef USE_EMBIND
 #include <emscripten/bind.h>
 
-OSMap OSExplorerMapForIndex(int i) {
+OSMap OSExplorerMapDataForIndex(const int i) {
   return OSExplorerMaps[i];
 }
 
-std::string OSExplorerMapNameForIndex(int i) {
-  return OSExplorerMaps[i].nameUTF8;
+std::string OSExplorerMapNameUTF8ForIndex(const int i) {
+  std::string name(OSExplorerMaps[i].nameUTF8);
+  return name;
 }
 
-std::string OSExplorerMapSheetForIndex(int i) {
-  return OSExplorerMaps[i].sheetUTF8;
+std::string OSExplorerMapSheetUTF8ForIndex(const int i) {
+  std::string sheet(OSExplorerMaps[i].sheetUTF8);
+  return sheet;
+}
+
+std::string stringWrapped_tetradFromOSGB36EastingNorthing(const EastingNorthing en) {
+  std::string tetrad(tetradFromOSGB36EastingNorthing(en));
+  return tetrad;
+}
+
+std::string stringWrapped_gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const bool spaces, const int res) {
+  std::string gridRef(gridRefFromOSGB36EastingNorthing(en, spaces, res));
+  return gridRef;
 }
 
 EMSCRIPTEN_BINDINGS(ostn02c) {
@@ -543,16 +555,32 @@ EMSCRIPTEN_BINDINGS(ostn02c) {
     .field("emax", &OSMap::emax)
     .field("nmax", &OSMap::nmax)
   ;
+  emscripten::value_object<LatLonDegMinSec>("LatLonDegMinSec")
+    .field("lat", &LatLonDegMinSec::lat)
+    .field("lon", &LatLonDegMinSec::lon)
+    .field("elevation", &LatLonDegMinSec::elevation)
+  ;
+  emscripten::value_object<DegMinSec>("DegMinSec")
+    .field("deg", &DegMinSec::deg)
+    .field("min", &DegMinSec::min)
+    .field("sec", &DegMinSec::sec)
+    .field("westOrSouth", &DegMinSec::westOrSouth)
+  ;
 
   emscripten::function("ETRS89EastingNorthingFromETRS89LatLon",          &ETRS89EastingNorthingFromETRS89LatLon);
   emscripten::function("OSGB36EastingNorthingFromETRS89EastingNorthing", &OSGB36EastingNorthingFromETRS89EastingNorthing);
   emscripten::function("ETRS89EastingNorthingFromOSGB36EastingNorthing", &ETRS89EastingNorthingFromOSGB36EastingNorthing);
   emscripten::function("ETRS89LatLonFromETRS89EastingNorthing",          &ETRS89LatLonFromETRS89EastingNorthing);
-  emscripten::function("nextOSExplorerMap",                              &nextOSExplorerMap);
-  emscripten::function("OSExplorerMapForIndex",                          &OSExplorerMapForIndex);
-  emscripten::function("OSExplorerMapNameForIndex",                      &OSExplorerMapNameForIndex);
-  emscripten::function("OSExplorerMapSheetForIndex",                     &OSExplorerMapSheetForIndex);
-  emscripten::function("test",                                           &test);
+  emscripten::function("tetradFromOSGB36EastingNorthing",                &stringWrapped_tetradFromOSGB36EastingNorthing);
+  emscripten::function("gridRefFromOSGB36EastingNorthing",               &stringWrapped_gridRefFromOSGB36EastingNorthing);
+  emscripten::function("latLonDecimalFromLatLonDegMinSec",               &latLonDecimalFromLatLonDegMinSec);
+  
+  emscripten::function("OSTN02Test",                                     &test);
+  
+  emscripten::function("OSExplorerMapNextIndex",                         &nextOSExplorerMap);
+  emscripten::function("OSExplorerMapDataForIndex",                      &OSExplorerMapDataForIndex);
+  emscripten::function("OSExplorerMapNameUTF8ForIndex",                  &OSExplorerMapNameUTF8ForIndex);
+  emscripten::function("OSExplorerMapSheetUTF8ForIndex",                 &OSExplorerMapSheetUTF8ForIndex);
 }
 
 
@@ -566,11 +594,14 @@ EMSCRIPTEN_BINDINGS(ostn02c) {
 
 // var en = Module.OSGB36EastingNorthingFromETRS89EastingNorthing(
 //   Module.ETRS89EastingNorthingFromETRS89LatLon(
-//     {lat: 53 + 46 / 60 + 44.796925 / 3600, lon: -(3 + 2 / 60 + 25.637665 / 3600), elevation: 64.940}));
+//     Module.latLonDecimalFromLatLonDegMinSec({lat: {deg: 53, min: 46, sec: 44.796925, westOrSouth: false}, 
+//                                              lon: {deg:  3, min:  2, sec: 25.637665, westOrSouth: true}, 
+//                                              elevation: 64.940})));
 
-// var map = Module.nextOSExplorerMap(en, 0);
+// var gridRef = Module.gridRefFromOSGB36EastingNorthing(en, true, 100);
+// var mapIndex = Module.OSExplorerMapNextIndex(en, 0);
 
 // UTF8 = { dec: function(s) { return decodeURIComponent(escape(s)); } };
-// var mapName = UTF8.dec(Module.OSExplorerMapNameForIndex(map));
+// var mapName = UTF8.dec(Module.OSExplorerMapNameUTF8ForIndex(mapIndex));
 
 #endif
