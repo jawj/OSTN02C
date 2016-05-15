@@ -584,24 +584,22 @@ EMSCRIPTEN_BINDINGS(ostn02c) {
 }
 
 
-// emscripten build commands
-
-// development: emcc -x c++ OSTN02/*.c --bind --std=c++11 -DUSE_EMBIND -lm -Wall -g1 -o emscripten-build/ostn02c.js
-// production:  emcc -x c++ OSTN02/*.c --bind --std=c++11 -DUSE_EMBIND -lm -Wall -O2 -o emscripten-build/ostn02c.js
+// emscripten build command
+// emcc -x c++ OSTN02/*.c --std=c++11 --bind -DUSE_EMBIND -Wall -O2 --pre-js emscripten-build/pre.js --post-js emscripten-build/post.js -o emscripten-build/ostn02c.js
 
 
 // JavaScript example usage
 
-// var en = Module.OSGB36EastingNorthingFromETRS89EastingNorthing(
-//   Module.ETRS89EastingNorthingFromETRS89LatLon(
-//     Module.latLonDecimalFromLatLonDegMinSec({lat: {deg: 53, min: 46, sec: 44.796925, westOrSouth: false}, 
-//                                              lon: {deg:  3, min:  2, sec: 25.637665, westOrSouth: true}, 
-//                                              elevation: 64.940})));
+// en = OSTN02C.OSGB36EastingNorthingFromETRS89EastingNorthing(
+//   OSTN02C.ETRS89EastingNorthingFromETRS89LatLon(
+//     OSTN02C.latLonDecimalFromLatLonDegMinSec({lat: {deg: 53, min: 46, sec: 44.796925, westOrSouth: false}, 
+//                                               lon: {deg:  3, min:  2, sec: 25.637665, westOrSouth: true}, 
+//                                               elevation: 64.940})));
 
-// var gridRef = Module.gridRefFromOSGB36EastingNorthing(en, true, 100);
-// var mapIndex = Module.OSExplorerMapNextIndex(en, 0);
+// gridRef = OSTN02C.gridRefFromOSGB36EastingNorthing(en, true, 100);
+// mapIndex = OSTN02C.OSExplorerMapNextIndex(en, 0);
 
 // UTF8 = { dec: function(s) { return decodeURIComponent(escape(s)); } };
-// var mapName = UTF8.dec(Module.OSExplorerMapNameUTF8ForIndex(mapIndex));
+// mapName = UTF8.dec(OSTN02C.OSExplorerMapNameUTF8ForIndex(mapIndex));
 
 #endif
