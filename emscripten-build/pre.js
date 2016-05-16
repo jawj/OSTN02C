@@ -1,10 +1,10 @@
-var OSTN02C = (function() {
+var OSTN02CFactory = (function(stdin, stdout, stderr) {
 
 	Module = {
 		noExitRuntime: true,
 		noInitialRun:  true,
 		preRun: function() {
-		  FS.init(null, stdoutCallback, null);
+		  FS.init(stdin, stdout, stderr);
 		  ENV.OSTN02C_LINE_BUFFERED = 'Y';
 		}
 	};
