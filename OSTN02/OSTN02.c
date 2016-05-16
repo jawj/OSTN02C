@@ -108,7 +108,7 @@ DBL gridConvergenceDegreesFromEastingNorthing(const EastingNorthing en, const El
   return oneEightyOverPi * cRads;
 }
 
-int nextOSExplorerMap(EastingNorthing en, int prevMap) {
+int nextOSExplorerMap(EastingNorthing en, int prevMap) {  // start with prevMap = -1
   for (int i = prevMap + 1, len = LENGTH_OF(OSExplorerMaps); i < len; i ++) {
     OSMap map = OSExplorerMaps[i];
     if (   en.e >= (DBL) map.emin 

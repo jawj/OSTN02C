@@ -8,14 +8,24 @@ emcc -x c++ OSTN02/*.c --std=c++11 --bind -DUSE_EMBIND -Wall -O2 \
 
 # JavaScript example usage
 
-en = OSTN02C.OSGB36EastingNorthingFromETRS89EastingNorthing(
+var en = OSTN02C.OSGB36EastingNorthingFromETRS89EastingNorthing(
   OSTN02C.ETRS89EastingNorthingFromETRS89LatLon(
     OSTN02C.latLonDecimalFromLatLonDegMinSec({lat: {deg: 53, min: 46, sec: 44.796925, westOrSouth: false}, 
                                               lon: {deg:  3, min:  2, sec: 25.637665, westOrSouth: true}, 
                                               elevation: 64.940})));
 
-gridRef = OSTN02C.gridRefFromOSGB36EastingNorthing(en, true, 100);
-mapIndex = OSTN02C.OSExplorerMapNextIndex(en, 0);
+var gridRef = OSTN02C.gridRefFromOSGB36EastingNorthing(en, true, 100);
+var tetrad  = OSTN02C.tetradFromOSGB36EastingNorthing(en);
 
-UTF8 = { decode: function(s) { return decodeURIComponent(escape(s)); } };
-mapName = UTF8.decode(OSTN02C.OSExplorerMapNameUTF8ForIndex(mapIndex));
+console.log(en, gridRef, tetrad);
+
+
+var UTF8 = { decode: function(s) { return decodeURIComponent(escape(s)); } };
+
+var mapIndex = -1;
+while ((mapIndex = OSTN02C.OSExplorerMapNextIndex(en, mapIndex)) != -1) {
+  var map      = OSTN02C.OSExplorerMapDataForIndex(mapIndex);
+  var mapName  = UTF8.decode(OSTN02C.OSExplorerMapNameUTF8ForIndex(mapIndex));
+  var mapSheet = UTF8.decode(OSTN02C.OSExplorerMapSheetUTF8ForIndex(mapIndex));
+  console.log(map.num, mapName, sheetName || "(single sheet)")
+}
