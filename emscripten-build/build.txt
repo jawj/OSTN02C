@@ -14,11 +14,15 @@ var en = OSTN02C.OSGB36EastingNorthingFromETRS89EastingNorthing(
                                               lon: {deg:  3, min:  2, sec: 25.637665, westOrSouth: true}, 
                                               elevation: 64.940})));
 
-var gridRef = OSTN02C.gridRefFromOSGB36EastingNorthing(en, true, 100);
-var tetrad  = OSTN02C.tetradFromOSGB36EastingNorthing(en);
+var gridRef = OSTN02C.gridRefFromOSGB36EastingNorthing(en, true, 10);
+console.log(en, gridRef);
 
-console.log(en, gridRef, tetrad);
 
+var en = OSTN02C.OSGB36EastingNorthingFromETRS89EastingNorthing(
+  OSTN02C.ETRS89EastingNorthingFromETRS89LatLon(
+    OSTN02C.latLonDecimalFromLatLonDegMinSec({lat: {deg: 54, min:  0, sec: 0, westOrSouth: false}, 
+                                              lon: {deg:  1, min: 30, sec: 0, westOrSouth: true}, 
+                                              elevation: 100})));
 
 var UTF8 = { decode: function(s) { return decodeURIComponent(escape(s)); } };
 
@@ -27,5 +31,5 @@ while ((mapIndex = OSTN02C.OSExplorerMapNextIndex(en, mapIndex)) != -1) {
   var map      = OSTN02C.OSExplorerMapDataForIndex(mapIndex);
   var mapName  = UTF8.decode(OSTN02C.OSExplorerMapNameUTF8ForIndex(mapIndex));
   var mapSheet = UTF8.decode(OSTN02C.OSExplorerMapSheetUTF8ForIndex(mapIndex));
-  console.log(map.num, mapName, sheetName || "(single sheet)")
+  console.log(map.num + ': ' + mapName + (mapSheet ? ' — Sheet: ' + mapSheet : ''));
 }
