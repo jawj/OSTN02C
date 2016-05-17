@@ -1,6 +1,8 @@
 *This is a C implementation of Ordnance Survey's definitive transformation model "OSTN02":http://www.ordnancesurvey.co.uk/oswebsite/gps/osnetfreeservices/about/surveying_osnet.html#6 and Geoid model "OSGM02":http://www.ordnancesurvey.co.uk/oswebsite/gps/osnetfreeservices/about/surveying_osnet.html#7, with tests.*
 
-It's intended to power a future update of my "GridPoint GB":http://mackerron.com/gridpointgb/ iOS app. It also includes a simple command-line tool. 
+It's intended to power a future update of my "GridPoint GB":http://mackerron.com/gridpointgb/ iOS app. It includes a simple command-line tool. 
+
+It also builds with "emscripten":http://kripken.github.io/emscripten-site/ and now comes with (as yet undocumented) "embind":http://kripken.github.io/emscripten-site/docs/porting/connecting_cpp_and_javascript/embind.html bindings, so you can use it from JavaScript too.
 
 
 h2. Licence
@@ -8,28 +10,11 @@ h2. Licence
 I'm releasing the code under the "MIT licence":http://www.opensource.org/licenses/mit-license.php (note, however, that OSTN02 and OSGM02 are trademarks of Ordnance Survey, and that the OSTN02 and OSGM02 data are © Crown copyright 2002. All rights reserved).
 
 
-h2. Installing the command-line tool
-
-h3. For Mac
-
-You can "download a binary for Mac OS X 10.4+, Intel 32/64-bit":http://jawj.github.com/OSTN02C/ostn02c.bz2. You'll need to uncompress, @chmod +x@ and @mv@ this somewhere appropriate.
-
-Alternatively, use "Homebrew":http://mxcl.github.com/homebrew/. In Terminal.app, type:
-
-@brew install http://jawj.github.com/OSTN02C/ostn02c.rb@
-
-h3. From source
-
-Otherwise, with the relevant build tools installed -- Xcode on the Mac, @sudo aptitude install build-essential@ on Debian/Ubuntu, etc. -- download or clone the source to your machine, and compile like so:
-
-@gcc OSTN02/*.c -std=gnu99 -D_GNU_SOURCE -lm -Wall -O2 -o ostn02c@
-
-To compile with long double precision arithmetic (not recommended, since the outputs are the same to within 1mm), add the option @-DUSE_LONG@. To suppress fancy formatting (bold/inverse/underlined) in the tool's output, add the option @-DUNFANCY_OUTPUT@.
-
-
 h2. Using the command-line tool
 
-The command-line tool works like this:
+*Thanks to "emscripten":http://kripken.github.io/emscripten-site/ you can now "use the command line tool here in your browser":https://jawj.github.io/OSTN02C/fakeshell.html.*
+
+It works like this:
 
 bc.. dyn204:OSTN02 George$ ostn02c help
 
@@ -143,6 +128,27 @@ OSGB36 computed   E:       0.000,   N:       0.000, elevation:    0.000 (Outside
 
 92 tests; 92 passed; 0 failed
 
+
+
+
+h2. Installing the native command-line tool
+
+h3. For Mac
+
+You can "download a binary for Mac OS X 10.4+, Intel 32/64-bit":https://jawj.github.io/OSTN02C/ostn02c.bz2. You'll need to uncompress, @chmod +x@ and @mv@ this somewhere appropriate.
+
+Alternatively, use "Homebrew":http://mxcl.github.com/homebrew/. In Terminal.app, type:
+
+@brew install https://jawj.github.io/OSTN02C/ostn02c.rb@
+
+
+h3. From source
+
+Otherwise, with the relevant build tools installed -- Xcode on the Mac, @sudo aptitude install build-essential@ on Debian/Ubuntu, etc. -- download or clone the source to your machine, and compile like so:
+
+@gcc OSTN02/*.c -std=gnu99 -D_GNU_SOURCE -lm -Wall -O2 -o ostn02c@
+
+To compile with long double precision arithmetic (not recommended, since the outputs are the same to within 1mm), add the option @-DUSE_LONG@. To suppress fancy formatting (bold/inverse/underlined) in the tool's output, add the option @-DUNFANCY_OUTPUT@.
 
 
 h3. Output buffering
