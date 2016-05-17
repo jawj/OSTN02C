@@ -1,7 +1,6 @@
 <!doctype html>
 <html>
 <head>
-<script src="ostn02c.js"></script>
 <style>
   html {
     margin: 0;
@@ -60,116 +59,7 @@
   <div id="prompt">&gt;</div>
 </form>
 <div id="output"></div>
-
-<script>
-  if (! window.scrollTo) window.scrollTo = window.scroll;
-
-  var outNode = document.getElementById('output');
-  var parseNode = document.createElement('div');
-  var inText = document.getElementById('input');
-  var inForm = document.getElementById('inputForm');
-  
-  function printHTML(html) {
-    var child;
-    parseNode.innerHTML = html;
-    while ((child = parseNode.firstChild)) outNode.appendChild(parseNode.removeChild(child));
-    setTimeout(function() { window.scrollTo(0, 10e8); }, 0);
-  }
-
-  var codeMap = {
-    '1': 'bold',
-    '7': 'inverse',
-    '4': 'uline'
-  }
-  var stdoutStr = ''
-
-  function stdoutCallback(chr) {
-    if (chr != null) stdoutStr += String.fromCharCode(chr);
-    if (chr == 10 || chr == null) {
-      var openCodes = 0;
-      var html = stdoutStr.replace(/\033\[(1|22|7|27|4|24)m/g, function(_, match) {
-        var cls = codeMap[match];
-        if (cls) {
-          openCodes++;
-          return '<span class="' + cls + '">';
-        } else {
-          openCodes--;
-          return '</span>';
-        }
-      });
-      if (openCodes > 0) return;
-
-      printHTML(html);
-      stdoutStr = '';
-    }
-  }
-  
-  var OSTN02C = OSTN02CFactory(null, stdoutCallback, null);
-
-  inForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    var command = inText.value;
-    printHTML('> ' + command + '\n');
-    commandHistory.push(command);
-    var args = command.match(/[\S+]+/g);
-    var exe = args.shift();
-    if (exe == 'clear') outNode.innerHTML = '';
-    else if (exe == 'ostn02c') OSTN02C.callMain(args);
-    else printHTML(exe + ': command not found\n\n');
-    inText.value = '';    
-  });
-
-  completions = [
-    'ostn02c help',
-    'ostn02c test',
-    'ostn02c list-geoids',
-    'ostn02c gps-to-grid ',
-    'ostn02c grid-to-gps ',
-    'clear'
-  ];
-  
-  var commandHistory = [''];
-  
-  inText.addEventListener('keydown', function(e) {  // autocomplete and history
-    var kc = e.keyCode;
-
-    if (kc == 38 || kc == 40) {  // 38 = up, 40 = down
-      e.preventDefault();
-      if (kc == 38) commandHistory.unshift(commandHistory.pop());
-      else commandHistory.push(commandHistory.shift());
-      inText.value = commandHistory[0];
-
-    } else if (kc == 9) {  // 9 = tab
-      e.preventDefault();
-      var matches = [];
-      for (var i = 0, len = completions.length; i < len; i ++) {
-        completion = completions[i];
-        if (completion.substring(0, inText.value.length) == inText.value) matches.push(completion);
-      }
-
-      if (matches.length == 1) inText.value = matches[0];
-      else if (matches.length > 1) {
-        var common = '';
-        outer:
-        for (var charPos = 0; true; charPos++) {
-          for (var i = 1, len = matches.length; i < len; i ++) if (matches[0].charAt(charPos) != matches[i].charAt(charPos)) break outer;
-          common += matches[0].charAt(charPos);
-        }
-        if (inText.value == common) {
-          printHTML(matches.join('     ') + '\n\n');
-        } else {
-          inText.value = common;
-        }
-      }
-    }
-  });
-
-  window.addEventListener('load', function () { 
-    inText.focus();
-    printHTML('Type <span class="bold">ostn02c help</span> below to get started.\n');
-    printHTML('This fake shell supports [Tab] completion, [Up] + [Down] command history, and two commands (<span class="bold">ostn02c</span> and <span class="bold">clear</span>).\n\n'); 
-  });
-
-</script>
+<script src="ostn02c.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
