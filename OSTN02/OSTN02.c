@@ -108,6 +108,11 @@ DBL gridConvergenceDegreesFromEastingNorthing(const EastingNorthing en, const El
   return oneEightyOverPi * cRads;
 }
 
+DBL gridConvergenceDegreesFromOSGB36EastingNorthing(const EastingNorthing en) {
+  return gridConvergenceDegreesFromEastingNorthing(en, Airy1830Ellipsoid, NationalGridProj);
+}
+
+
 int nextOSExplorerMap(EastingNorthing en, int prevMap) {  // start with prevMap = -1
   for (int i = prevMap + 1, len = LENGTH_OF(OSExplorerMaps); i < len; i ++) {
     OSMap map = OSExplorerMaps[i];
@@ -366,22 +371,29 @@ EastingNorthing ETRS89EastingNorthingFromOSGB36EastingNorthing(const EastingNort
   return shifted;
 }
 
-char *gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const bool spaces, const int res) { 
-  // res is expressed in metres: 1/10/100 -> 3/4/5-digit easting and northing
-  const int  eRound = (int) round(en.e / (DBL) res) * res;
-  const int  nRound = (int) round(en.n / (DBL) res) * res;
-  const int  firstEIndex  = eRound / 500000;
-  const int  firstNIndex  = nRound / 500000;
-  const int  secondEIndex = (eRound % 500000) / 100000;
-  const int  secondNIndex = (nRound % 500000) / 100000;
-  const char sq0 = firstLetters[firstNIndex][firstEIndex];
-  const char sq1 = secondLetters[secondNIndex][secondEIndex];
-  const int  e   = eRound - (500000 * firstEIndex) - (100000 * secondEIndex);
-  const int  n   = nRound - (500000 * firstNIndex) - (100000 * secondNIndex);
+GridRefComponents gridRefComponentsFromOSGB36EastingNorthing(const EastingNorthing en, const int res) {
+  // res is expressed in metres: 1/10/100/1000 -> components to use in generating 5/4/3/2-digit eastings and northings
+  GridRefComponents grc;
+  const int eRound = (int) round(en.e / (DBL)res) * res;
+  const int nRound = (int) round(en.n / (DBL)res) * res;
+  const int firstEIndex  = eRound / 500000;
+  const int firstNIndex  = nRound / 500000;
+  const int secondEIndex = (eRound % 500000) / 100000;
+  const int secondNIndex = (nRound % 500000) / 100000;
+  grc.letters[0] = firstLetters[firstNIndex][firstEIndex];
+  grc.letters[1] = secondLetters[secondNIndex][secondEIndex];
+  grc.e = eRound - (500000 * firstEIndex) - (100000 * secondEIndex);
+  grc.n = nRound - (500000 * firstNIndex) - (100000 * secondNIndex);
+  grc.resolution = res;
+  return grc;
+}
+
+char *gridRefFromGridRefComponents(const GridRefComponents grc, const bool spaces) {
   char *ref, *fmtStr;
-  const int digits = res == 100 ? 3 : (res == 10 ? 4 : 5);
+  const int res = grc.resolution;
+  const int digits = res == 1000 ? 2 : res == 100 ? 3 : res == 10 ? 4 : 5;
   ASPRINTF_OR_DIE(&fmtStr, "%%c%%c%%s%%0%dd%%s%%0%dd", digits, digits);
-  ASPRINTF_OR_DIE(&ref, fmtStr, sq0, sq1, (spaces ? " " : ""), e / res, (spaces ? " " : ""), n / res);
+  ASPRINTF_OR_DIE(&ref, fmtStr, grc.letters[0], grc.letters[1], (spaces ? " " : ""), grc.e / res, (spaces ? " " : ""), grc.n / res);
   free(fmtStr);
   return ref;
 }
@@ -408,13 +420,38 @@ char *tetradFromOSGB36EastingNorthing(const EastingNorthing en) {
   return tetrad;
 }
 
+DegMinSec degMinSecFromDecimal(DBL dec) {
+  DegMinSec dms;
+  dms.westOrSouth = dec < L(0.0) ? true : false;
+  dec = ABS(dec);
+  dms.deg = FLOOR(dec);
+  dec -= dms.deg;
+  dms.min = FLOOR(L(60.0) * dec);
+  dec -= dms.min / L(60.0);
+  dms.sec = dec * L(3600.0);
+  return dms;
+}
+
+DBL decimalFromDegMinSec(DegMinSec dms) {
+  return (dms.westOrSouth ? L(-1.0) : L(1.0)) * (((DBL) dms.deg) + ((DBL) dms.min) / L(60.0) + dms.sec / L(3600.0));
+}
+
 LatLonDecimal latLonDecimalFromLatLonDegMinSec(const LatLonDegMinSec dms) {
   LatLonDecimal dec;
-  dec.lat = (dms.lat.westOrSouth ? L(-1.0) : L(1.0)) * (((DBL) dms.lat.deg) + ((DBL) dms.lat.min) / L(60.0) + dms.lat.sec / L(3600.0));
-  dec.lon = (dms.lon.westOrSouth ? L(-1.0) : L(1.0)) * (((DBL) dms.lon.deg) + ((DBL) dms.lon.min) / L(60.0) + dms.lon.sec / L(3600.0));
+  dec.lat = decimalFromDegMinSec(dms.lat);
+  dec.lon = decimalFromDegMinSec(dms.lon);
   dec.elevation = dms.elevation;
-  dec.geoid = 0;
+  dec.geoid = dms.geoid;
   return dec;
+}
+
+LatLonDegMinSec latLonDegMinSecFromLatLonDecimal(const LatLonDecimal dec) {
+  LatLonDegMinSec dms;
+  dms.lat = degMinSecFromDecimal(dec.lat);
+  dms.lon = degMinSecFromDecimal(dec.lon);
+  dms.elevation = dec.elevation;
+  dms.geoid = dec.geoid;
+  return dms;
 }
 
 bool test(const bool noisily) {
