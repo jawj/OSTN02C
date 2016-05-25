@@ -112,6 +112,9 @@ DBL gridConvergenceDegreesFromOSGB36EastingNorthing(const EastingNorthing en) {
   return gridConvergenceDegreesFromEastingNorthing(en, Airy1830Ellipsoid, NationalGridProj);
 }
 
+DBL gridConvergenceDegreesFromETRS89LatLon(const LatLonDecimal latLon) {
+  return gridConvergenceDegreesFromLatLon(latLon, GRS80Ellipsoid, NationalGridProj);
+}
 
 int nextOSExplorerMap(EastingNorthing en, int prevMap) {  // start with prevMap = -1
   for (int i = prevMap + 1, len = LENGTH_OF(OSExplorerMaps); i < len; i ++) {
