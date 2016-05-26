@@ -38,8 +38,8 @@ typedef struct {
 } OSMap;
 
 typedef struct {
-  unsigned char deg;  // range 0 - 180 (S or W)
-  unsigned char min;  // range 0 - 60
+  int deg;  // usual range 0 - 180 (S or W)
+  int min;  // usual range 0 - 60
   DBL sec;
   bool westOrSouth;
 } DegMinSec;

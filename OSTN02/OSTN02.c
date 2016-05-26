@@ -16,6 +16,7 @@
 #include "geoids.data"
 #include "gridRef.data"
 #include "testCoords.data"
+#include "testConvergences.data"
 #include "explorerMaps.data"
 
 #define LENGTH_OF(x) (sizeof (x) / sizeof *(x))
@@ -67,45 +68,63 @@ DBL gridConvergenceDegreesFromLatLon(const LatLonDecimal latLon, const Ellipsoid
   return oneEightyOverPi * cRads;
 }
 
-
 DBL gridConvergenceDegreesFromEastingNorthing(const EastingNorthing en, const Ellipsoid ellipsoid, const MapProjection projection) {
+  CDBL n0   = projection.trueOriginEastingNorthing.n;
+  CDBL e0   = projection.trueOriginEastingNorthing.e;
+  CDBL f0   = projection.centralMeridianScale;
+  CDBL af0  = ellipsoid.semiMajorAxis * f0;
+  CDBL bf0  = ellipsoid.semiMinorAxis * f0;
   
-  LatLonDecimal latLon = latLonFromEastingNorthing(en, ellipsoid, projection);
-  CDBL phi     = piOver180 * latLon.lat;
-  CDBL lambda  = piOver180 * latLon.lon;
-  CDBL lambda0 = piOver180 * projection.trueOriginLatLon.lon;
-  
-  CDBL a   = ellipsoid.semiMajorAxis;
-  CDBL b   = ellipsoid.semiMinorAxis;
-  CDBL f0  = projection.centralMeridianScale;
-  
-  CDBL deltaLambda  = lambda - lambda0;
-  CDBL deltaLambda2 = deltaLambda  * deltaLambda;
-  CDBL deltaLambda3 = deltaLambda2 * deltaLambda;
-  CDBL deltaLambda5 = deltaLambda3 * deltaLambda2;
-  
-  CDBL sinPhi   = SIN(phi);
-  CDBL sinPhi2  = sinPhi * sinPhi;
-  CDBL cosPhi   = COS(phi);
-  CDBL cosPhi2  = cosPhi * cosPhi;
-  CDBL cosPhi4  = cosPhi2 * cosPhi2;
-  CDBL tanPhi   = TAN(phi);
-  CDBL tanPhi2  = tanPhi * tanPhi;
-  
-  CDBL af0  = a * f0;
   CDBL af02 = af0 * af0;
-  CDBL bf0  = b * f0;
   CDBL bf02 = bf0 * bf0;
   
-  CDBL e2    = (af02 - bf02) / af02;
-  CDBL nu    = af0 / SQRT(L(1.0) - (e2 * sinPhi2));
-  CDBL rho   = (nu * (L(1.0) - e2)) / (L(1.0) - (e2 * sinPhi2));
-  CDBL eta2  = (nu / rho) - L(1.0);
-  CDBL xiv   = ((sinPhi * cosPhi2) / L(3.0))  * (L(1.0) + L(3.0) * eta2 + L(2.0) * eta2 * eta2);
-  CDBL xv    = ((sinPhi * cosPhi4) / L(15.0)) * (L(2.0) - tanPhi2);
+  CDBL n    = (af0 - bf0) / (af0 + bf0);
+  CDBL n2   = n * n;
+  CDBL n3   = n2 * n;
+  CDBL e2   = (af02 - bf02) / af02;
   
-  CDBL cRads = (deltaLambda * sinPhi) + (deltaLambda3 * xiv) + (deltaLambda5 * xv);
-  return oneEightyOverPi * cRads;
+  CDBL phi0 = piOver180 * projection.trueOriginLatLon.lat;
+  DBL phi = (en.n - n0) / af0 + phi0;
+  
+  while (true) {
+    DBL deltaPhi = phi - phi0;
+    DBL sumPhi = phi + phi0;
+    DBL j3 = (L(1.0) + n + L(5.0) / L(4.0) * n2 + L(5.0) / L(4.0) * n3) * deltaPhi;
+    DBL j4 = (L(3.0) * n + L(3.0) * n2 + L(21.0)/L(8.0) * n3) * SIN(deltaPhi) * COS(sumPhi);
+    DBL j5 = (L(15.0) / L(8.0) * n2 + L(15.0) / L(8.0) * n3) * SIN(L(2.0) * deltaPhi) * COS(L(2.0) * sumPhi);
+    DBL j6 = L(35.0) / L(24.0) * n3 * SIN(L(3.0) * deltaPhi) * COS(L(3.0) * sumPhi);
+    DBL M = bf0 * (j3 - j4 + j5 - j6);
+    if (ABS(en.n - n0 - M) < L(0.001)) break;
+    phi += (en.n - n0 - M) / af0;
+  };
+  DegMinSec dms = degMinSecFromDecimal(phi * oneEightyOverPi);
+  
+  CDBL sinPhi = SIN(phi);
+  CDBL sinPhi2 = sinPhi * sinPhi;
+  CDBL nu = af0 / SQRT(L(1.0) - e2 * sinPhi2);
+  CDBL rho = nu * (L(1.0) - e2) / (L(1.0) - e2 * sinPhi2);
+  CDBL eta2 = nu / rho - L(1.0);
+  CDBL eta4 = eta2 * eta2;
+  
+  CDBL nu2 = nu * nu;
+  CDBL nu3 = nu2 * nu;
+  CDBL nu5 = nu3 * nu2;
+  CDBL tanPhi = TAN(phi);
+  CDBL tanPhi2 = tanPhi * tanPhi;
+  CDBL tanPhi4 = tanPhi2 * tanPhi2;
+  
+  CDBL y = en.e - e0;
+  CDBL y3 = y * y * y;
+  CDBL y5 = y3 * y * y;
+  
+  CDBL j31 = tanPhi / nu;
+  CDBL j41 = tanPhi / (L(3.0) * nu3) * (L(1.0) + tanPhi2 - eta2 - L(2.0) * eta4);
+  CDBL j51 = tanPhi / (L(15.0) * nu5) * (L(2.0) + L(5.0) * tanPhi2 + L(3.0) * tanPhi4);
+  
+  CDBL c = y * j31 - y3 * j41 + y5 * j51;
+  
+  dms = degMinSecFromDecimal(oneEightyOverPi * c);
+  return oneEightyOverPi * c;
 }
 
 DBL gridConvergenceDegreesFromOSGB36EastingNorthing(const EastingNorthing en) {
@@ -484,11 +503,15 @@ bool test(const bool noisily) {
   
   // check test conversions against known good results
   
+  int len;
+  
+  // OSTN02 conversions
+  
   LatLonDecimal actualLatLon, computedLatLon;
   EastingNorthing actualEN, computedEN;
   char *actualLatLonStr, *computedLatLonStr, *actualENStr, *computedENStr;
   
-  const int len = LENGTH_OF(testETRSCoords);
+  len = LENGTH_OF(testETRSCoords);
   for (int i = 0; i < len; i ++) {
     
     // actual coords
@@ -530,19 +553,37 @@ bool test(const bool noisily) {
     free(computedENStr);
   }
   
-  /*
-  EastingNorthing testEN;
-  testEN.e = 651409.903;
-  testEN.n = 313177.270;
-  printf("Convergence: %13.11lf \n\n", gridConvergenceDegreesFromEastingNorthing(testEN, Airy1830Ellipsoid, NationalGridProj));
-  */
+  // convergences by Easting/Northing
   
-  /*
-  LatLonDecimal testLL;
-  testLL.lat = 51.0;
-  testLL.lon = -2.0;
-  printf("Convergence: %13.11lf \n\n", gridConvergenceDegreesFromLatLon(testLL, Airy1830Ellipsoid, NationalGridProj));
-  */
+  EastingNorthing convergenceEN;
+  DegMinSec actualC, computedC;
+  char *actualCStr, *computedCStr;
+  
+  len = LENGTH_OF(testConvergenceOSGB36Coords);
+  for (int i = 0; i < len; i ++) {
+    
+    // actual coords
+    
+    convergenceEN = testConvergenceOSGB36Coords[i];
+    actualC = testConvergencesFromOSGB36Coords[i];
+    ASPRINTF_OR_DIE(&actualCStr, "%i°%02i'%.4f %c", actualC.deg, actualC.min, actualC.sec, actualC.westOrSouth ? 'W' : 'E');
+    if (noisily) printf("Convergence actual   %s\n", actualCStr);
+    
+    // computed coords
+    
+    computedC = degMinSecFromDecimal(gridConvergenceDegreesFromOSGB36EastingNorthing(convergenceEN));
+    ASPRINTF_OR_DIE(&computedCStr, "%i°%02i'%.4f %c", computedC.deg, computedC.min, computedC.sec, computedC.westOrSouth ? 'W' : 'E');
+    
+    testPassed = strcmp(actualCStr, computedCStr) == 0;
+    numTested ++;
+    if (testPassed) numPassed ++;
+    if (noisily) printf("%sConvergence computed %s\n\n%s", (testPassed ? "" : BOLD), computedCStr, (testPassed ? "" : UNBOLD));
+    
+    free(actualCStr);
+    free(computedCStr);
+  }
+  
+  // TODO: test gridConvergenceDegreesFromLatLon() too
   
   bool allPassed = numTested == numPassed;
   if (noisily) printf("%i tests; %i passed; %s%i failed%s\n\n", numTested, numPassed, (allPassed ? "" : BOLD), numTested - numPassed, (allPassed ? "" : UNBOLD));
@@ -621,6 +662,8 @@ EMSCRIPTEN_BINDINGS(ostn02c) {
   emscripten::function("OSExplorerMapDataForIndex",                      &OSExplorerMapDataForIndex);
   emscripten::function("OSExplorerMapNameUTF8ForIndex",                  &OSExplorerMapNameUTF8ForIndex);
   emscripten::function("OSExplorerMapSheetUTF8ForIndex",                 &OSExplorerMapSheetUTF8ForIndex);
+  
+  // TODO: export some additional functions  
 }
 
 #endif

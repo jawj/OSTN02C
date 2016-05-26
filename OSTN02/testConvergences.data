@@ -1,0 +1,10 @@
+static const EastingNorthing testConvergenceOSGB36Coords[] = {
+  // From OS (1983) Transverse Mercator Projection: Constants, Formulae & Methods
+  {.e = L(626238.249), .n = L(302646.415), .elevation = L(0.0), .geoid = 0},  // Framingham
+  {.e = L(651409.903), .n = L(313177.271), .elevation = L(0.0), .geoid = 0},  // Caister Water Twr
+};
+
+static const DegMinSec testConvergencesFromOSGB36Coords[] = {
+  {.deg = 2, .min = 39, .sec = L(10.4692), .westOrSouth = false},
+  {.deg = 2, .min = 57, .sec = L(26.5562), .westOrSouth = false}
+};

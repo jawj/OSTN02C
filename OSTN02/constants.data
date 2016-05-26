@@ -6,7 +6,7 @@ const Ellipsoid GRS80Ellipsoid = {  // WGS84, ITRS, ETRS89
 
 const Ellipsoid Airy1830Ellipsoid = {  // OSGB36, National Grid
   .semiMajorAxis = L(6377563.396),
-  .semiMinorAxis = L(6356256.909)
+  .semiMinorAxis = L(6356256.910)  // or 6356256.909 in some sources
 };
 
 const Ellipsoid Airy1830ModifiedEllipsoid = {  // Ireland 65, Irish National Grid
