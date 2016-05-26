@@ -1,10 +1,33 @@
 static const EastingNorthing testConvergenceOSGB36Coords[] = {
   // From OS (1983) Transverse Mercator Projection: Constants, Formulae & Methods
-  {.e = L(626238.249), .n = L(302646.415), .elevation = L(0.0), .geoid = 0},  // Framingham
-  {.e = L(651409.903), .n = L(313177.271), .elevation = L(0.0), .geoid = 0},  // Caister Water Twr
+  {.e = L(626238.249), .n = L(302646.415)},  // Framingham
+  {.e = L(651409.903), .n = L(313177.271)},  // Caister Water Twr
+
+  // From OS maps
+  {.e = L(135000.000), .n = L(903000.000)},   // SW corner of Landranger / West Lewis & North Harris
+  {.e = L(425000.000), .n = L(365000.000)},   // Centre of Explorer / Peak District
+  {.e = L(532000.000), .n = L(111500.000)}    // Centre of Explorer / Peak District
 };
 
 static const DegMinSec testConvergencesFromOSGB36Coords[] = {
   {.deg = 2, .min = 39, .sec = L(10.4692), .westOrSouth = false},
-  {.deg = 2, .min = 57, .sec = L(26.5562), .westOrSouth = false}
+  {.deg = 2, .min = 57, .sec = L(26.5562), .westOrSouth = false},
+
+  // From https://www.ordnancesurvey.co.uk/docs/support/projection-and-transformation-calculations.xls
+  {.deg = 3, .min = 47, .sec = L(49.3742), .westOrSouth = true},   // map itself lists 3°48 E
+  {.deg = 0, .min = 17, .sec = L(58.2082), .westOrSouth = false},  // map itself lists 0°18 W
+  {.deg = 1, .min = 27, .sec = L(23.3293), .westOrSouth = false}   // map itself lists 1°27 W
+};
+
+static const LatLonDegMinSec testConvergenceLatLons[] = {
+  // From OS (1983) Transverse Mercator Projection: Constants, Formulae & Methods
+  {.lat = {.deg = 52, .min = 34, .sec =  L(26.8915), .westOrSouth = false},
+   .lon = {.deg =  1, .min = 20, .sec =  L(21.1080), .westOrSouth = false}},
+  {.lat = {.deg = 52, .min = 39, .sec =  L(27.2531), .westOrSouth = false},
+   .lon = {.deg =  1, .min = 43, .sec =  L( 4.5177), .westOrSouth = false}},
+};
+
+static const DegMinSec testConvergencesFromLatLons[] = {
+  {.deg = 2, .min = 39, .sec = L(10.4691), .westOrSouth = false},
+  {.deg = 2, .min = 57, .sec = L(26.5561), .westOrSouth = false}
 };

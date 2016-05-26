@@ -545,7 +545,7 @@ bool test(const bool noisily) {
     testPassed = strcmp(actualENStr, computedENStr) == 0;
     numTested ++;
     if (testPassed) numPassed ++;
-    if (noisily) printf("%sOSGB36 computed %s\n\n%s", (testPassed ? "" : BOLD), computedENStr, (testPassed ? "" : UNBOLD));
+    if (noisily) printf("%sOSGB36 computed %s%s\n\n", (testPassed ? "" : BOLD), computedENStr, (testPassed ? "" : UNBOLD));
     
     free(actualLatLonStr);
     free(computedLatLonStr);
@@ -567,7 +567,7 @@ bool test(const bool noisily) {
     convergenceEN = testConvergenceOSGB36Coords[i];
     actualC = testConvergencesFromOSGB36Coords[i];
     ASPRINTF_OR_DIE(&actualCStr, "%i°%02i'%.4f %c", actualC.deg, actualC.min, actualC.sec, actualC.westOrSouth ? 'W' : 'E');
-    if (noisily) printf("Convergence actual   %s\n", actualCStr);
+    if (noisily) printf("Convergence reference from E/N  %s\n", actualCStr);
     
     // computed coords
     
@@ -577,13 +577,39 @@ bool test(const bool noisily) {
     testPassed = strcmp(actualCStr, computedCStr) == 0;
     numTested ++;
     if (testPassed) numPassed ++;
-    if (noisily) printf("%sConvergence computed %s\n\n%s", (testPassed ? "" : BOLD), computedCStr, (testPassed ? "" : UNBOLD));
+    if (noisily) printf("%sConvergence computed from E/N   %s%s\n\n", (testPassed ? "" : BOLD), computedCStr, (testPassed ? "" : UNBOLD));
     
     free(actualCStr);
     free(computedCStr);
   }
   
-  // TODO: test gridConvergenceDegreesFromLatLon() too
+  // convergences by lat/lon
+  
+  LatLonDecimal convergenceLatLon;
+  
+  len = LENGTH_OF(testConvergenceLatLons);
+  for (int i = 0; i < len; i ++) {
+    
+    // actual coords
+    
+    convergenceLatLon = latLonDecimalFromLatLonDegMinSec(testConvergenceLatLons[i]);
+    actualC = testConvergencesFromLatLons[i];
+    ASPRINTF_OR_DIE(&actualCStr, "%i°%02i'%.4f %c", actualC.deg, actualC.min, actualC.sec, actualC.westOrSouth ? 'W' : 'E');
+    if (noisily) printf("Convergence reference from lat/lon  %s\n", actualCStr);
+    
+    // computed coords
+    
+    computedC = degMinSecFromDecimal(gridConvergenceDegreesFromLatLon(convergenceLatLon, Airy1830Ellipsoid, NationalGridProj));
+    ASPRINTF_OR_DIE(&computedCStr, "%i°%02i'%.4f %c", computedC.deg, computedC.min, computedC.sec, computedC.westOrSouth ? 'W' : 'E');
+    
+    testPassed = strcmp(actualCStr, computedCStr) == 0;
+    numTested ++;
+    if (testPassed) numPassed ++;
+    if (noisily) printf("%sConvergence computed from lat/lon   %s\n\n%s", (testPassed ? "" : BOLD), computedCStr, (testPassed ? "" : UNBOLD));
+    
+    free(actualCStr);
+    free(computedCStr);
+  }
   
   bool allPassed = numTested == numPassed;
   if (noisily) printf("%i tests; %i passed; %s%i failed%s\n\n", numTested, numPassed, (allPassed ? "" : BOLD), numTested - numPassed, (allPassed ? "" : UNBOLD));
@@ -663,7 +689,7 @@ EMSCRIPTEN_BINDINGS(ostn02c) {
   emscripten::function("OSExplorerMapNameUTF8ForIndex",                  &OSExplorerMapNameUTF8ForIndex);
   emscripten::function("OSExplorerMapSheetUTF8ForIndex",                 &OSExplorerMapSheetUTF8ForIndex);
   
-  // TODO: export some additional functions  
+  // TODO: export some additional functions
 }
 
 #endif
