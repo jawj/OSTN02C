@@ -1,4 +1,4 @@
-static const char *OSGB36GeoidNames[] = {
+const char *OSGB36GeoidNames[] = {
   "N/A",
   "Newlyn",
   "St Marys",
@@ -16,7 +16,7 @@ static const char *OSGB36GeoidNames[] = {
   "Belfast"
 };
 
-static const char *OSGB36GeoidRegions[] = {
+const char *OSGB36GeoidRegions[] = {
   "Outside model boundary",
   "UK mainland",
   "Scilly Isles",

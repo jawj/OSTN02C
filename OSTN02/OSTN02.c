@@ -395,7 +395,8 @@ EastingNorthing ETRS89EastingNorthingFromOSGB36EastingNorthing(const EastingNort
 
 GridRefComponents gridRefComponentsFromOSGB36EastingNorthing(const EastingNorthing en, const int res) {
   // res is expressed in metres: 1/10/100/1000 -> components to use in generating 5/4/3/2-digit eastings and northings
-  GridRefComponents grc;
+  GridRefComponents grc = {0};
+  if (en.geoid == 0) return grc;
   const int eRound = (int) round(en.e / (DBL)res) * res;
   const int nRound = (int) round(en.n / (DBL)res) * res;
   const int firstEIndex  = eRound / 500000;
