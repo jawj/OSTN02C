@@ -97,7 +97,6 @@ DBL gridConvergenceDegreesFromEastingNorthing(const EastingNorthing en, const El
     if (ABS(en.n - n0 - M) < L(0.001)) break;
     phi += (en.n - n0 - M) / af0;
   };
-  DegMinSec dms = degMinSecFromDecimal(phi * oneEightyOverPi);
   
   CDBL sinPhi = SIN(phi);
   CDBL sinPhi2 = sinPhi * sinPhi;
@@ -123,7 +122,6 @@ DBL gridConvergenceDegreesFromEastingNorthing(const EastingNorthing en, const El
   
   CDBL c = y * j31 - y3 * j41 + y5 * j51;
   
-  dms = degMinSecFromDecimal(oneEightyOverPi * c);
   return oneEightyOverPi * c;
 }
 
