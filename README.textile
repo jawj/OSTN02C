@@ -1,8 +1,10 @@
 *This is a C implementation of Ordnance Survey's definitive transformation model "OSTN02":http://www.ordnancesurvey.co.uk/oswebsite/gps/osnetfreeservices/about/surveying_osnet.html#6 and Geoid model "OSGM02":http://www.ordnancesurvey.co.uk/oswebsite/gps/osnetfreeservices/about/surveying_osnet.html#7, with tests.*
 
-It's intended to power a future update of my "GridPoint GB":http://mackerron.com/gridpointgb/ iOS app. It includes a simple command-line tool. 
+* It powers version 2 of my "GridPoint GB":http://mackerron.com/gridpointgb/ iOS app. 
 
-It also builds with "emscripten":http://kripken.github.io/emscripten-site/ and now comes with (as yet undocumented) "embind":http://kripken.github.io/emscripten-site/docs/porting/connecting_cpp_and_javascript/embind.html bindings, so you can use it from JavaScript too.
+* It includes a simple command-line tool. 
+
+* It also builds with "emscripten":http://kripken.github.io/emscripten-site/ and now comes with (as yet undocumented) "embind":http://kripken.github.io/emscripten-site/docs/porting/connecting_cpp_and_javascript/embind.html bindings, so you can use it from JavaScript too.
 
 
 h2. Licence
