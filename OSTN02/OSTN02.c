@@ -571,13 +571,13 @@ bool test(const bool noisily) {
     
     convergenceEN = testConvergenceOSGB36Coords[i];
     actualC = testConvergencesFromOSGB36Coords[i];
-    ASPRINTF_OR_DIE(&actualCStr, "%i°%02i'%.4f %c", actualC.deg, actualC.min, actualC.sec, actualC.westOrSouth ? 'W' : 'E');
+    ASPRINTF_OR_DIE(&actualCStr, "%i\u00b0 %02i\u2032 %.4f\u2033 %c", actualC.deg, actualC.min, actualC.sec, actualC.westOrSouth ? 'W' : 'E');
     if (noisily) printf("Convergence reference from E/N  %s\n", actualCStr);
     
     // computed coords
     
     computedC = degMinSecFromDecimal(gridConvergenceDegreesFromOSGB36EastingNorthing(convergenceEN));
-    ASPRINTF_OR_DIE(&computedCStr, "%i°%02i'%.4f %c", computedC.deg, computedC.min, computedC.sec, computedC.westOrSouth ? 'W' : 'E');
+    ASPRINTF_OR_DIE(&computedCStr, "%i\u00b0 %02i\u2032 %.4f\u2033 %c", computedC.deg, computedC.min, computedC.sec, computedC.westOrSouth ? 'W' : 'E');
     
     testPassed = strcmp(actualCStr, computedCStr) == 0;
     numTested ++;
@@ -599,13 +599,13 @@ bool test(const bool noisily) {
     
     convergenceLatLon = latLonDecimalFromLatLonDegMinSec(testConvergenceLatLons[i]);
     actualC = testConvergencesFromLatLons[i];
-    ASPRINTF_OR_DIE(&actualCStr, "%i°%02i'%.4f %c", actualC.deg, actualC.min, actualC.sec, actualC.westOrSouth ? 'W' : 'E');
+    ASPRINTF_OR_DIE(&actualCStr, "%i\u00b0 %02i\u2032 %.4f\u2033 %c", actualC.deg, actualC.min, actualC.sec, actualC.westOrSouth ? 'W' : 'E');
     if (noisily) printf("Convergence reference from lat/lon  %s\n", actualCStr);
     
     // computed coords
     
     computedC = degMinSecFromDecimal(gridConvergenceDegreesFromLatLon(convergenceLatLon, Airy1830Ellipsoid, NationalGridProj));
-    ASPRINTF_OR_DIE(&computedCStr, "%i°%02i'%.4f %c", computedC.deg, computedC.min, computedC.sec, computedC.westOrSouth ? 'W' : 'E');
+    ASPRINTF_OR_DIE(&computedCStr, "%i\u00b0 %02i\u2032 %.4f\u2033 %c", computedC.deg, computedC.min, computedC.sec, computedC.westOrSouth ? 'W' : 'E');
     
     testPassed = strcmp(actualCStr, computedCStr) == 0;
     numTested ++;
