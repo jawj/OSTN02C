@@ -409,7 +409,7 @@ GridRefComponents gridRefComponentsFromOSGB36EastingNorthing(const EastingNorthi
   return grc;
 }
 
-char *gridRefFromGridRefComponents(const GridRefComponents grc, const bool spaces) {
+char* gridRefFromGridRefComponents(const GridRefComponents grc, const bool spaces) {
   char *ref, *fmtStr;
   const int res = grc.resolution;
   const int digits = res == 1000 ? 2 : res == 100 ? 3 : res == 10 ? 4 : 5;
@@ -445,9 +445,9 @@ DegMinSec degMinSecFromDecimal(DBL dec) {
   DegMinSec dms;
   dms.westOrSouth = dec < L(0.0) ? true : false;
   dec = ABS(dec);
-  dms.deg = FLOOR(dec);
+  dms.deg = (int)FLOOR(dec);
   dec -= dms.deg;
-  dms.min = FLOOR(L(60.0) * dec);
+  dms.min = (int)FLOOR(L(60.0) * dec);
   dec -= dms.min / L(60.0);
   dms.sec = dec * L(3600.0);
   return dms;
@@ -634,12 +634,16 @@ std::string OSExplorerMapSheetUTF8ForIndex(const int i) {
 }
 
 std::string stringWrapped_tetradFromOSGB36EastingNorthing(const EastingNorthing en) {
-  std::string tetrad(tetradFromOSGB36EastingNorthing(en));
+  char* enChar = tetradFromOSGB36EastingNorthing(en);
+  std::string tetrad(enChar);
+  free(enChar);
   return tetrad;
 }
 
 std::string stringWrapped_gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const bool spaces, const int res) {
-  std::string gridRef(gridRefFromOSGB36EastingNorthing(en, spaces, res));
+  char* gridRefChar = gridRefFromGridRefComponents(gridRefComponentsFromOSGB36EastingNorthing(en, res), spaces);
+  std::string gridRef(gridRefChar);
+  free(gridRefChar);
   return gridRef;
 }
 
@@ -673,22 +677,27 @@ EMSCRIPTEN_BINDINGS(ostn02c) {
     .field("westOrSouth", &DegMinSec::westOrSouth)
   ;
 
-  emscripten::function("ETRS89EastingNorthingFromETRS89LatLon",          &ETRS89EastingNorthingFromETRS89LatLon);
-  emscripten::function("OSGB36EastingNorthingFromETRS89EastingNorthing", &OSGB36EastingNorthingFromETRS89EastingNorthing);
-  emscripten::function("ETRS89EastingNorthingFromOSGB36EastingNorthing", &ETRS89EastingNorthingFromOSGB36EastingNorthing);
-  emscripten::function("ETRS89LatLonFromETRS89EastingNorthing",          &ETRS89LatLonFromETRS89EastingNorthing);
-  emscripten::function("tetradFromOSGB36EastingNorthing",                &stringWrapped_tetradFromOSGB36EastingNorthing);
-  emscripten::function("gridRefFromOSGB36EastingNorthing",               &stringWrapped_gridRefFromOSGB36EastingNorthing);
-  emscripten::function("latLonDecimalFromLatLonDegMinSec",               &latLonDecimalFromLatLonDegMinSec);
+  emscripten::function("ETRS89EastingNorthingFromETRS89LatLon",           &ETRS89EastingNorthingFromETRS89LatLon);
+  emscripten::function("OSGB36EastingNorthingFromETRS89EastingNorthing",  &OSGB36EastingNorthingFromETRS89EastingNorthing);
+  emscripten::function("ETRS89EastingNorthingFromOSGB36EastingNorthing",  &ETRS89EastingNorthingFromOSGB36EastingNorthing);
+  emscripten::function("ETRS89LatLonFromETRS89EastingNorthing",           &ETRS89LatLonFromETRS89EastingNorthing);
+  emscripten::function("tetradFromOSGB36EastingNorthing",                 &stringWrapped_tetradFromOSGB36EastingNorthing);
+  emscripten::function("gridRefFromOSGB36EastingNorthing",                &stringWrapped_gridRefFromOSGB36EastingNorthing);
   
-  emscripten::function("OSTN02Test",                                     &test);
+  emscripten::function("degMinSecFromDecimal",                            &degMinSecFromDecimal);
+  emscripten::function("decimalFromDegMinSec",                            &decimalFromDegMinSec);
+  emscripten::function("latLonDecimalFromLatLonDegMinSec",                &latLonDecimalFromLatLonDegMinSec);
+  emscripten::function("latLonDegMinSecFromLatLonDecimal",                &latLonDecimalFromLatLonDegMinSec);
   
-  emscripten::function("OSExplorerMapNextIndex",                         &nextOSExplorerMap);
-  emscripten::function("OSExplorerMapDataForIndex",                      &OSExplorerMapDataForIndex);
-  emscripten::function("OSExplorerMapNameUTF8ForIndex",                  &OSExplorerMapNameUTF8ForIndex);
-  emscripten::function("OSExplorerMapSheetUTF8ForIndex",                 &OSExplorerMapSheetUTF8ForIndex);
+  emscripten::function("OSTN02Test",                                      &test);
   
-  // TODO: export some additional functions
+  emscripten::function("OSExplorerMapNextIndex",                          &nextOSExplorerMap);
+  emscripten::function("OSExplorerMapDataForIndex",                       &OSExplorerMapDataForIndex);
+  emscripten::function("OSExplorerMapNameUTF8ForIndex",                   &OSExplorerMapNameUTF8ForIndex);
+  emscripten::function("OSExplorerMapSheetUTF8ForIndex",                  &OSExplorerMapSheetUTF8ForIndex);
+  
+  emscripten::function("gridConvergenceDegreesFromOSGB36EastingNorthing", &gridConvergenceDegreesFromOSGB36EastingNorthing);
+  emscripten::function("gridConvergenceDegreesFromETRS89LatLon",          &gridConvergenceDegreesFromETRS89LatLon);
 }
 
 #endif

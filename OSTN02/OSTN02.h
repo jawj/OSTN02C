@@ -114,8 +114,8 @@ DBL               decimalFromDegMinSec(DegMinSec dms);
 LatLonDegMinSec   latLonDegMinSecFromLatLonDecimal(const LatLonDecimal dec);
 LatLonDecimal     latLonDecimalFromLatLonDegMinSec(const LatLonDegMinSec dms);
 GridRefComponents gridRefComponentsFromOSGB36EastingNorthing(const EastingNorthing en, const int res);
-char              *gridRefFromGridRefComponents(const GridRefComponents grc, const bool spaces);  // be sure to free(result) after use
-char              *tetradFromOSGB36EastingNorthing(const EastingNorthing en);                     // be sure to free(result) after use
+char*             gridRefFromGridRefComponents(const GridRefComponents grc, const bool spaces);   // be sure to free(result) after use
+char*             tetradFromOSGB36EastingNorthing(const EastingNorthing en);                      // be sure to free(result) after use
 bool              test(const bool noisily);
 
 #endif
