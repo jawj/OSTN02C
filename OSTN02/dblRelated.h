@@ -16,7 +16,8 @@
 #define COS       cosl
 #define TAN       tanl
 #define SQRT      sqrtl
-#define ABS       fabs
+#define ABS       fabsl
+#define FLOOR     floorl
 #define NUMDESC   "long double"
 #else
 #define L(x)      x
@@ -25,7 +26,8 @@
 #define COS       cos
 #define TAN       tan
 #define SQRT      sqrt
-#define ABS       fabsl
+#define ABS       fabs
+#define FLOOR     floor
 #define NUMDESC   "double"
 #endif
 

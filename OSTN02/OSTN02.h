@@ -38,8 +38,8 @@ typedef struct {
 } OSMap;
 
 typedef struct {
-  unsigned char deg;  // range 0 - 180 (S or W)
-  unsigned char min;  // range 0 - 60
+  int deg;  // usual range 0 - 180 (S or W)
+  int min;  // usual range 0 - 60
   DBL sec;
   bool westOrSouth;
 } DegMinSec;
@@ -52,6 +52,13 @@ typedef struct {
 } EastingNorthing;
 
 typedef struct {
+  char letters[2];
+  int e;
+  int n;
+  int resolution;  // 1/10/100/1000m
+} GridRefComponents;
+
+typedef struct {
   DBL lat;
   DBL lon;
   DBL elevation;
@@ -62,6 +69,7 @@ typedef struct {
   DegMinSec lat;
   DegMinSec lon;
   DBL elevation;
+  unsigned char geoid;
 } LatLonDegMinSec;
 
 typedef struct {
@@ -90,18 +98,25 @@ typedef struct {
 
 DBL gridConvergenceDegreesFromLatLon(const LatLonDecimal latLon, const Ellipsoid ellipsoid, const MapProjection projection);
 DBL gridConvergenceDegreesFromEastingNorthing(const EastingNorthing en, const Ellipsoid ellipsoid, const MapProjection projection);
+DBL gridConvergenceDegreesFromOSGB36EastingNorthing(const EastingNorthing en);
+DBL gridConvergenceDegreesFromETRS89LatLon(const LatLonDecimal latLon);
 int nextOSExplorerMap(EastingNorthing en, int prevMap);
-EastingNorthing eastingNorthingFromLatLon(const LatLonDecimal latLon, const Ellipsoid ellipsoid, const MapProjection projection);
-EastingNorthing ETRS89EastingNorthingFromETRS89LatLon(const LatLonDecimal latLon);
-LatLonDecimal   latLonFromEastingNorthing(const EastingNorthing en, const Ellipsoid ellipsoid, const MapProjection projection);
-LatLonDecimal   ETRS89LatLonFromETRS89EastingNorthing(const EastingNorthing en);
-EastingNorthing OSTN02ShiftsForIndices(const int eIndex, const int nIndex);
-EastingNorthing shiftsForEastingNorthing(const EastingNorthing en);
-EastingNorthing OSGB36EastingNorthingFromETRS89EastingNorthing(const EastingNorthing en);
-EastingNorthing ETRS89EastingNorthingFromOSGB36EastingNorthing(const EastingNorthing en);
-LatLonDecimal   latLonDecimalFromLatLonDegMinSec(const LatLonDegMinSec dms);
-char            *gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const bool spaces, const int res);  // be sure to free(result) after use
-char            *tetradFromOSGB36EastingNorthing(const EastingNorthing en);                                     // be sure to free(result) after use
-bool            test(const bool noisily);
+EastingNorthing   eastingNorthingFromLatLon(const LatLonDecimal latLon, const Ellipsoid ellipsoid, const MapProjection projection);
+EastingNorthing   ETRS89EastingNorthingFromETRS89LatLon(const LatLonDecimal latLon);
+LatLonDecimal     latLonFromEastingNorthing(const EastingNorthing en, const Ellipsoid ellipsoid, const MapProjection projection);
+LatLonDecimal     ETRS89LatLonFromETRS89EastingNorthing(const EastingNorthing en);
+EastingNorthing   OSTN02ShiftsForIndices(const int eIndex, const int nIndex);
+EastingNorthing   shiftsForEastingNorthing(const EastingNorthing en);
+EastingNorthing   OSGB36EastingNorthingFromETRS89EastingNorthing(const EastingNorthing en);
+EastingNorthing   ETRS89EastingNorthingFromOSGB36EastingNorthing(const EastingNorthing en);
+DegMinSec         degMinSecFromDecimal(DBL dec);
+DBL               decimalFromDegMinSec(DegMinSec dms);
+LatLonDegMinSec   latLonDegMinSecFromLatLonDecimal(const LatLonDecimal dec);
+LatLonDecimal     latLonDecimalFromLatLonDegMinSec(const LatLonDegMinSec dms);
+GridRefComponents gridRefComponentsFromOSGB36EastingNorthing(const EastingNorthing en, const int res);
+char*             gridRefFromGridRefComponents(const GridRefComponents grc, const bool spaces);  // be sure to free(result) after use
+char*             gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const int res, const bool spaces);  // be sure to free(result) after use
+char*             tetradFromOSGB36EastingNorthing(const EastingNorthing en);  // be sure to free(result) after use
+bool              test(const bool noisily);
 
 #endif

@@ -16,6 +16,7 @@
 #include "geoids.data"
 #include "gridRef.data"
 #include "testCoords.data"
+#include "testConvergences.data"
 #include "explorerMaps.data"
 
 #define LENGTH_OF(x) (sizeof (x) / sizeof *(x))
@@ -67,45 +68,69 @@ DBL gridConvergenceDegreesFromLatLon(const LatLonDecimal latLon, const Ellipsoid
   return oneEightyOverPi * cRads;
 }
 
-
 DBL gridConvergenceDegreesFromEastingNorthing(const EastingNorthing en, const Ellipsoid ellipsoid, const MapProjection projection) {
+  CDBL n0   = projection.trueOriginEastingNorthing.n;
+  CDBL e0   = projection.trueOriginEastingNorthing.e;
+  CDBL f0   = projection.centralMeridianScale;
+  CDBL af0  = ellipsoid.semiMajorAxis * f0;
+  CDBL bf0  = ellipsoid.semiMinorAxis * f0;
   
-  LatLonDecimal latLon = latLonFromEastingNorthing(en, ellipsoid, projection);
-  CDBL phi     = piOver180 * latLon.lat;
-  CDBL lambda  = piOver180 * latLon.lon;
-  CDBL lambda0 = piOver180 * projection.trueOriginLatLon.lon;
-  
-  CDBL a   = ellipsoid.semiMajorAxis;
-  CDBL b   = ellipsoid.semiMinorAxis;
-  CDBL f0  = projection.centralMeridianScale;
-  
-  CDBL deltaLambda  = lambda - lambda0;
-  CDBL deltaLambda2 = deltaLambda  * deltaLambda;
-  CDBL deltaLambda3 = deltaLambda2 * deltaLambda;
-  CDBL deltaLambda5 = deltaLambda3 * deltaLambda2;
-  
-  CDBL sinPhi   = SIN(phi);
-  CDBL sinPhi2  = sinPhi * sinPhi;
-  CDBL cosPhi   = COS(phi);
-  CDBL cosPhi2  = cosPhi * cosPhi;
-  CDBL cosPhi4  = cosPhi2 * cosPhi2;
-  CDBL tanPhi   = TAN(phi);
-  CDBL tanPhi2  = tanPhi * tanPhi;
-  
-  CDBL af0  = a * f0;
   CDBL af02 = af0 * af0;
-  CDBL bf0  = b * f0;
   CDBL bf02 = bf0 * bf0;
   
-  CDBL e2    = (af02 - bf02) / af02;
-  CDBL nu    = af0 / SQRT(L(1.0) - (e2 * sinPhi2));
-  CDBL rho   = (nu * (L(1.0) - e2)) / (L(1.0) - (e2 * sinPhi2));
-  CDBL eta2  = (nu / rho) - L(1.0);
-  CDBL xiv   = ((sinPhi * cosPhi2) / L(3.0))  * (L(1.0) + L(3.0) * eta2 + L(2.0) * eta2 * eta2);
-  CDBL xv    = ((sinPhi * cosPhi4) / L(15.0)) * (L(2.0) - tanPhi2);
+  CDBL n    = (af0 - bf0) / (af0 + bf0);
+  CDBL n2   = n * n;
+  CDBL n3   = n2 * n;
+  CDBL e2   = (af02 - bf02) / af02;
   
-  CDBL cRads = (deltaLambda * sinPhi) + (deltaLambda3 * xiv) + (deltaLambda5 * xv);
-  return oneEightyOverPi * cRads;
+  CDBL phi0 = piOver180 * projection.trueOriginLatLon.lat;
+  DBL phi = (en.n - n0) / af0 + phi0;
+  
+  while (true) {
+    DBL deltaPhi = phi - phi0;
+    DBL sumPhi = phi + phi0;
+    DBL j3 = (L(1.0) + n + L(5.0) / L(4.0) * n2 + L(5.0) / L(4.0) * n3) * deltaPhi;
+    DBL j4 = (L(3.0) * n + L(3.0) * n2 + L(21.0)/L(8.0) * n3) * SIN(deltaPhi) * COS(sumPhi);
+    DBL j5 = (L(15.0) / L(8.0) * n2 + L(15.0) / L(8.0) * n3) * SIN(L(2.0) * deltaPhi) * COS(L(2.0) * sumPhi);
+    DBL j6 = L(35.0) / L(24.0) * n3 * SIN(L(3.0) * deltaPhi) * COS(L(3.0) * sumPhi);
+    DBL M = bf0 * (j3 - j4 + j5 - j6);
+    if (ABS(en.n - n0 - M) < L(0.001)) break;
+    phi += (en.n - n0 - M) / af0;
+  };
+  
+  CDBL sinPhi = SIN(phi);
+  CDBL sinPhi2 = sinPhi * sinPhi;
+  CDBL nu = af0 / SQRT(L(1.0) - e2 * sinPhi2);
+  CDBL rho = nu * (L(1.0) - e2) / (L(1.0) - e2 * sinPhi2);
+  CDBL eta2 = nu / rho - L(1.0);
+  CDBL eta4 = eta2 * eta2;
+  
+  CDBL nu2 = nu * nu;
+  CDBL nu3 = nu2 * nu;
+  CDBL nu5 = nu3 * nu2;
+  CDBL tanPhi = TAN(phi);
+  CDBL tanPhi2 = tanPhi * tanPhi;
+  CDBL tanPhi4 = tanPhi2 * tanPhi2;
+  
+  CDBL y = en.e - e0;
+  CDBL y3 = y * y * y;
+  CDBL y5 = y3 * y * y;
+  
+  CDBL j31 = tanPhi / nu;
+  CDBL j41 = tanPhi / (L(3.0) * nu3) * (L(1.0) + tanPhi2 - eta2 - L(2.0) * eta4);
+  CDBL j51 = tanPhi / (L(15.0) * nu5) * (L(2.0) + L(5.0) * tanPhi2 + L(3.0) * tanPhi4);
+  
+  CDBL c = y * j31 - y3 * j41 + y5 * j51;
+  
+  return oneEightyOverPi * c;
+}
+
+DBL gridConvergenceDegreesFromOSGB36EastingNorthing(const EastingNorthing en) {
+  return gridConvergenceDegreesFromEastingNorthing(en, Airy1830Ellipsoid, NationalGridProj);
+}
+
+DBL gridConvergenceDegreesFromETRS89LatLon(const LatLonDecimal latLon) {
+  return gridConvergenceDegreesFromLatLon(latLon, GRS80Ellipsoid, NationalGridProj);
 }
 
 int nextOSExplorerMap(EastingNorthing en, int prevMap) {  // start with prevMap = -1
@@ -366,24 +391,38 @@ EastingNorthing ETRS89EastingNorthingFromOSGB36EastingNorthing(const EastingNort
   return shifted;
 }
 
-char *gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const bool spaces, const int res) { 
-  // res is expressed in metres: 1/10/100 -> 3/4/5-digit easting and northing
-  const int  eRound = (int) round(en.e / (DBL) res) * res;
-  const int  nRound = (int) round(en.n / (DBL) res) * res;
-  const int  firstEIndex  = eRound / 500000;
-  const int  firstNIndex  = nRound / 500000;
-  const int  secondEIndex = (eRound % 500000) / 100000;
-  const int  secondNIndex = (nRound % 500000) / 100000;
-  const char sq0 = firstLetters[firstNIndex][firstEIndex];
-  const char sq1 = secondLetters[secondNIndex][secondEIndex];
-  const int  e   = eRound - (500000 * firstEIndex) - (100000 * secondEIndex);
-  const int  n   = nRound - (500000 * firstNIndex) - (100000 * secondNIndex);
+GridRefComponents gridRefComponentsFromOSGB36EastingNorthing(const EastingNorthing en, const int res) {
+  // res is expressed in metres: 1/10/100/1000 -> components to use in generating 5/4/3/2-digit eastings and northings
+  GridRefComponents grc = {0};
+  if (en.geoid == 0) return grc;
+  const int eRound = (int) round(en.e / (DBL)res) * res;
+  const int nRound = (int) round(en.n / (DBL)res) * res;
+  const int firstEIndex  = eRound / 500000;
+  const int firstNIndex  = nRound / 500000;
+  const int secondEIndex = (eRound % 500000) / 100000;
+  const int secondNIndex = (nRound % 500000) / 100000;
+  grc.letters[0] = firstLetters[firstNIndex][firstEIndex];
+  grc.letters[1] = secondLetters[secondNIndex][secondEIndex];
+  grc.e = eRound - (500000 * firstEIndex) - (100000 * secondEIndex);
+  grc.n = nRound - (500000 * firstNIndex) - (100000 * secondNIndex);
+  grc.resolution = res;
+  return grc;
+}
+
+char* gridRefFromGridRefComponents(const GridRefComponents grc, const bool spaces) {
   char *ref, *fmtStr;
-  const int digits = res == 100 ? 3 : (res == 10 ? 4 : 5);
+  const int res = grc.resolution;
+  const int digits = res == 1000 ? 2 : res == 100 ? 3 : res == 10 ? 4 : 5;
   ASPRINTF_OR_DIE(&fmtStr, "%%c%%c%%s%%0%dd%%s%%0%dd", digits, digits);
-  ASPRINTF_OR_DIE(&ref, fmtStr, sq0, sq1, (spaces ? " " : ""), e / res, (spaces ? " " : ""), n / res);
+  ASPRINTF_OR_DIE(&ref, fmtStr, grc.letters[0], grc.letters[1], (spaces ? " " : ""), grc.e / res, (spaces ? " " : ""), grc.n / res);
   free(fmtStr);
   return ref;
+}
+
+char* gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const int res, const bool spaces) {
+  GridRefComponents grc = gridRefComponentsFromOSGB36EastingNorthing(en, res);
+  char* gridRef = gridRefFromGridRefComponents(grc, spaces);
+  return gridRef;
 }
 
 char *tetradFromOSGB36EastingNorthing(const EastingNorthing en) {
@@ -408,13 +447,38 @@ char *tetradFromOSGB36EastingNorthing(const EastingNorthing en) {
   return tetrad;
 }
 
+DegMinSec degMinSecFromDecimal(DBL dec) {
+  DegMinSec dms;
+  dms.westOrSouth = dec < L(0.0) ? true : false;
+  dec = ABS(dec);
+  dms.deg = (int)FLOOR(dec);
+  dec -= dms.deg;
+  dms.min = (int)FLOOR(L(60.0) * dec);
+  dec -= dms.min / L(60.0);
+  dms.sec = dec * L(3600.0);
+  return dms;
+}
+
+DBL decimalFromDegMinSec(DegMinSec dms) {
+  return (dms.westOrSouth ? L(-1.0) : L(1.0)) * (((DBL) dms.deg) + ((DBL) dms.min) / L(60.0) + dms.sec / L(3600.0));
+}
+
 LatLonDecimal latLonDecimalFromLatLonDegMinSec(const LatLonDegMinSec dms) {
   LatLonDecimal dec;
-  dec.lat = (dms.lat.westOrSouth ? L(-1.0) : L(1.0)) * (((DBL) dms.lat.deg) + ((DBL) dms.lat.min) / L(60.0) + dms.lat.sec / L(3600.0));
-  dec.lon = (dms.lon.westOrSouth ? L(-1.0) : L(1.0)) * (((DBL) dms.lon.deg) + ((DBL) dms.lon.min) / L(60.0) + dms.lon.sec / L(3600.0));
+  dec.lat = decimalFromDegMinSec(dms.lat);
+  dec.lon = decimalFromDegMinSec(dms.lon);
   dec.elevation = dms.elevation;
-  dec.geoid = 0;
+  dec.geoid = dms.geoid;
   return dec;
+}
+
+LatLonDegMinSec latLonDegMinSecFromLatLonDecimal(const LatLonDecimal dec) {
+  LatLonDegMinSec dms;
+  dms.lat = degMinSecFromDecimal(dec.lat);
+  dms.lon = degMinSecFromDecimal(dec.lon);
+  dms.elevation = dec.elevation;
+  dms.geoid = dec.geoid;
+  return dms;
 }
 
 bool test(const bool noisily) {
@@ -444,11 +508,15 @@ bool test(const bool noisily) {
   
   // check test conversions against known good results
   
+  int len;
+  
+  // OSTN02 conversions
+  
   LatLonDecimal actualLatLon, computedLatLon;
   EastingNorthing actualEN, computedEN;
   char *actualLatLonStr, *computedLatLonStr, *actualENStr, *computedENStr;
   
-  const int len = LENGTH_OF(testETRSCoords);
+  len = LENGTH_OF(testETRSCoords);
   for (int i = 0; i < len; i ++) {
     
     // actual coords
@@ -482,7 +550,7 @@ bool test(const bool noisily) {
     testPassed = strcmp(actualENStr, computedENStr) == 0;
     numTested ++;
     if (testPassed) numPassed ++;
-    if (noisily) printf("%sOSGB36 computed %s\n\n%s", (testPassed ? "" : BOLD), computedENStr, (testPassed ? "" : UNBOLD));
+    if (noisily) printf("%sOSGB36 computed %s%s\n\n", (testPassed ? "" : BOLD), computedENStr, (testPassed ? "" : UNBOLD));
     
     free(actualLatLonStr);
     free(computedLatLonStr);
@@ -490,25 +558,68 @@ bool test(const bool noisily) {
     free(computedENStr);
   }
   
-  /*
-  EastingNorthing testEN;
-  testEN.e = 651409.903;
-  testEN.n = 313177.270;
-  printf("Convergence: %13.11lf \n\n", gridConvergenceDegreesFromEastingNorthing(testEN, Airy1830Ellipsoid, NationalGridProj));
-  */
+  // convergences by Easting/Northing
   
-  /*
-  LatLonDecimal testLL;
-  testLL.lat = 51.0;
-  testLL.lon = -2.0;
-  printf("Convergence: %13.11lf \n\n", gridConvergenceDegreesFromLatLon(testLL, Airy1830Ellipsoid, NationalGridProj));
-  */
+  EastingNorthing convergenceEN;
+  DegMinSec actualC, computedC;
+  char *actualCStr, *computedCStr;
+  
+  len = LENGTH_OF(testConvergenceOSGB36Coords);
+  for (int i = 0; i < len; i ++) {
+    
+    // actual coords
+    
+    convergenceEN = testConvergenceOSGB36Coords[i];
+    actualC = testConvergencesFromOSGB36Coords[i];
+    ASPRINTF_OR_DIE(&actualCStr, "%i°%02i'%.4f %c", actualC.deg, actualC.min, actualC.sec, actualC.westOrSouth ? 'W' : 'E');
+    if (noisily) printf("Convergence reference from E/N  %s\n", actualCStr);
+    
+    // computed coords
+    
+    computedC = degMinSecFromDecimal(gridConvergenceDegreesFromOSGB36EastingNorthing(convergenceEN));
+    ASPRINTF_OR_DIE(&computedCStr, "%i°%02i'%.4f %c", computedC.deg, computedC.min, computedC.sec, computedC.westOrSouth ? 'W' : 'E');
+    
+    testPassed = strcmp(actualCStr, computedCStr) == 0;
+    numTested ++;
+    if (testPassed) numPassed ++;
+    if (noisily) printf("%sConvergence computed from E/N   %s%s\n\n", (testPassed ? "" : BOLD), computedCStr, (testPassed ? "" : UNBOLD));
+    
+    free(actualCStr);
+    free(computedCStr);
+  }
+  
+  // convergences by lat/lon
+  
+  LatLonDecimal convergenceLatLon;
+  
+  len = LENGTH_OF(testConvergenceLatLons);
+  for (int i = 0; i < len; i ++) {
+    
+    // actual coords
+    
+    convergenceLatLon = latLonDecimalFromLatLonDegMinSec(testConvergenceLatLons[i]);
+    actualC = testConvergencesFromLatLons[i];
+    ASPRINTF_OR_DIE(&actualCStr, "%i°%02i'%.4f %c", actualC.deg, actualC.min, actualC.sec, actualC.westOrSouth ? 'W' : 'E');
+    if (noisily) printf("Convergence reference from lat/lon  %s\n", actualCStr);
+    
+    // computed coords
+    
+    computedC = degMinSecFromDecimal(gridConvergenceDegreesFromLatLon(convergenceLatLon, Airy1830Ellipsoid, NationalGridProj));
+    ASPRINTF_OR_DIE(&computedCStr, "%i°%02i'%.4f %c", computedC.deg, computedC.min, computedC.sec, computedC.westOrSouth ? 'W' : 'E');
+    
+    testPassed = strcmp(actualCStr, computedCStr) == 0;
+    numTested ++;
+    if (testPassed) numPassed ++;
+    if (noisily) printf("%sConvergence computed from lat/lon   %s\n\n%s", (testPassed ? "" : BOLD), computedCStr, (testPassed ? "" : UNBOLD));
+    
+    free(actualCStr);
+    free(computedCStr);
+  }
   
   bool allPassed = numTested == numPassed;
   if (noisily) printf("%i tests; %i passed; %s%i failed%s\n\n", numTested, numPassed, (allPassed ? "" : BOLD), numTested - numPassed, (allPassed ? "" : UNBOLD));
   return allPassed;
 }
-
 
 #ifdef USE_EMBIND
 #include <emscripten/bind.h>
@@ -528,12 +639,16 @@ std::string OSExplorerMapSheetUTF8ForIndex(const int i) {
 }
 
 std::string stringWrapped_tetradFromOSGB36EastingNorthing(const EastingNorthing en) {
-  std::string tetrad(tetradFromOSGB36EastingNorthing(en));
+  char* tetradChar = tetradFromOSGB36EastingNorthing(en);
+  std::string tetrad(tetradChar);
+  free(tetradChar);
   return tetrad;
 }
 
-std::string stringWrapped_gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const bool spaces, const int res) {
-  std::string gridRef(gridRefFromOSGB36EastingNorthing(en, spaces, res));
+std::string stringWrapped_gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const int res, const bool spaces) {
+  char* gridRefChar = gridRefFromOSGB36EastingNorthing(en, res, spaces);
+  std::string gridRef(gridRefChar);
+  free(gridRefChar);
   return gridRef;
 }
 
@@ -542,6 +657,7 @@ EMSCRIPTEN_BINDINGS(ostn02c) {
     .field("e", &EastingNorthing::e)
     .field("n", &EastingNorthing::n)
     .field("elevation", &EastingNorthing::elevation)
+    .field("geoid", &EastingNorthing::geoid)
   ;
   emscripten::value_object<LatLonDecimal>("LatLonDecimal")
     .field("lat", &LatLonDecimal::lat)
@@ -567,20 +683,28 @@ EMSCRIPTEN_BINDINGS(ostn02c) {
     .field("westOrSouth", &DegMinSec::westOrSouth)
   ;
 
-  emscripten::function("ETRS89EastingNorthingFromETRS89LatLon",          &ETRS89EastingNorthingFromETRS89LatLon);
-  emscripten::function("OSGB36EastingNorthingFromETRS89EastingNorthing", &OSGB36EastingNorthingFromETRS89EastingNorthing);
-  emscripten::function("ETRS89EastingNorthingFromOSGB36EastingNorthing", &ETRS89EastingNorthingFromOSGB36EastingNorthing);
-  emscripten::function("ETRS89LatLonFromETRS89EastingNorthing",          &ETRS89LatLonFromETRS89EastingNorthing);
-  emscripten::function("tetradFromOSGB36EastingNorthing",                &stringWrapped_tetradFromOSGB36EastingNorthing);
-  emscripten::function("gridRefFromOSGB36EastingNorthing",               &stringWrapped_gridRefFromOSGB36EastingNorthing);
-  emscripten::function("latLonDecimalFromLatLonDegMinSec",               &latLonDecimalFromLatLonDegMinSec);
+  emscripten::function("ETRS89EastingNorthingFromETRS89LatLon",           &ETRS89EastingNorthingFromETRS89LatLon);
+  emscripten::function("OSGB36EastingNorthingFromETRS89EastingNorthing",  &OSGB36EastingNorthingFromETRS89EastingNorthing);
+  emscripten::function("ETRS89EastingNorthingFromOSGB36EastingNorthing",  &ETRS89EastingNorthingFromOSGB36EastingNorthing);
+  emscripten::function("ETRS89LatLonFromETRS89EastingNorthing",           &ETRS89LatLonFromETRS89EastingNorthing);
   
-  emscripten::function("OSTN02Test",                                     &test);
+  emscripten::function("tetradFromOSGB36EastingNorthing",                 &stringWrapped_tetradFromOSGB36EastingNorthing);
+  emscripten::function("gridRefFromOSGB36EastingNorthing",                &stringWrapped_gridRefFromOSGB36EastingNorthing);
   
-  emscripten::function("OSExplorerMapNextIndex",                         &nextOSExplorerMap);
-  emscripten::function("OSExplorerMapDataForIndex",                      &OSExplorerMapDataForIndex);
-  emscripten::function("OSExplorerMapNameUTF8ForIndex",                  &OSExplorerMapNameUTF8ForIndex);
-  emscripten::function("OSExplorerMapSheetUTF8ForIndex",                 &OSExplorerMapSheetUTF8ForIndex);
+  emscripten::function("degMinSecFromDecimal",                            &degMinSecFromDecimal);
+  emscripten::function("decimalFromDegMinSec",                            &decimalFromDegMinSec);
+  emscripten::function("latLonDecimalFromLatLonDegMinSec",                &latLonDecimalFromLatLonDegMinSec);
+  emscripten::function("latLonDegMinSecFromLatLonDecimal",                &latLonDecimalFromLatLonDegMinSec);
+  
+  emscripten::function("OSTN02Test",                                      &test);
+  
+  emscripten::function("OSExplorerMapNextIndex",                          &nextOSExplorerMap);
+  emscripten::function("OSExplorerMapDataForIndex",                       &OSExplorerMapDataForIndex);
+  emscripten::function("OSExplorerMapNameUTF8ForIndex",                   &OSExplorerMapNameUTF8ForIndex);
+  emscripten::function("OSExplorerMapSheetUTF8ForIndex",                  &OSExplorerMapSheetUTF8ForIndex);
+  
+  emscripten::function("gridConvergenceDegreesFromOSGB36EastingNorthing", &gridConvergenceDegreesFromOSGB36EastingNorthing);
+  emscripten::function("gridConvergenceDegreesFromETRS89LatLon",          &gridConvergenceDegreesFromETRS89LatLon);
 }
 
 #endif
