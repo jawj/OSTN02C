@@ -40,7 +40,7 @@
 		5EBE804014A5FE4800CA9D70 /* ostn02c */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ostn02c; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EBE804414A5FE4800CA9D70 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		5EBE804D14A5FE7300CA9D70 /* OSTN02.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSTN02.h; sourceTree = "<group>"; };
-		5EBE804E14A5FE9000CA9D70 /* OSTN02.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = OSTN02.c; sourceTree = "<group>"; };
+		5EBE804E14A5FE9000CA9D70 /* OSTN02.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; path = OSTN02.c; sourceTree = "<group>"; };
 		5ECB2EE414B863F00015B28A /* constants.data */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = constants.data; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 

@@ -119,6 +119,7 @@ int main (int argc, const char * argv[]) {
     
   // with any other arguments, show help text
   } else {
+    
     puts("\n" INVERSE "OSTN02C -- https://github.com/jawj/OSTN02C -- Built " __DATE__ " " __TIME__ " (" NUMDESC " precision)" UNINVERSE "\n"
          "\n"
          "This tool converts coordinates between ETRS89 (WGS84, GPS) lat/lon/elevation and OSGB36 easting/northing/elevation.\n"

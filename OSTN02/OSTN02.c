@@ -419,6 +419,12 @@ char* gridRefFromGridRefComponents(const GridRefComponents grc, const bool space
   return ref;
 }
 
+char* gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const int res, const bool spaces) {
+  GridRefComponents grc = gridRefComponentsFromOSGB36EastingNorthing(en, res);
+  char* gridRef = gridRefFromGridRefComponents(grc, spaces);
+  return gridRef;
+}
+
 char *tetradFromOSGB36EastingNorthing(const EastingNorthing en) {
   // see http://www.bto.org/volunteer-surveys/birdatlas/taking-part/correct-grid-references/know-your-place
   const int  eTrunc = (int) en.e;  // note: unlike for a grid ref, we never round -- we (implictly) truncate
@@ -615,7 +621,6 @@ bool test(const bool noisily) {
   return allPassed;
 }
 
-
 #ifdef USE_EMBIND
 #include <emscripten/bind.h>
 
@@ -634,14 +639,14 @@ std::string OSExplorerMapSheetUTF8ForIndex(const int i) {
 }
 
 std::string stringWrapped_tetradFromOSGB36EastingNorthing(const EastingNorthing en) {
-  char* enChar = tetradFromOSGB36EastingNorthing(en);
-  std::string tetrad(enChar);
-  free(enChar);
+  char* tetradChar = tetradFromOSGB36EastingNorthing(en);
+  std::string tetrad(tetradChar);
+  free(tetradChar);
   return tetrad;
 }
 
-std::string stringWrapped_gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const bool spaces, const int res) {
-  char* gridRefChar = gridRefFromGridRefComponents(gridRefComponentsFromOSGB36EastingNorthing(en, res), spaces);
+std::string stringWrapped_gridRefFromOSGB36EastingNorthing(const EastingNorthing en, const int res, const bool spaces) {
+  char* gridRefChar = gridRefFromOSGB36EastingNorthing(en, res, spaces);
   std::string gridRef(gridRefChar);
   free(gridRefChar);
   return gridRef;
@@ -652,6 +657,7 @@ EMSCRIPTEN_BINDINGS(ostn02c) {
     .field("e", &EastingNorthing::e)
     .field("n", &EastingNorthing::n)
     .field("elevation", &EastingNorthing::elevation)
+    .field("geoid", &EastingNorthing::geoid)
   ;
   emscripten::value_object<LatLonDecimal>("LatLonDecimal")
     .field("lat", &LatLonDecimal::lat)
@@ -681,6 +687,7 @@ EMSCRIPTEN_BINDINGS(ostn02c) {
   emscripten::function("OSGB36EastingNorthingFromETRS89EastingNorthing",  &OSGB36EastingNorthingFromETRS89EastingNorthing);
   emscripten::function("ETRS89EastingNorthingFromOSGB36EastingNorthing",  &ETRS89EastingNorthingFromOSGB36EastingNorthing);
   emscripten::function("ETRS89LatLonFromETRS89EastingNorthing",           &ETRS89LatLonFromETRS89EastingNorthing);
+  
   emscripten::function("tetradFromOSGB36EastingNorthing",                 &stringWrapped_tetradFromOSGB36EastingNorthing);
   emscripten::function("gridRefFromOSGB36EastingNorthing",                &stringWrapped_gridRefFromOSGB36EastingNorthing);
   

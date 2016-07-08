@@ -2,7 +2,7 @@
 
 # emscripten build command
 
-emcc -x c++ OSTN02/*.c --std=c++11 --bind -DUSE_EMBIND -Wall -O2 \
+emcc -x c++ OSTN02/*.c --std=c++11 --bind -DUSE_EMBIND -Wall -Wno-missing-braces -O2 \
      --pre-js emscripten-build/pre.js --post-js emscripten-build/post.js -o emscripten-build/ostn02c.js
 
 
@@ -15,7 +15,8 @@ var en = OSTN02C.OSGB36EastingNorthingFromETRS89EastingNorthing(
                                               elevation: 64.940})));
 
 var gridRef = OSTN02C.gridRefFromOSGB36EastingNorthing(en, true, 10);
-console.log(en, gridRef);
+var tetrad = OSTN02C.tetradFromOSGB36EastingNorthing(en);
+console.log(en, gridRef, tetrad);
 
 
 var en = OSTN02C.OSGB36EastingNorthingFromETRS89EastingNorthing(
