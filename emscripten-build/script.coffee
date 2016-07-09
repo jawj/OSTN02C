@@ -17,13 +17,16 @@ codeMap =
   '7': 'inverse'
   '4': 'uline'
 
+UTF8 = 
+  decode: (s) -> decodeURIComponent(escape s)
+
 stdoutStr = ''
 
 stdoutCallback = (chr) ->
-  if chr isnt null then stdoutStr += String.fromCharCode chr
+  if chr isnt null then stdoutStr += String.fromCharCode(if chr < 0 then chr + 256 else chr)  # chr is (weirdly) a signed char
   if chr is 10 or chr is null
     openCodes = 0
-    html = stdoutStr.replace /\x1b\[(1|22|7|27|4|24)m/g, (_, match) ->
+    html = UTF8.decode(stdoutStr).replace /\x1b\[(1|22|7|27|4|24)m/g, (_, match) ->
       cls = codeMap[match]
       if cls
         openCodes++
