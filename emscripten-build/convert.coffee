@@ -102,7 +102,7 @@ osgbChanged = ->
   enETRS89 = OSTN02C.ETRS89EastingNorthingFromOSGB36EastingNorthing {e, n, elevation, geoid: 0}
   if enETRS89.geoid is 0
     displayGps null
-    displayGeoid null
+    displayGeoid enETRS89
     return
 
   displayGeoid enETRS89
@@ -123,6 +123,7 @@ gpsChanged = ->
   en = OSTN02C.OSGB36EastingNorthingFromETRS89EastingNorthing OSTN02C.ETRS89EastingNorthingFromETRS89LatLon {lat, lon, elevation}
   if en.geoid is 0
     displayOsgb null
+    displayGeoid en
     return
 
   displayOsgb en

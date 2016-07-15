@@ -179,7 +179,7 @@ osgbChanged = function() {
   });
   if (enETRS89.geoid === 0) {
     displayGps(null);
-    displayGeoid(null);
+    displayGeoid(enETRS89);
     return;
   }
   displayGeoid(enETRS89);
@@ -228,6 +228,7 @@ gpsChanged = function() {
   }));
   if (en.geoid === 0) {
     displayOsgb(null);
+    displayGeoid(en);
     return;
   }
   displayOsgb(en);
