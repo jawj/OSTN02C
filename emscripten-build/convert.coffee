@@ -3,7 +3,7 @@ OSTN02C = OSTN02CFactory()
 
 (self[id + 'Field'] = get {id}) for id in ['e', 'n', 'mslAlt', 'datum', 'lat', 'lon', 'gpsAlt']
 osgbFields = [eField,   nField,   mslAltField, datumField]
-gpsFields  = [latField, lonField, gpsAltField]
+gpsFields  = [lonField, latField, gpsAltField]
 arrow = get id: 'arrow'
 
 parseLatOrLon = (s, isLat) -> 
@@ -113,13 +113,13 @@ osgbChanged = ->
 
 gpsChanged = ->
   strs = (input.value for input in gpsFields)
-  values = ((if i is 2 then parseAlt s else parseLatOrLon s) for s, i in strs)
+  values = ((if i is 2 then parseAlt s else parseLatOrLon s, (i is 1)) for s, i in strs)
   (cls input, if values[i]? then remove: 'invalid' else add: 'invalid') for input, i in gpsFields
   if null in values
     displayOsgb null
     return
 
-  [lat, lon, elevation] = values
+  [lon, lat, elevation] = values
   en = OSTN02C.OSGB36EastingNorthingFromETRS89EastingNorthing OSTN02C.ETRS89EastingNorthingFromETRS89LatLon {lat, lon, elevation}
   if en.geoid is 0
     displayOsgb null
@@ -130,7 +130,6 @@ gpsChanged = ->
 
   arrow.style.visibility = 'visible'
   arrow.style.transform = 'scaleX(-1)'
-
 
 (input.oninput = osgbChanged) for input in osgbFields
 (input.oninput = gpsChanged)  for input in gpsFields

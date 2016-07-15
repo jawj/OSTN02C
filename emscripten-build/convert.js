@@ -14,7 +14,7 @@ for (j = 0, len = ref.length; j < len; j++) {
 
 osgbFields = [eField, nField, mslAltField, datumField];
 
-gpsFields = [latField, lonField, gpsAltField];
+gpsFields = [lonField, latField, gpsAltField];
 
 arrow = get({
   id: 'arrow'
@@ -204,7 +204,7 @@ gpsChanged = function() {
     results = [];
     for (i = k = 0, len1 = strs.length; k < len1; i = ++k) {
       s = strs[i];
-      results.push(i === 2 ? parseAlt(s) : parseLatOrLon(s));
+      results.push(i === 2 ? parseAlt(s) : parseLatOrLon(s, i === 1));
     }
     return results;
   })();
@@ -220,7 +220,7 @@ gpsChanged = function() {
     displayOsgb(null);
     return;
   }
-  lat = values[0], lon = values[1], elevation = values[2];
+  lon = values[0], lat = values[1], elevation = values[2];
   en = OSTN02C.OSGB36EastingNorthingFromETRS89EastingNorthing(OSTN02C.ETRS89EastingNorthingFromETRS89LatLon({
     lat: lat,
     lon: lon,
