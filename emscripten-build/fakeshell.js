@@ -189,4 +189,4 @@ window.addEventListener('load', function() {
   return printHTML('This fake shell supports [Tab] completion, [Up] + [Down] command history, and two commands (<span class="bold">ostn02c</span> and <span class="bold">clear</span>).\n\n');
 });
 
-//# sourceMappingURL=script.js.map
+//# sourceMappingURL=fakeshell.js.map

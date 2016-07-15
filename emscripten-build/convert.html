@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"> 
+<title>GridPoint GB convert</title>
+
+<style>
+
+html, body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  font-size: 18px;
+}
+
+body {
+  font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+}
+
+#inputs {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+#osgb, #gps {
+  margin: 0 30px;
+}
+#arrow {
+  width: 30px;
+  height: 300px;
+  align-self: center;
+  visibility: hidden;
+}
+
+.item {
+  display: flex;
+  flex-direction: column-reverse;
+  margin: 25px 0;
+}
+.caption {
+  color: #999;
+}
+
+input {
+  border: none;
+  border-bottom: 1px solid #999;
+  width: 6.5em;
+}
+input, #datum {
+  font-family: inherit;
+  font-size: 36px;
+  font-weight: bold;
+}
+#datum {
+  font-size: inherit;
+}
+.invalid {
+  background: #fcc;
+}
+</style>
+
+</head>
+<body>
+<form id="inputs">
+<div id="osgb">
+  <div class="item">
+    <div class="caption">Easting</div><div class="field"><input type="text" id="e"></div>
+  </div>
+  <div class="item">
+    <div class="caption">Northing</div><div class="field"><input type="text" id="n" /></div>
+  </div>
+  <div class="item">
+    <div class="caption">Height above mean sea level</div><div class="field"><input type="text" id="mslAlt" /></div>
+  </div>
+  <div class="item">
+    <div class="caption">Height datum</div><div class="field"><span id="datum"></span></div>
+  </div>
+</div>
+<div id="arrow">
+  <svg width="30" height="300">
+    <path d="M 1 1 L 29 150 L 1 299" fill="transparent" stroke="#999">
+  </svg>
+</div>
+<div id="gps">
+  <div class="item">
+    <div class="caption">Latitude</div><div class="field"><input type="text" id="lat" /></div>
+  </div>
+  <div class="item">
+    <div class="caption">Longitude</div><div class="field"><input type="text" id="lon" /></div>
+  </div>
+  <div class="item">
+    <div class="caption">Geoid height</div><div class="field"><input type="text" id="gpsAlt" /></div>
+  </div>
+</div>
+</form>
+<script src="ostn02c.js"></script>
+<script src="affogato.js"></script>
+<script src="convert.js"></script>
+</body>
+</html>

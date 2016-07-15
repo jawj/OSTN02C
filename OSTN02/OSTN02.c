@@ -652,6 +652,16 @@ std::string stringWrapped_gridRefFromOSGB36EastingNorthing(const EastingNorthing
   return gridRef;
 }
 
+std::string geoidNameForIndex(const int i) {
+  std::string name(OSGB36GeoidNames[i]);
+  return name;
+}
+
+std::string geoidRegionForIndex(const int i) {
+  std::string region(OSGB36GeoidRegions[i]);
+  return region;
+}
+
 EMSCRIPTEN_BINDINGS(ostn02c) {
   emscripten::value_object<EastingNorthing>("EastingNorthing")
     .field("e", &EastingNorthing::e)
@@ -705,6 +715,9 @@ EMSCRIPTEN_BINDINGS(ostn02c) {
   
   emscripten::function("gridConvergenceDegreesFromOSGB36EastingNorthing", &gridConvergenceDegreesFromOSGB36EastingNorthing);
   emscripten::function("gridConvergenceDegreesFromETRS89LatLon",          &gridConvergenceDegreesFromETRS89LatLon);
+
+  emscripten::function("geoidNameForIndex",                               &geoidNameForIndex);
+  emscripten::function("geoidRegionForIndex",                             &geoidRegionForIndex);
 }
 
 #endif
