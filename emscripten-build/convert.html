@@ -15,6 +15,7 @@ html, body {
 body {
   font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center; 
   font-size: 16px;
@@ -39,25 +40,43 @@ body {
 
 .item {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   margin: 25px 0;
 }
-.caption {
+label, .label {
   color: #88a;
 }
+.degFmtLbl {
+  display: inline-block;
+  margin-right: 20px;
+}
 
-input {
+input[type=radio] {
+  margin: 0 5px 0 0;
+  padding: 0;
+  transform: translateY(-1px);
+}
+
+input[type=text] {
   border: none;
   border-bottom: 1px solid #88a;
-  width: 7em;
+  width: 8em;
   background-color: inherit;
   color: inherit;
 }
-input, #datum {
+input[type=text]:focus {
+  outline: none;
+  border-color: #fff;
+}
+input[type=text]:focus + label {
+  color: #fff;
+}
+input[type=text], #datum {
   font-family: inherit;
   font-size: 40px;
   font-weight: bold;
 }
+
 #datum {
   font-size: inherit;
 }
@@ -68,40 +87,53 @@ input, #datum {
 
 </head>
 <body>
-<form id="inputs">
-<div id="osgb">
-  <div class="item">
-    <div class="caption">Easting</div><div class="field"><input type="text" id="e"></div>
+  <form id="inputs">
+
+    <div id="osgb">
+      <div class="item">
+        <input type="text" id="e"><label for="e">Easting</label>
+      </div>
+      <div class="item">
+        <input type="text" id="n"><label for="n">Northing</label>
+      </div>
+      <div class="item">
+        <input type="text" id="mslAlt"><label for="mslAlt">Height above mean sea level</label>
+      </div>
+      <div class="item">
+        <span id="datum"></span><div class="label">Height datum</div>
+      </div>
+    </div>
+
+    <div id="arrow">
+      <svg width="30" height="300">
+        <path d="M 1 1 L 29 150 L 1 299" fill="transparent" stroke="#88a">
+      </svg>
+    </div>
+
+    <div id="gps">
+      <div class="item">
+        <input type="text" id="lon"><label for="lon">Longitude</label>
+      </div>
+      <div class="item">
+        <input type="text" id="lat"><label for="lat">Latitude</label>
+      </div>
+      <div class="item">
+        <input type="text" id="gpsAlt"><label for="gpsAlt">Geoid height</label>
+      </div>
+      <div class="degFmts">
+        <label class="degFmtLbl"><input type="radio" name="degFmt" value="dms" id="dms"> D&#x00b0;&#x2008;M&#x2032;&#x2008;S&#x2033;</label>
+        <label class="degFmtLbl"><input type="radio" name="degFmt" value="dec" id="dec"> D.D&#x00b0;</label>
+      </div>
+    </div>
+
+  </form>
+  
+  <div id="convergence">
+    <div class="label">Convergence</div><span id="convergence"></span>
   </div>
-  <div class="item">
-    <div class="caption">Northing</div><div class="field"><input type="text" id="n" /></div>
-  </div>
-  <div class="item">
-    <div class="caption">Height above mean sea level</div><div class="field"><input type="text" id="mslAlt" /></div>
-  </div>
-  <div class="item">
-    <div class="caption">Height datum</div><div class="field"><span id="datum"></span></div>
-  </div>
-</div>
-<div id="arrow">
-  <svg width="30" height="300">
-    <path d="M 1 1 L 29 150 L 1 299" fill="transparent" stroke="#88a">
-  </svg>
-</div>
-<div id="gps">
-  <div class="item">
-    <div class="caption">Longitude</div><div class="field"><input type="text" id="lon" /></div>
-  </div>
-  <div class="item">
-    <div class="caption">Latitude</div><div class="field"><input type="text" id="lat" /></div>
-  </div>
-  <div class="item">
-    <div class="caption">Geoid height</div><div class="field"><input type="text" id="gpsAlt" /></div>
-  </div>
-</div>
-</form>
-<script src="ostn02c.js"></script>
-<script src="affogato.js"></script>
-<script src="convert.js"></script>
+
+  <script src="ostn02c.js"></script>
+  <script src="affogato.js"></script>
+  <script src="convert.js"></script>
 </body>
 </html>

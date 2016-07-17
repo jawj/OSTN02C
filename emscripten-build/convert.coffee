@@ -1,9 +1,11 @@
 
 OSTN02C = OSTN02CFactory()
 
-(self[id + 'Field'] = get {id}) for id in ['e', 'n', 'mslAlt', 'datum', 'lat', 'lon', 'gpsAlt']
+(self[id + 'Field'] = get {id}) for id in ['e', 'n', 'mslAlt', 'datum', 'lat', 'lon', 'gpsAlt', 'dms', 'dec']
 osgbFields = [eField,   nField,   mslAltField, datumField]
 gpsFields  = [lonField, latField, gpsAltField]
+degFmt = get(id: 'inputs').elements.degFmt
+
 arrow = get id: 'arrow'
 
 parseLatOrLon = (s, isLat) -> 
@@ -49,24 +51,31 @@ parseLatOrLon = (s, isLat) ->
   if value < -maxVal or value > maxVal then return null
   return value
 
-parseAlt = (s) ->
-  validFormat = s.match /^\s*-?([0-9]+|[0-9]+\.[0-9]*|[0-9]*\.[0-9]+)\s*m?\s*$/
-  return if validFormat then parseFloat s else null
-
 parseEorN = (s) ->
   validFormat = s.match /^\s*-?([0-9]+|[0-9]+\.[0-9]*|[0-9]*\.[0-9]+)\s*$/
   return if validFormat then parseFloat s else null
 
+parseAlt = (s) ->
+  validFormat = s.match /^\s*-?([0-9]+|[0-9]+\.[0-9]*|[0-9]*\.[0-9]+)\s*m?\s*$/
+  return if validFormat then parseFloat s else null
 
-formatLatOrLon = (v) -> v.toFixed 6
+
+formatLatOrLon = (v, isLat) -> 
+  if degFmt.value is 'dms'
+    dms = OSTN02C.degMinSecFromDecimal v
+    dir = if isLat then (if dms.westOrSouth then 'S' else 'N') else (if dms.westOrSouth then 'W' else 'E')
+    "#{dms.deg}\u00b0\u2008#{dms.min}\u2032\u2008#{dms.sec.toFixed 2}\u2033 #{dir}"
+  else
+    v.toFixed 6
+
 formatEOrN = (v) -> v.toFixed 0
 formatAlt = (alt) -> (Math.round alt) + 'm'
 showMissing = (inputs) -> (input.value = "—") for input in inputs
 
 displayGps = (latLon) ->
   if latLon?
-    latField.value    = formatLatOrLon latLon.lat
-    lonField.value    = formatLatOrLon latLon.lon
+    latField.value    = formatLatOrLon latLon.lat, yes
+    lonField.value    = formatLatOrLon latLon.lon, no
     gpsAltField.value = formatAlt latLon.elevation
   else
     showMissing gpsFields
@@ -131,6 +140,13 @@ gpsChanged = ->
   arrow.style.visibility = 'visible'
   arrow.style.transform = 'scaleX(-1)'
 
+dmsChanged = ->
+  for field, i in [lonField, latField]
+    isLat = i is 1
+    value = parseLatOrLon field.value, isLat
+    if value then field.value = formatLatOrLon value, isLat
+
+
 (input.oninput = osgbChanged) for input in osgbFields
 (input.oninput = gpsChanged)  for input in gpsFields
-
+decField.onclick = dmsField.onclick = dmsChanged
