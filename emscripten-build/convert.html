@@ -31,11 +31,22 @@ body {
 #osgb, #gps {
   margin: 0 30px;
 }
+#map {
+  margin: 0 20px 0 0;
+  transform: translateY(-20px);
+}
+#mapCanvas {
+  width: 230px;
+  height: 417px;
+}
 #arrow {
   width: 30px;
-  height: 300px;
+  height: 350px;
   align-self: center;
-  visibility: hidden;
+  transform: translateY(-15px);
+}
+#arrow.reverse {
+  transform: translateY(-15px) scaleX(-1);
 }
 
 .item {
@@ -60,9 +71,12 @@ input[type=radio] {
 input[type=text] {
   border: none;
   border-bottom: 1px solid #88a;
-  width: 8em;
+  width: 7.5em;
   background-color: inherit;
   color: inherit;
+}
+#osgb input[type=text] {
+  width: 6em;
 }
 input[type=text]:focus {
   outline: none;
@@ -88,7 +102,9 @@ input[type=text], #datum {
 </head>
 <body>
   <form id="inputs">
-
+    <div id="map">
+      <canvas id="mapCanvas" width="460" height="834">
+    </div>
     <div id="osgb">
       <div class="item">
         <input type="text" id="e"><label for="e">Easting</label>
@@ -105,8 +121,8 @@ input[type=text], #datum {
     </div>
 
     <div id="arrow">
-      <svg width="30" height="300">
-        <path d="M 1 1 L 29 150 L 1 299" fill="transparent" stroke="#88a">
+      <svg width="30" height="350">
+        <path d="M 1 1 L 29 175 L 1 349" fill="transparent" stroke="#88a">
       </svg>
     </div>
 
@@ -121,8 +137,8 @@ input[type=text], #datum {
         <input type="text" id="gpsAlt"><label for="gpsAlt">Geoid height</label>
       </div>
       <div class="degFmts">
-        <label class="degFmtLbl"><input type="radio" name="degFmt" value="dms" id="dms"> D&#x00b0;&#x2008;M&#x2032;&#x2008;S&#x2033;</label>
         <label class="degFmtLbl"><input type="radio" name="degFmt" value="dec" id="dec"> D.D&#x00b0;</label>
+        <label class="degFmtLbl"><input type="radio" name="degFmt" value="dms" id="dms"> D&#x00b0;&#x2008;M&#x2032;&#x2008;S&#x2033;</label>
       </div>
     </div>
 
