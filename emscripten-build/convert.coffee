@@ -1,6 +1,4 @@
 
-OSTN02C = OSTN02CFactory()
-
 (self[id + 'Field'] = get {id}) for id in ['e', 'n', 'mslAlt', 'datum', 'lat', 'lon', 'gpsAlt', 'dms', 'dec']
 osgbFields = [eField,   nField,   mslAltField, datumField]
 gpsFields  = [lonField, latField, gpsAltField]
@@ -120,6 +118,8 @@ osgbChanged = ->
   arrow.style.visibility = 'visible'
   arrow.style.transform = 'scaleX(1)'
 
+  saveData 'coords', {changed: 'osgb', values: strs}
+
 gpsChanged = ->
   strs = (input.value for input in gpsFields)
   values = ((if i is 2 then parseAlt s else parseLatOrLon s, (i is 1)) for s, i in strs)
@@ -140,13 +140,34 @@ gpsChanged = ->
   arrow.style.visibility = 'visible'
   arrow.style.transform = 'scaleX(-1)'
 
+  saveData 'coords', {changed: 'gps', values: strs}
+
 dmsChanged = ->
   for field, i in [lonField, latField]
     isLat = i is 1
     value = parseLatOrLon field.value, isLat
     if value then field.value = formatLatOrLon value, isLat
 
+  saveData 'degFmt', degFmt.value
+
+saveData = (k, v) ->
+  self.localStorage?.setItem k, (JSON.stringify v)
+
+loadData = (k) ->
+  JSON.parse (self.localStorage?.getItem k)
 
 (input.oninput = osgbChanged) for input in osgbFields
 (input.oninput = gpsChanged)  for input in gpsFields
 decField.onclick = dmsField.onclick = dmsChanged
+
+OSTN02C = OSTN02CFactory null, null, null, ->
+  prevDegFmt = (loadData 'degFmt') ? 'dms'
+  degFmt.value = prevDegFmt
+
+  prevData = (loadData 'coords') ? {changed: 'osgb', values: ['200000', '200000', '20m']}
+  fields = if prevData.changed is 'osgb' then osgbFields else gpsFields
+
+  (fields[i].value = value) for value, i in prevData.values
+  if prevData.changed is 'osgb' then osgbChanged() else gpsChanged()
+  dmsChanged()
+
