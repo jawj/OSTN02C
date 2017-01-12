@@ -6,7 +6,7 @@ require 'formula'
 class Ostn02c < Formula
   homepage 'https://github.com/jawj/OSTN02C'
   url 'https://github.com/jawj/OSTN02C/tarball/v0.1.2'
-  md5 '0f25f9a41eec1b40d2201579722a9684'
+  sha256 'b02994febc9174a1274d53718f13a9874b8eaaddf925a0707b30ad8c38d7053e'
   
   def install
     system "#{ENV.cc} OSTN02/*.c -std=gnu99 -D_GNU_SOURCE -lm -Wall -O2 -o ostn02c"
