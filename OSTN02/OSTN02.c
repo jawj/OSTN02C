@@ -412,6 +412,7 @@ GridRefComponents gridRefComponentsFromOSGB36EastingNorthing(const EastingNorthi
 char* gridRefFromGridRefComponents(const GridRefComponents grc, const bool spaces) {
   char *ref, *fmtStr;
   const int res = grc.resolution;
+  if (res == 0) exit(EXIT_FAILURE);  // keep clang static analysis quiet
   const int digits = res == 1000 ? 2 : res == 100 ? 3 : res == 10 ? 4 : 5;
   ASPRINTF_OR_DIE(&fmtStr, "%%c%%c%%s%%0%dd%%s%%0%dd", digits, digits);
   ASPRINTF_OR_DIE(&ref, fmtStr, grc.letters[0], grc.letters[1], (spaces ? " " : ""), grc.e / res, (spaces ? " " : ""), grc.n / res);
